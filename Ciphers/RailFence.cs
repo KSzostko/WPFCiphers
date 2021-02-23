@@ -25,6 +25,17 @@ namespace WPFCiphers.Ciphers
             throw new NotImplementedException();
         }
 
+        private string BuildWord(char[,] rails)
+        {
+            StringBuilder builder = new StringBuilder();
+            foreach(char letter in rails)
+            {
+                if (letter != '\n') builder.Append(letter);
+            }
+
+            return builder.ToString();
+        }
+
         private char[,] InitRails(string s)
         {
             char[,] rails = new char[Key, s.Length];
