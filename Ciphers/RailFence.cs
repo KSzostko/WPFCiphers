@@ -1,0 +1,55 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace WPFCiphers.Ciphers
+{
+    class RailFence : Cipher
+    {
+        public int Key { get; set; }
+
+        public RailFence(int key)
+        {
+            this.Key = key;
+        }
+
+        public string Decrypt(string s)
+        {
+            throw new NotImplementedException();
+        }
+
+        public string Encrypt(string s)
+        {
+            throw new NotImplementedException();
+        }
+
+        private char[,] InitRails(string s)
+        {
+            char[,] rails = new char[Key, s.Length];
+
+            for(int i = 0; i < rails.GetLength(0); i++)
+            {
+                for(int j = 0; j < rails.GetLength(1); j++)
+                {
+                    rails[i, j] = '\n';
+                }
+            }
+
+            return rails;
+        }
+
+        private bool OnArrayBound(int row)
+        {
+            return row == 0 || row == Key - 1;
+        }
+
+        private int NextRow(int row, bool increase)
+        {
+            if (increase) return row + 1;
+
+            return row - 1;
+        }
+    }
+}
