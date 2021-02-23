@@ -17,7 +17,24 @@ namespace WPFCiphers.Ciphers
 
         public string Decrypt(string s)
         {
-            throw new NotImplementedException();
+            char[,] rails = GenerateRails(new string('*', s.Length));
+
+            int current = 0;
+            char[] decryptedWord = new char[s.Length];
+
+            for (int row = 0; row < rails.GetLength(0); row++)
+            {
+                for (int col = 0; col < rails.GetLength(1); col++)
+                {
+                    if (rails[row, col] == '*')
+                    {
+                        decryptedWord[col] = s[current];
+                        current++;
+                    }
+                }
+            }
+
+            return new string(decryptedWord);
         }
 
         public string Encrypt(string s)
