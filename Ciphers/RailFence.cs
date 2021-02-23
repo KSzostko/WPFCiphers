@@ -22,14 +22,21 @@ namespace WPFCiphers.Ciphers
 
         public string Encrypt(string s)
         {
+            char[,] rails = GenerateRails(s);
+
+            return BuildWord(rails);
+        }
+
+        private char[,] GenerateRails(string s)
+        {
             char[,] rails = InitRails(s);
 
             bool increase = false;
             int row = 0, col = 0;
 
-            foreach(char letter in s)
+            foreach (char letter in s)
             {
-                if(OnArrayBound(row))
+                if (OnArrayBound(row))
                 {
                     increase = !increase;
                 }
@@ -40,7 +47,7 @@ namespace WPFCiphers.Ciphers
                 col++;
             }
 
-            return BuildWord(rails);
+            return rails;
         }
 
         private string BuildWord(char[,] rails)
