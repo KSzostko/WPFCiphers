@@ -22,7 +22,25 @@ namespace WPFCiphers.Ciphers
 
         public string Encrypt(string s)
         {
-            throw new NotImplementedException();
+            char[,] rails = InitRails(s);
+
+            bool increase = false;
+            int row = 0, col = 0;
+
+            foreach(char letter in s)
+            {
+                if(OnArrayBound(row))
+                {
+                    increase = !increase;
+                }
+
+                rails[row, col] = letter;
+
+                row = NextRow(row, increase);
+                col++;
+            }
+
+            return BuildWord(rails);
         }
 
         private string BuildWord(char[,] rails)
