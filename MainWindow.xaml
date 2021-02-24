@@ -48,7 +48,7 @@
         <!--.-->
 
         <!--Side-bar-->
-        <Border x:Name="sideBarGrid" Visibility="Visible" Grid.Column="2" BorderBrush="Black"  CornerRadius="3,3,3,3" Background="White" BorderThickness="4" Margin="20">
+        <Border x:Name="sideBarGrid" Visibility="Hidden" Grid.Column="2" BorderBrush="Black"  CornerRadius="3,3,3,3" Background="White" BorderThickness="4" Margin="20">
             <Grid 
               Background="White"
               ShowGridLines="False">
