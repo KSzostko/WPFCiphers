@@ -91,7 +91,10 @@ namespace WPFCiphers
         {
             int i;
             if (int.TryParse(keyTextBox.Text.ToString(), out i))
-                return true;
+            {
+                if( i != 1) return true;
+            }
+
             return false;
         }
     }
