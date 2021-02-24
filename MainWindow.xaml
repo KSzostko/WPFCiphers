@@ -37,9 +37,9 @@
 
             <Label Grid.Row="0" Content="BSK 2021" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="50" FontWeight="Black"></Label>
 
-            <Button Grid.Row="1" Style="{StaticResource DefaultButtonStyle}" Margin="20" FontSize="35" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" FontWeight="Light" Foreground="White">ALGORYTM #1</Button>
-            <Button Grid.Row="2" Style="{StaticResource DefaultButtonStyle}" Margin="20" FontSize="35" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" FontWeight="Light" Foreground="White">ALGORYTM #2</Button>
-            <Button Grid.Row="3" Style="{StaticResource DefaultButtonStyle}" Margin="20" FontSize="35" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" FontWeight="Light" Foreground="White">ALGORYTM #3</Button>
+            <Button Click="cipherButtonPressed" Name="RAIL_FENCE" Grid.Row="1" Style="{StaticResource DefaultButtonStyle}" Margin="20" FontSize="35" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" FontWeight="Light" Foreground="White" Content="RAIL FENCE"></Button>
+            <Button Click="cipherButtonPressed" Name="COLUMNAR_TRANSP" Grid.Row="2" Style="{StaticResource DefaultButtonStyle}" Margin="20" FontSize="35" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" FontWeight="Light" Foreground="White" Content="COLUMNAR TRANSP"></Button>
+            <Button Click="cipherButtonPressed" Name="alg3" Grid.Row="3" Style="{StaticResource DefaultButtonStyle}" Margin="20" FontSize="35" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" FontWeight="Light" Foreground="White" Content=" "></Button>
 
             <Label Grid.Row="4" Content="Jakub i Filip i Jakub 2021 ®" 
                    HorizontalAlignment="Center" VerticalAlignment="Bottom" 
@@ -48,7 +48,62 @@
         <!--.-->
 
         <!--Side-bar-->
+        <Border x:Name="sideBarGrid" Visibility="Visible" Grid.Column="2" BorderBrush="Black"  CornerRadius="3,3,3,3" Background="White" BorderThickness="4" Margin="20">
+            <Grid 
+              Background="White"
+              ShowGridLines="False">
+                <Grid.RowDefinitions>
+                    <RowDefinition/>
+                    <RowDefinition/>
+                    <RowDefinition/>
+                    <RowDefinition/>
+                    <RowDefinition/>
+                    <RowDefinition/>
+                </Grid.RowDefinitions>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition/>
+                    <ColumnDefinition/>
+                </Grid.ColumnDefinitions>
 
-
+                <Label x:Name="algoNameLabel" Content="algorithm name" 
+                   FontSize="30"
+                   HorizontalContentAlignment="Center" VerticalContentAlignment="Center"
+                   Grid.Row="0" Grid.ColumnSpan="2">
+                </Label>
+                <Grid Grid.Row="1" Grid.ColumnSpan="2">
+                    <Grid.RowDefinitions>
+                        <RowDefinition/>
+                        <RowDefinition/>
+                    </Grid.RowDefinitions>
+                    <Label Name="mLabel" Content="M" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" FontSize="30" FontWeight="Light"></Label>
+                    <TextBox Name="mTextBox" Grid.Row="1" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" FontSize="20" FontWeight="Light" Margin="5"></TextBox>
+                </Grid>
+                <Grid Grid.Row="2" Grid.ColumnSpan="2">
+                    <Grid.RowDefinitions>
+                        <RowDefinition/>
+                        <RowDefinition/>
+                    </Grid.RowDefinitions>
+                    <Label Name="keyLabel" Content="KEY" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" FontSize="30" FontWeight="Light"></Label>
+                    <TextBox x:Name="keyTextBox" Grid.Row="1" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" FontSize="20" FontWeight="Light" Margin="5"></TextBox>
+                </Grid>
+                <Grid Grid.Row="3" Grid.ColumnSpan="2">
+                    <Grid.RowDefinitions>
+                        <RowDefinition/>
+                        <RowDefinition/>
+                    </Grid.RowDefinitions>
+                    <Label Grid.Row="0" Content="ENCRYPTED:" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" FontSize="30" FontWeight="Normal"> </Label>
+                    <Label Grid.Row="1" Name="encryptedLabel" Content=" " HorizontalContentAlignment="Center" VerticalContentAlignment="Center" FontSize="30" FontWeight="Light"></Label>
+                </Grid>
+                <Grid Grid.Row="4" Grid.ColumnSpan="2">
+                    <Grid.RowDefinitions>
+                        <RowDefinition/>
+                        <RowDefinition/>
+                    </Grid.RowDefinitions>
+                    <Label Grid.Row="0" Content="DECRYPTED:" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" FontSize="30" FontWeight="Normal"></Label>
+                    <Label Grid.Row="1" Name="decryptedLabel" Content=" " HorizontalContentAlignment="Center" VerticalContentAlignment="Center" FontSize="30" FontWeight="Light"></Label>
+                </Grid>
+                <Button Click="doTheMagic" Grid.Row="5" Grid.ColumnSpan="2" Style="{StaticResource DefaultButtonStyle}" Foreground="Green" Content="DO THE MAGIC !" FontSize="30" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" FontWeight="ExtraLight"></Button>
+            </Grid>
+        </Border>
     </Grid>
 </Window>
