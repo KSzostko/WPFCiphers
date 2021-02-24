@@ -73,7 +73,7 @@ namespace WPFCiphers
                         int i = int.Parse(keyTextBox.Text.ToString());
                         rf = new RailFence(i);
                         string encrypted = rf.Encrypt(mTextBox.Text.ToString());
-                        string decrypted = rf.Encrypt(encrypted);
+                        string decrypted = rf.Decrypt(encrypted);
                         encryptedLabel.Content = encrypted;
                         decryptedLabel.Content = decrypted;
                     }
