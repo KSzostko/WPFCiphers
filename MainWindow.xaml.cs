@@ -35,6 +35,8 @@ namespace WPFCiphers
             string buttonName = ((Button)sender).Name;
             mTextBox.Text = " ";
             keyTextBox.Text = " ";
+            encryptedLabel.Content = " ";
+            decryptedLabel.Content = " ";
             if (buttonName == currentAlgorithm)
             {
                 sideBarGrid.Visibility = Visibility.Hidden;
