@@ -5,8 +5,50 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:WPFCiphers"
         mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="800">
-    <Grid>
-        
+        Title="MainWindow" Height="600" Width="1200"
+        ResizeMode="CanResize"
+        Background="White">
+    <Grid ShowGridLines="False">
+        <!--Grid setup-->
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition></ColumnDefinition>
+            <ColumnDefinition></ColumnDefinition>
+            <ColumnDefinition></ColumnDefinition>
+        </Grid.ColumnDefinitions>
+
+        <Grid.RowDefinitions>
+            <RowDefinition></RowDefinition>
+        </Grid.RowDefinitions>
+        <!--.-->
+
+        <!--Background image-->
+        <Image Stretch="Fill" Source="/assets/BG@2x.png" Grid.ColumnSpan="3" ></Image>
+        <!--.-->
+
+        <!--Menu-->
+        <Grid Grid.Column="1" Grid.Row="0" ShowGridLines="False">
+            <Grid.RowDefinitions>
+                <RowDefinition></RowDefinition>
+                <RowDefinition></RowDefinition>
+                <RowDefinition></RowDefinition>
+                <RowDefinition></RowDefinition>
+                <RowDefinition></RowDefinition>
+            </Grid.RowDefinitions>
+
+            <Label Grid.Row="0" Content="BSK 2021" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="50" FontWeight="Black"></Label>
+
+            <Button Grid.Row="1" Style="{StaticResource DefaultButtonStyle}" Margin="20" FontSize="35" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" FontWeight="Light" Foreground="White">ALGORYTM #1</Button>
+            <Button Grid.Row="2" Style="{StaticResource DefaultButtonStyle}" Margin="20" FontSize="35" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" FontWeight="Light" Foreground="White">ALGORYTM #2</Button>
+            <Button Grid.Row="3" Style="{StaticResource DefaultButtonStyle}" Margin="20" FontSize="35" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" FontWeight="Light" Foreground="White">ALGORYTM #3</Button>
+
+            <Label Grid.Row="4" Content="Jakub i Filip i Jakub 2021 ®" 
+                   HorizontalAlignment="Center" VerticalAlignment="Bottom" 
+                   FontSize="10" Foreground="Gray"></Label>
+        </Grid>
+        <!--.-->
+
+        <!--Side-bar-->
+
+
     </Grid>
 </Window>
