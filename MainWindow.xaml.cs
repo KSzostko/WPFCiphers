@@ -35,8 +35,8 @@ namespace WPFCiphers
             string buttonName = ((Button)sender).Name;
             mTextBox.Text = " ";
             keyTextBox.Text = " ";
-            encryptedLabel.Content = " ";
-            decryptedLabel.Content = " ";
+
+            outcomeLabel.Content = " ";
             if (buttonName == currentAlgorithm)
             {
                 sideBarGrid.Visibility = Visibility.Hidden;
@@ -65,8 +65,15 @@ namespace WPFCiphers
             }
         }
 
-        private void doTheMagic(object sender, RoutedEventArgs e)
+        private void encryptDecryptPressed(object sender, RoutedEventArgs e)
         {
+            string buttonName = ((Button)sender).Name;
+
+            string userInput = mTextBox.Text.ToString();
+
+            string encrypted = "";
+            string decrypted = "";
+
             switch (currentAlgorithm)
             {
                 case "RAIL_FENCE":
@@ -74,10 +81,9 @@ namespace WPFCiphers
                     {
                         int i = int.Parse(keyTextBox.Text.ToString());
                         rf = new RailFence(i);
-                        string encrypted = rf.Encrypt(mTextBox.Text.ToString());
-                        string decrypted = rf.Decrypt(encrypted);
-                        encryptedLabel.Content = encrypted;
-                        decryptedLabel.Content = decrypted;
+                        encrypted = rf.Encrypt(userInput);
+                        decrypted = rf.Decrypt(userInput);
+                        
                     }
                     break;
                 case "COLUMNAR_TRANSP":
@@ -86,7 +92,21 @@ namespace WPFCiphers
                 default:
                     break;
             }
+
+            if (buttonName == "encrypt")
+            {
+                outcomeTypeLabel.Content = "Encrypted:";
+                 outcomeLabel.Content = encrypted;
+            }
+            else
+            {
+                outcomeTypeLabel.Content = "Decrypted:";
+                outcomeLabel.Content = decrypted;
+            }
+                
+
         }
+    
         private bool validateRailfenceFields()
         {
             int i;
@@ -97,6 +117,8 @@ namespace WPFCiphers
 
             return false;
         }
+
+      
     }
 
    
