@@ -86,7 +86,7 @@
                     <Label Name="keyLabel" Content="KEY" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" FontSize="30" FontWeight="Light"></Label>
                     <TextBox x:Name="keyTextBox" Grid.Row="1" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" FontSize="20" FontWeight="Light" Margin="5"></TextBox>
                 </Grid>
-                
+
                 <Grid Grid.Row="3" Grid.RowSpan="2" Grid.ColumnSpan="2">
                     <Grid.RowDefinitions>
                         <RowDefinition/>
@@ -105,5 +105,77 @@
                 </Grid>
             </Grid>
         </Border>
+        <!--.-->
+        
+        <!--Side-bar-files-->
+        <Border x:Name="filessideBarGrid" Visibility="Visible" Grid.Column="0" BorderBrush="Black"  CornerRadius="3,3,3,3" Background="White" BorderThickness="4" Margin="20">
+            <Grid 
+              Background="White"
+              ShowGridLines="False">
+                <Grid.RowDefinitions>
+                    <RowDefinition/>
+                    <RowDefinition/>
+                    <RowDefinition/>
+                    <RowDefinition/>
+                    <RowDefinition/>
+                    <RowDefinition/>
+                </Grid.RowDefinitions>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition/>
+                    <ColumnDefinition/>
+                </Grid.ColumnDefinitions>
+
+                <Label x:Name="filesalgoNameLabel" Content="algorithm name" 
+                   FontSize="30"
+                   HorizontalContentAlignment="Center" VerticalContentAlignment="Center"
+                   Grid.Row="0" Grid.ColumnSpan="2">
+                </Label>
+                <Grid Grid.Row="1" Grid.ColumnSpan="2">
+                    <Grid.RowDefinitions>
+                        <RowDefinition/>
+                        <RowDefinition/>
+                    </Grid.RowDefinitions>
+                    <Button Name="filesmTextBox" Grid.Row="0" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" FontSize="20" FontWeight="Light" Margin="5" Style="{StaticResource DefaultButtonStyle}" Foreground="Green" Content="choose your file"></Button>
+                    <Label Grid.Row="1" Name="filesmLabel" Content="C:/get/213/7" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" FontSize="20" FontWeight="Light"></Label>
+                </Grid>
+                <Grid Grid.Row="2" Grid.ColumnSpan="2">
+                    <Grid.RowDefinitions>
+                        <RowDefinition/>
+                        <RowDefinition/>
+                    </Grid.RowDefinitions>
+                    <Label Name="fileskeyLabel" Content="KEY" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" FontSize="30" FontWeight="Light"></Label>
+                    <TextBox x:Name="fileskeyTextBox" Grid.Row="1" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" FontSize="20" FontWeight="Light" Margin="5"></TextBox>
+                </Grid>
+
+                <ScrollViewer>
+                <ItemsControl ItemsSource="{Binding outcomeScrollViewerList}" Margin="10">
+                    <ItemsControl.ItemTemplate>
+                        <DataTemplate>
+                            
+                        </DataTemplate>
+                    </ItemsControl.ItemTemplate>
+                </ItemsControl>
+                </ScrollViewer>
+
+                <Grid Grid.Row="5" Grid.ColumnSpan="2">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition/>
+                        <ColumnDefinition/>
+                    </Grid.ColumnDefinitions>
+                    <Button Name="filesencrypt" Grid.Column="0" Click="filesencryptDecryptPressed" Grid.Row="5"  Style="{StaticResource DefaultButtonStyle}" Foreground="Green" Content="ENCRYPT" FontSize="30" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" FontWeight="ExtraLight"></Button>
+                    <Button Name="filesdecrypt" Grid.Column="1" Click="filesencryptDecryptPressed" Grid.Row="5"  Style="{StaticResource DefaultButtonStyle}" Foreground="Red" Content="DECRYPT" FontSize="30" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" FontWeight="ExtraLight"></Button>
+                </Grid>
+            </Grid>
+        </Border>
     </Grid>
+
+
+
+    <!--.-->
+
+
+    
+    <!--.-->
+
+    
 </Window>

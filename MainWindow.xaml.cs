@@ -111,6 +111,11 @@ namespace WPFCiphers
 
         }
     
+        private void filesencryptDecryptPressed(object sender, RoutedEventArgs e)
+        {
+
+        }
+
         private bool validateRailfenceFields()
         {
             int i;
