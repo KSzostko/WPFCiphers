@@ -35,6 +35,7 @@ namespace WPFCiphers
             string buttonName = ((Button)sender).Name;
             mTextBox.Text = " ";
             keyTextBox.Text = " ";
+            outcomeTypeLabel.Content = " ";
 
             outcomeLabel.Content = " ";
             if (buttonName == currentAlgorithm)
