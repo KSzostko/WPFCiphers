@@ -15,7 +15,7 @@ namespace WPFCiphers.Ciphers
             this.Key = key;
         }
 
-        public string Decrypt(string s)
+        public string Encrypt(string s)
         {
             // kolumny z literami
             List<List<char>> columns = createColumns(s);
@@ -44,7 +44,7 @@ namespace WPFCiphers.Ciphers
             return decrypted_word;
         }
 
-        public string Encrypt(string s)
+        public string Decrypt(string s)
         {
             // ilość kolumn
             int lenght = this.Key.Max();
