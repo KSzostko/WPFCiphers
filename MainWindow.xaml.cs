@@ -30,6 +30,7 @@ namespace WPFCiphers
         // cipherButtonPressed fields...
         string currentAlgorithm = "none";
         RailFence rf;
+        ColumnarTransposition ct;
         private void cipherButtonPressed(object sender, System.Windows.RoutedEventArgs e)
         {
             string buttonName = ((Button)sender).Name;
@@ -71,6 +72,7 @@ namespace WPFCiphers
             string buttonName = ((Button)sender).Name;
 
             string userInput = mTextBox.Text.ToString();
+            string userKey = keyTextBox.Text.ToString();
 
             string encrypted = "";
             string decrypted = "";
@@ -80,15 +82,16 @@ namespace WPFCiphers
                 case "RAIL_FENCE":
                     if (validateRailfenceFields())
                     {
-                        int i = int.Parse(keyTextBox.Text.ToString());
+                        int i = int.Parse(userKey);
                         rf = new RailFence(i);
                         encrypted = rf.Encrypt(userInput);
                         decrypted = rf.Decrypt(userInput);
-                        
                     }
                     break;
                 case "COLUMNAR_TRANSP":
-                    
+                    ct = new ColumnarTransposition(parseColumnarTranspKey(userKey));
+                    encrypted = ct.Encrypt(userInput);
+                    decrypted = ct.Decrypt(userInput);
                     break;
                 default:
                     break;
@@ -96,12 +99,12 @@ namespace WPFCiphers
 
             if (buttonName == "encrypt")
             {
-                outcomeTypeLabel.Content = "Encrypted:";
-                 outcomeLabel.Content = encrypted;
+                if(encrypted != "") outcomeTypeLabel.Content = "Encrypted:";
+                outcomeLabel.Content = encrypted;
             }
             else
             {
-                outcomeTypeLabel.Content = "Decrypted:";
+                if (decrypted != "") outcomeTypeLabel.Content = "Decrypted:";
                 outcomeLabel.Content = decrypted;
             }
                 
@@ -118,7 +121,34 @@ namespace WPFCiphers
 
             return false;
         }
+        private int[] parseColumnarTranspKey(String s)
+        {
+            List<int> l = new List<int>();
 
+            int digit = 0;
+            int multiplier = 1;
+            for(int i = 0; i < s.Length; i++)
+            {
+                char x = s[i];
+                if (x < 48 || x > 57)
+                {
+                    if (digit != 0) l.Add(digit);
+                    digit = 0;
+                    multiplier = 1;
+                } else
+                {
+                    digit += (x - 48) * multiplier;
+                    multiplier *= 10;
+                }
+            }
+            int[] tab;
+            tab = new int[l.Count];
+            for(int i = 0; i < l.Count; i++)
+            {
+                tab[i] = l.ElementAt(i);
+            }
+            return tab;
+        }
       
     }
 
