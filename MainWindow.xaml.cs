@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -13,6 +14,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 using WPFCiphers.Ciphers;
+
 namespace WPFCiphers
 {
     /// <summary>
@@ -21,35 +23,52 @@ namespace WPFCiphers
     /// g
     public partial class MainWindow : Window
     {
+        public ObservableCollection<string> outcomeScrollViewerList { get; set; }
+        public ObservableCollection<string> userInputScrollList { get; set; }
+        
         public MainWindow()
         {
             InitializeComponent();
+            outcomeScrollViewerList = new ObservableCollection<string>();
+            userInputScrollList = new ObservableCollection<string>();
+            this.DataContext = this;
+            
         }
 
 
-        // cipherButtonPressed fields...
+        // cipher fields...
         string currentAlgorithm = "none";
         RailFence rf;
         ColumnarTransposition ct;
+
+        
+        
+        // cipher methods
         private void cipherButtonPressed(object sender, System.Windows.RoutedEventArgs e)
         {
             string buttonName = ((Button)sender).Name;
             mTextBox.Text = " ";
             keyTextBox.Text = " ";
             outcomeTypeLabel.Content = " ";
+            userInputScrollList.Clear();
+            outcomeScrollViewerList.Clear();
+            userInputList.Clear();
+            filesmLabel.Content = "";
 
             outcomeLabel.Content = " ";
             if (buttonName == currentAlgorithm)
             {
+                filessideBarGrid.Visibility = Visibility.Hidden;
                 sideBarGrid.Visibility = Visibility.Hidden;
                 currentAlgorithm = "none";
             }
             else
             {
+                filessideBarGrid.Visibility = Visibility.Visible;
                 sideBarGrid.Visibility = Visibility.Visible;
                 currentAlgorithm = buttonName;
                 algoNameLabel.Content = buttonName;
-
+                filesalgoNameLabel.Content = buttonName;
              
                 switch (currentAlgorithm)
                 {
@@ -80,7 +99,7 @@ namespace WPFCiphers
             switch (currentAlgorithm)
             {
                 case "RAIL_FENCE":
-                    if (validateRailfenceFields())
+                    if (validateRailfenceFields(keyTextBox.Text.ToString()))
                     {
                         int i = int.Parse(userKey);
                         rf = new RailFence(i);
@@ -114,12 +133,54 @@ namespace WPFCiphers
         private void filesencryptDecryptPressed(object sender, RoutedEventArgs e)
         {
 
+            outcomeScrollViewerList.Clear();
+
+            string buttonName = ((Button)sender).Name;
+            string userKey = fileskeyTextBox.Text.ToString();
+            string userInput = "";
+
+            string encrypted = "";
+            string decrypted = "";
+
+            foreach (string line in userInputList)
+            {
+                userInput = line;
+                switch (currentAlgorithm)
+                {
+                case "RAIL_FENCE":
+                    if (validateRailfenceFields(fileskeyTextBox.Text.ToString()))
+                    {
+                        int i = int.Parse(userKey);
+                        rf = new RailFence(i);
+                        encrypted = rf.Encrypt(userInput);
+                        decrypted = rf.Decrypt(userInput);
+                    }
+                    break;
+                case "COLUMNAR_TRANSP":
+                    ct = new ColumnarTransposition(parseColumnarTranspKey(userKey));
+                    encrypted = ct.Encrypt(userInput);
+                    decrypted = ct.Decrypt(userInput);
+                    break;
+                default:
+                    break;
+                }
+                if (buttonName == "filesencrypt")
+                {
+                    outcomeScrollViewerList.Add(encrypted);
+                }
+                else
+                {
+                    outcomeScrollViewerList.Add(decrypted);
+                } 
+            }
+
+            
         }
 
-        private bool validateRailfenceFields()
+        private bool validateRailfenceFields(string s)
         {
             int i;
-            if (int.TryParse(keyTextBox.Text.ToString(), out i))
+            if (int.TryParse(s, out i))
             {
                 if( i != 1) return true;
             }
@@ -154,7 +215,28 @@ namespace WPFCiphers
             }
             return tab;
         }
-      
+
+        List<string> userInputList = new List<string>();
+
+        private void chooseFileButton_Click(object sender, RoutedEventArgs e)
+        {
+            userInputScrollList.Clear();
+            outcomeScrollViewerList.Clear();
+            userInputList.Clear();
+
+            var ofd = new Microsoft.Win32.OpenFileDialog() { Filter = "TXT Files (*.txt)|*.txt" };
+            var result = ofd.ShowDialog();
+            if (result == false) return;
+            var filepath = ofd.FileName;
+            filesmLabel.Content = ofd.FileName;
+            string[] lines = System.IO.File.ReadAllLines(@filepath);
+            foreach (string line in lines)
+            {
+                // Use a tab to indent each line of the file.
+                userInputList.Add(line);
+                userInputScrollList.Add(line);
+            }
+        }
     }
 
    
