@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.ComponentModel;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -23,37 +25,32 @@ namespace WPFCiphers
     /// g
     public partial class MainWindow : Window
     {
+
         public ObservableCollection<string> outcomeScrollViewerList { get; set; }
         public ObservableCollection<string> userInputScrollList { get; set; }
-        
+        //List<string> userInputList = new List<string>();
+
         public MainWindow()
         {
             InitializeComponent();
             outcomeScrollViewerList = new ObservableCollection<string>();
             userInputScrollList = new ObservableCollection<string>();
             this.DataContext = this;
-            
+
+          
+
         }
 
-
-        // cipher fields...
         string currentAlgorithm = "none";
         RailFence rf;
         ColumnarTransposition ct;
 
-        
-        
-        // cipher methods
+
+
         private void cipherButtonPressed(object sender, System.Windows.RoutedEventArgs e)
         {
             string buttonName = ((Button)sender).Name;
-            mTextBox.Text = " ";
-            keyTextBox.Text = " ";
-            outcomeTypeLabel.Content = " ";
-            userInputScrollList.Clear();
-            outcomeScrollViewerList.Clear();
-            userInputList.Clear();
-            filesmLabel.Content = "";
+            clearView();
 
             outcomeLabel.Content = " ";
             if (buttonName == currentAlgorithm)
@@ -69,7 +66,7 @@ namespace WPFCiphers
                 currentAlgorithm = buttonName;
                 algoNameLabel.Content = buttonName;
                 filesalgoNameLabel.Content = buttonName;
-             
+
                 switch (currentAlgorithm)
                 {
                     case "RAIL_FENCE":
@@ -105,6 +102,7 @@ namespace WPFCiphers
                         rf = new RailFence(i);
                         encrypted = rf.Encrypt(userInput);
                         decrypted = rf.Decrypt(userInput);
+
                     }
                     break;
                 case "COLUMNAR_TRANSP":
@@ -118,7 +116,7 @@ namespace WPFCiphers
 
             if (buttonName == "encrypt")
             {
-                if(encrypted != "") outcomeTypeLabel.Content = "Encrypted:";
+                if (encrypted != "") outcomeTypeLabel.Content = "Encrypted:";
                 outcomeLabel.Content = encrypted;
             }
             else
@@ -126,55 +124,84 @@ namespace WPFCiphers
                 if (decrypted != "") outcomeTypeLabel.Content = "Decrypted:";
                 outcomeLabel.Content = decrypted;
             }
-                
+           
+
 
         }
-    
+
         private void filesencryptDecryptPressed(object sender, RoutedEventArgs e)
         {
-
+            // setup outcome list
             outcomeScrollViewerList.Clear();
 
+            // init key, algorithm and temp fields
             string buttonName = ((Button)sender).Name;
             string userKey = fileskeyTextBox.Text.ToString();
             string userInput = "";
-
             string encrypted = "";
             string decrypted = "";
-
-            foreach (string line in userInputList)
+            string status = "";
+            Cipher algorithm;
+            // needed cause compiler cries about algorithm not being set
+            algorithm = new RailFence(3);
+            // check for encryption status
+            if (buttonName == "filesencrypt")
             {
-                userInput = line;
-                switch (currentAlgorithm)
-                {
+                status = "encrypting";
+            }
+            else
+            {
+                status = "decrypting";
+            }
+
+            parseColumnarTranspKey(userKey);
+
+            // inicialize algorithm with key
+            switch (currentAlgorithm)
+            {
                 case "RAIL_FENCE":
                     if (validateRailfenceFields(fileskeyTextBox.Text.ToString()))
                     {
                         int i = int.Parse(userKey);
-                        rf = new RailFence(i);
-                        encrypted = rf.Encrypt(userInput);
-                        decrypted = rf.Decrypt(userInput);
+                        algorithm = new RailFence(i);
+                    }
+                    else
+                    {
+                        return;
                     }
                     break;
                 case "COLUMNAR_TRANSP":
-                    ct = new ColumnarTransposition(parseColumnarTranspKey(userKey));
-                    encrypted = ct.Encrypt(userInput);
-                    decrypted = ct.Decrypt(userInput);
+                    if (validateColumnarTranspkey(userKey))
+                    {
+                        parseColumnarTranspKey(userKey);
+                        //algorithm = new ColumnarTransposition(parseColumnarTranspKey(userKey));
+                    } else
+                    {
+                        return;
+                    }
                     break;
                 default:
-                    break;
-                }
-                if (buttonName == "filesencrypt")
-                {
-                    outcomeScrollViewerList.Add(encrypted);
-                }
-                else
-                {
-                    outcomeScrollViewerList.Add(decrypted);
-                } 
+                    return;
             }
 
-            
+            // depending on the status move through input list and update outcome list
+            if (status == "encrypting")
+                foreach (string line in userInputScrollList)
+                {
+                    userInput = line;
+                    encrypted = algorithm.Encrypt(line);
+                    outcomeScrollViewerList.Add(encrypted);
+                }
+            else
+            {
+                foreach (string line in userInputScrollList)
+                {
+                    userInput = line;
+                    decrypted = algorithm.Decrypt(line);
+                    outcomeScrollViewerList.Add(decrypted);
+                }
+            }
+
         }
 
         private bool validateRailfenceFields(string s)
@@ -182,62 +209,108 @@ namespace WPFCiphers
             int i;
             if (int.TryParse(s, out i))
             {
-                if( i != 1) return true;
+                if (i != 1) return true;
             }
 
             return false;
         }
-        private int[] parseColumnarTranspKey(String s)
+        private bool validateColumnarTranspkey(string s)
+        {
+            // TODO: get to know-how of columanr transp algorithm and replace this dummy method with proper one
+            return true;
+        }
+        private int[] parseColumnarTranspKey(string s)
         {
             List<int> l = new List<int>();
 
-            int digit = 0;
-            int multiplier = 1;
-            for(int i = 0; i < s.Length; i++)
+            string cacheNumber = "";
+            // needed for parsing algorithm to work.
+            s += " ";
+            for (int i = 0; i < s.Length; i++)
             {
-                char x = s[i];
-                if (x < 48 || x > 57)
+                if (Char.IsDigit(s[i]))
                 {
-                    if (digit != 0) l.Add(digit);
-                    digit = 0;
-                    multiplier = 1;
+                    cacheNumber += s[i];
                 } else
                 {
-                    digit += (x - 48) * multiplier;
-                    multiplier *= 10;
+                    if(cacheNumber != "") l.Add(Int32.Parse(cacheNumber));
+                    cacheNumber = "";
+
                 }
             }
-            int[] tab;
-            tab = new int[l.Count];
-            for(int i = 0; i < l.Count; i++)
+            int[] tab = new int[l.Count];
+            for (int i = 0; i < l.Count; i++)
             {
                 tab[i] = l.ElementAt(i);
             }
             return tab;
         }
 
-        List<string> userInputList = new List<string>();
+
+        List<string> listOfLines = new List<string>();
 
         private void chooseFileButton_Click(object sender, RoutedEventArgs e)
         {
-            userInputScrollList.Clear();
-            outcomeScrollViewerList.Clear();
-            userInputList.Clear();
+            
+
+            clearLists();
 
             var ofd = new Microsoft.Win32.OpenFileDialog() { Filter = "TXT Files (*.txt)|*.txt" };
             var result = ofd.ShowDialog();
             if (result == false) return;
             var filepath = ofd.FileName;
             filesmLabel.Content = ofd.FileName;
-            string[] lines = System.IO.File.ReadAllLines(@filepath);
-            foreach (string line in lines)
+           
+
+
+            using (FileStream fs = File.Open(filepath, FileMode.Open, FileAccess.Read, FileShare.ReadWrite))
+            using (BufferedStream bs = new BufferedStream(fs))
+            using (StreamReader sr = new StreamReader(bs))
             {
-                // Use a tab to indent each line of the file.
-                userInputList.Add(line);
-                userInputScrollList.Add(line);
+                string line;
+                int i = 0;
+                while ((line = sr.ReadLine()) != null)
+                {
+
+                    outcomeLabel.Content = i;
+                    i++;
+                    listOfLines.Add(line);
+                    //userInputScrollList.Add("X");
+                }
             }
+            //foreach (string line in listOfLines)
+            //{
+            //    dispatcher.Invoke(DispatcherPriority.DataBind, (Action<T>)((line) => {
+            //        Add(line);
+            //    }), item);
+            //}
+            //string[] lines = System.IO.File.ReadAllLines(@filepath);
+            //foreach (string line in lines)
+            //{
+            //    // Use a tab to indent each line of the file.
+            //    userInputList.Add(line);
+            //    userInputScrollList.Add(line);
+            //}
+        }
+        private void clearView()
+        {
+            mTextBox.Text = " ";
+            keyTextBox.Text = " ";
+            outcomeTypeLabel.Content = " ";
+            userInputScrollList.Clear();
+            outcomeScrollViewerList.Clear();
+            
+            filesmLabel.Content = "";
+        }
+        private void clearLists()
+        {
+            userInputScrollList.Clear();
+            outcomeScrollViewerList.Clear();
+            listOfLines.Clear();
+           
         }
     }
 
-   
+
+
 }
