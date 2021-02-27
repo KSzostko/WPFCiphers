@@ -141,6 +141,7 @@ namespace WPFCiphers
             string encrypted = "";
             string decrypted = "";
             string status = "";
+            string algorithmName = "";
             Cipher algorithm;
             // needed cause compiler cries about algorithm not being set
             algorithm = new RailFence(3);
@@ -164,6 +165,7 @@ namespace WPFCiphers
                     {
                         int i = int.Parse(userKey);
                         algorithm = new RailFence(i);
+                        algorithmName = "rail fence";
                     }
                     else
                     {
@@ -175,6 +177,7 @@ namespace WPFCiphers
                     {
                         parseColumnarTranspKey(userKey);
                         //algorithm = new ColumnarTransposition(parseColumnarTranspKey(userKey));
+                        algorithmName = "columnar transposition";
                     }
                     else
                     {
@@ -187,12 +190,14 @@ namespace WPFCiphers
 
             // depending on the status move through input list and update outcome list
 
+            string currentDate = DateTime.Now.ToString().Replace(':', ' ').Replace('/', ' ');
+            
 
             if (status == "encrypting")
             {
                 if (listOfLines.Count > textFileLinesAmountBreakPoint)
                 {
-                    TextWriter tw = new StreamWriter("EncryptedListOfWords.txt");
+                    TextWriter tw = new StreamWriter("EncryptedListOfWords - " + currentAlgorithm + " - " + currentDate + ".txt");
                     string outcome = "";
                     foreach (string s in listOfLines)
                     {
@@ -215,7 +220,7 @@ namespace WPFCiphers
             {
                 if (listOfLines.Count > textFileLinesAmountBreakPoint)
                 {
-                    TextWriter tw = new StreamWriter("DecryptedListOfWords.txt");
+                    TextWriter tw = new StreamWriter("DecryptedListOfWords - " + currentAlgorithm + " - " + currentDate + ".txt");
                     string outcome = "";
                     foreach (string s in listOfLines)
                     {
@@ -236,8 +241,14 @@ namespace WPFCiphers
             }
             if (listOfLines.Count > textFileLinesAmountBreakPoint)
             {
-                MessageBox.Show("Check app's folder for outcome of this operation.");
-                outcomeScrollViewerList.Add("Check your app's folder");
+                MessageBox.Show("Check app's folder for outcome of this operation. ");
+                outcomeScrollViewerList.Add("Check your app's folder for");
+                if (status == "encrypting") outcomeScrollViewerList.Add("EncryptedListOfWords - ");
+                else outcomeScrollViewerList.Add("DecryptedListOfWords - " );
+                outcomeScrollViewerList.Add(currentAlgorithm); 
+                outcomeScrollViewerList.Add(" - ");
+                outcomeScrollViewerList.Add(currentDate);
+                outcomeScrollViewerList.Add(".txt");
             }
 
 
