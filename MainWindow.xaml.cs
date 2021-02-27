@@ -28,7 +28,7 @@ namespace WPFCiphers
 
         public ObservableCollection<string> outcomeScrollViewerList { get; set; }
         public ObservableCollection<string> userInputScrollList { get; set; }
-        //List<string> userInputList = new List<string>();
+        int textFileLinesAmountBreakPoint = 100;
 
         public MainWindow()
         {
@@ -190,7 +190,7 @@ namespace WPFCiphers
 
             if (status == "encrypting")
             {
-                if (listOfLines.Count > 100000)
+                if (listOfLines.Count > textFileLinesAmountBreakPoint)
                 {
                     TextWriter tw = new StreamWriter("EncryptedListOfWords.txt");
                     string outcome = "";
@@ -213,7 +213,7 @@ namespace WPFCiphers
             }
             else
             {
-                if (listOfLines.Count > 100000)
+                if (listOfLines.Count > textFileLinesAmountBreakPoint)
                 {
                     TextWriter tw = new StreamWriter("DecryptedListOfWords.txt");
                     string outcome = "";
@@ -234,7 +234,7 @@ namespace WPFCiphers
                     }
                 }
             }
-            if (listOfLines.Count > 100000)
+            if (listOfLines.Count > textFileLinesAmountBreakPoint)
             {
                 MessageBox.Show("Check app's folder for outcome of this operation.");
                 outcomeScrollViewerList.Add("Check your app's folder");
@@ -316,7 +316,7 @@ namespace WPFCiphers
                     //
                 }
             }
-            if (listOfLines.Count > 100000)
+            if (listOfLines.Count > textFileLinesAmountBreakPoint)
             {
                 userInputScrollList.Add("File stored in memory");
                 userInputScrollList.Add("you can still do your ");
