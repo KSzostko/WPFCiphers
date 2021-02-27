@@ -185,22 +185,59 @@ namespace WPFCiphers
             }
 
             // depending on the status move through input list and update outcome list
-            if (status == "encrypting")
-                foreach (string line in userInputScrollList)
+        
+            
+                if (status == "encrypting")
                 {
-                    userInput = line;
-                    encrypted = algorithm.Encrypt(line);
-                    outcomeScrollViewerList.Add(encrypted);
+                    if (listOfLines.Count > 100000)
+                    {
+                        TextWriter tw = new StreamWriter("EncryptedListOfWords.txt");
+                        string outcome = "";
+                        foreach (string s in listOfLines)
+                        {
+                            outcome = algorithm.Encrypt(s);
+                            tw.WriteLine(outcome);
+                        }
+                        tw.Close();
+                    } else
+                    {
+                        foreach (string line in userInputScrollList)
+                        {
+                            userInput = line;
+                            encrypted = algorithm.Encrypt(line);
+                            outcomeScrollViewerList.Add(encrypted);
+                        }
+                    }
+                    }
+                else
+                {
+                    if (listOfLines.Count > 100000)
+                    {
+                        TextWriter tw = new StreamWriter("DecryptedListOfWords.txt");
+                        string outcome = "";
+                        foreach (string s in listOfLines)
+                        {
+                            outcome = algorithm.Decrypt(s);
+                            tw.WriteLine(outcome);
+                        }
+                        tw.Close();
+                    }
+                    else
+                    {
+                        foreach (string line in userInputScrollList)
+                        {
+                            userInput = line;
+                            decrypted = algorithm.Decrypt(line);
+                            outcomeScrollViewerList.Add(decrypted);
+                        }
+                    }
                 }
-            else
+                if(listOfLines.Count > 100000)
             {
-                foreach (string line in userInputScrollList)
-                {
-                    userInput = line;
-                    decrypted = algorithm.Decrypt(line);
-                    outcomeScrollViewerList.Add(decrypted);
-                }
+                MessageBox.Show("Check app's folder for outcome of this operation.");
+                outcomeScrollViewerList.Add("Check your app's folder");
             }
+               
 
         }
 
@@ -275,8 +312,19 @@ namespace WPFCiphers
                     outcomeLabel.Content = i;
                     i++;
                     listOfLines.Add(line);
-                    //userInputScrollList.Add("X");
+                    //
                 }
+            }
+            if(listOfLines.Count > 100000)
+            {
+                userInputScrollList.Add("File stored in memory");
+                userInputScrollList.Add("you can still do your ");
+                userInputScrollList.Add("encrypt/decrypt operations.");
+                MessageBox.Show("Your file is stored in the memory, you can do the encrypt/decrypt operation on it and it will be saved to seperate text file inside app's main folder.");
+            } else
+            {
+                foreach (string s in listOfLines)
+                    userInputScrollList.Add(s);
             }
             //foreach (string line in listOfLines)
             //{
