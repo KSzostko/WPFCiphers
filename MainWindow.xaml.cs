@@ -37,7 +37,7 @@ namespace WPFCiphers
             userInputScrollList = new ObservableCollection<string>();
             this.DataContext = this;
 
-          
+
 
         }
 
@@ -124,7 +124,7 @@ namespace WPFCiphers
                 if (decrypted != "") outcomeTypeLabel.Content = "Decrypted:";
                 outcomeLabel.Content = decrypted;
             }
-           
+
 
 
         }
@@ -175,7 +175,8 @@ namespace WPFCiphers
                     {
                         parseColumnarTranspKey(userKey);
                         //algorithm = new ColumnarTransposition(parseColumnarTranspKey(userKey));
-                    } else
+                    }
+                    else
                     {
                         return;
                     }
@@ -185,59 +186,60 @@ namespace WPFCiphers
             }
 
             // depending on the status move through input list and update outcome list
-        
-            
-                if (status == "encrypting")
+
+
+            if (status == "encrypting")
+            {
+                if (listOfLines.Count > 100000)
                 {
-                    if (listOfLines.Count > 100000)
+                    TextWriter tw = new StreamWriter("EncryptedListOfWords.txt");
+                    string outcome = "";
+                    foreach (string s in listOfLines)
                     {
-                        TextWriter tw = new StreamWriter("EncryptedListOfWords.txt");
-                        string outcome = "";
-                        foreach (string s in listOfLines)
-                        {
-                            outcome = algorithm.Encrypt(s);
-                            tw.WriteLine(outcome);
-                        }
-                        tw.Close();
-                    } else
-                    {
-                        foreach (string line in userInputScrollList)
-                        {
-                            userInput = line;
-                            encrypted = algorithm.Encrypt(line);
-                            outcomeScrollViewerList.Add(encrypted);
-                        }
+                        outcome = algorithm.Encrypt(s);
+                        tw.WriteLine(outcome);
                     }
-                    }
+                    tw.Close();
+                }
                 else
                 {
-                    if (listOfLines.Count > 100000)
+                    foreach (string line in userInputScrollList)
                     {
-                        TextWriter tw = new StreamWriter("DecryptedListOfWords.txt");
-                        string outcome = "";
-                        foreach (string s in listOfLines)
-                        {
-                            outcome = algorithm.Decrypt(s);
-                            tw.WriteLine(outcome);
-                        }
-                        tw.Close();
-                    }
-                    else
-                    {
-                        foreach (string line in userInputScrollList)
-                        {
-                            userInput = line;
-                            decrypted = algorithm.Decrypt(line);
-                            outcomeScrollViewerList.Add(decrypted);
-                        }
+                        userInput = line;
+                        encrypted = algorithm.Encrypt(line);
+                        outcomeScrollViewerList.Add(encrypted);
                     }
                 }
-                if(listOfLines.Count > 100000)
+            }
+            else
+            {
+                if (listOfLines.Count > 100000)
+                {
+                    TextWriter tw = new StreamWriter("DecryptedListOfWords.txt");
+                    string outcome = "";
+                    foreach (string s in listOfLines)
+                    {
+                        outcome = algorithm.Decrypt(s);
+                        tw.WriteLine(outcome);
+                    }
+                    tw.Close();
+                }
+                else
+                {
+                    foreach (string line in userInputScrollList)
+                    {
+                        userInput = line;
+                        decrypted = algorithm.Decrypt(line);
+                        outcomeScrollViewerList.Add(decrypted);
+                    }
+                }
+            }
+            if (listOfLines.Count > 100000)
             {
                 MessageBox.Show("Check app's folder for outcome of this operation.");
                 outcomeScrollViewerList.Add("Check your app's folder");
             }
-               
+
 
         }
 
@@ -268,9 +270,10 @@ namespace WPFCiphers
                 if (Char.IsDigit(s[i]))
                 {
                     cacheNumber += s[i];
-                } else
+                }
+                else
                 {
-                    if(cacheNumber != "") l.Add(Int32.Parse(cacheNumber));
+                    if (cacheNumber != "") l.Add(Int32.Parse(cacheNumber));
                     cacheNumber = "";
 
                 }
@@ -288,7 +291,7 @@ namespace WPFCiphers
 
         private void chooseFileButton_Click(object sender, RoutedEventArgs e)
         {
-            
+
 
             clearLists();
 
@@ -297,7 +300,7 @@ namespace WPFCiphers
             if (result == false) return;
             var filepath = ofd.FileName;
             filesmLabel.Content = ofd.FileName;
-           
+
 
 
             using (FileStream fs = File.Open(filepath, FileMode.Open, FileAccess.Read, FileShare.ReadWrite))
@@ -308,37 +311,24 @@ namespace WPFCiphers
                 int i = 0;
                 while ((line = sr.ReadLine()) != null)
                 {
-
-                    outcomeLabel.Content = i;
                     i++;
                     listOfLines.Add(line);
                     //
                 }
             }
-            if(listOfLines.Count > 100000)
+            if (listOfLines.Count > 100000)
             {
                 userInputScrollList.Add("File stored in memory");
                 userInputScrollList.Add("you can still do your ");
                 userInputScrollList.Add("encrypt/decrypt operations.");
+                userInputScrollList.Add("Lines stored: " + listOfLines.Count);
                 MessageBox.Show("Your file is stored in the memory, you can do the encrypt/decrypt operation on it and it will be saved to seperate text file inside app's main folder.");
-            } else
+            }
+            else
             {
                 foreach (string s in listOfLines)
                     userInputScrollList.Add(s);
             }
-            //foreach (string line in listOfLines)
-            //{
-            //    dispatcher.Invoke(DispatcherPriority.DataBind, (Action<T>)((line) => {
-            //        Add(line);
-            //    }), item);
-            //}
-            //string[] lines = System.IO.File.ReadAllLines(@filepath);
-            //foreach (string line in lines)
-            //{
-            //    // Use a tab to indent each line of the file.
-            //    userInputList.Add(line);
-            //    userInputScrollList.Add(line);
-            //}
         }
         private void clearView()
         {
@@ -347,7 +337,7 @@ namespace WPFCiphers
             outcomeTypeLabel.Content = " ";
             userInputScrollList.Clear();
             outcomeScrollViewerList.Clear();
-            
+
             filesmLabel.Content = "";
         }
         private void clearLists()
@@ -355,7 +345,7 @@ namespace WPFCiphers
             userInputScrollList.Clear();
             outcomeScrollViewerList.Clear();
             listOfLines.Clear();
-           
+
         }
     }
 
