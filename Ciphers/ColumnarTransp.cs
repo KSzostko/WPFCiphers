@@ -8,33 +8,32 @@ namespace WPFCiphers.Ciphers
 {
     class ColumnarTransposition : Cipher
     {
-        public List<int> key { get; set; }
+        public int[] Key { get; set; }
 
-        public ColumnarTransposition(List<int> key)
+        public ColumnarTransposition(int[] key)
         {
-            this.key = key;
+            this.Key = key;
         }
-
-
+        
         public string Encrypt(string text)
         {
             string output = "";
             //jaką długość będzie mieć najkrótsza kolumna
-            int column_lenght = (int)Math.Floor((decimal)text.Length / key.Count);
-            //ile będzie kolumn z maksymalną długością, jak 0 to wszystkie
-            int column_full = text.Length % key.Count;
+            int minColLength = (int)Math.Floor((decimal)text.Length / Key.Length);
+            //jaką długość będzie mieć najkrótszy wiersz
+            int lastRowLength = text.Length % Key.Length;
 
-            for (int i = 0; i <= column_lenght; i++)
+            for (int i = 0; i <= minColLength; i++)
             {
-                for (int j = 0; j < key.Count; j++)
+                foreach (int colNr in Key)
                 {
-                    if (i == column_lenght)
+                    if (i == minColLength)
                     {
-                        if (key[j] <= column_full)
-                            output += text[(key[j] + ((i) * key.Count)) - 1];
+                        if (colNr <= lastRowLength)
+                            output += text[(colNr + ((i) * Key.Length)) - 1];
                     }
                     else
-                        output += text[(key[j] + ((i) * key.Count)) - 1];
+                        output += text[(colNr + ((i) * Key.Length)) - 1];
                 }
             }
 
@@ -46,26 +45,26 @@ namespace WPFCiphers.Ciphers
         {
             char[] output = new char[text.Length];
             //jaką długość będzie mieć najkrótsza kolumna
-            int column_lenght = (int)Math.Floor((decimal)text.Length / key.Count);
-            //ile będzie kolumn z maksymalną długością, jak 0 to wszystkie
-            int column_full = text.Length % key.Count;
+            int minColLength = (int)Math.Floor((decimal)text.Length / Key.Length);
+            //jaką długość będzie mieć najkrótszy wiersz
+            int lastRowLength = text.Length % Key.Length;
             // 
             int row = 0;
 
-            for (int i = 0; i <= column_lenght; i++)
+            for (int i = 0; i <= minColLength; i++)
             {
-                for (int j = 0; j < key.Count; j++)
+                for (int j = 0; j < Key.Length; j++)
                 {
-                    if (i == column_lenght)
+                    if (i == minColLength)
                     {
-                        if (key[j] <= column_full)
+                        if (Key[j] <= lastRowLength)
                         {
-                            output[(key[j]) + ((i) * key.Count) - 1] = text[row + i * key.Count];
+                            output[(Key[j]) + ((i) * Key.Length) - 1] = text[row + i * Key.Length];
                             row++;
                         }
                     }
                     else
-                        output[(key[j]) + ((i) * key.Count) - 1] = text[j + i * key.Count];
+                        output[(Key[j]) + ((i) * Key.Length) - 1] = text[j + i * Key.Length];
                 }
             }
 
