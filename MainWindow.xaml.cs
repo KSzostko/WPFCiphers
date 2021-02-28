@@ -257,11 +257,18 @@ namespace WPFCiphers
         private bool validateRailfenceFields(string s)
         {
             int i;
+           
             if (int.TryParse(s, out i))
             {
-                if (i != 1) return true;
+                if (i < 2)
+                {
+                    MessageBox.Show("Rail fence key is invalid. Please provide integer greater than 1.");
+                    return false;
+                }
+                  
+                return true;
             }
-
+            MessageBox.Show("Rail fence key is invalid. Please provide integer greater than 1.");
             return false;
         }
         private bool validateColumnarTranspkey(string s)
