@@ -343,9 +343,9 @@ namespace WPFCiphers
         }
         private void clearView()
         {
-            mTextBox.Text = " ";
-            keyTextBox.Text = " ";
-            outcomeTypeLabel.Content = " ";
+            mTextBox.Text = "";
+            keyTextBox.Text = "";
+            outcomeTypeLabel.Content = "";
             userInputScrollList.Clear();
             outcomeScrollViewerList.Clear();
 
