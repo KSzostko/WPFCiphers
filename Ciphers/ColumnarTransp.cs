@@ -14,103 +14,61 @@ namespace WPFCiphers.Ciphers
         {
             this.Key = key;
         }
-
-        public string Encrypt(string s)
+        
+        public string Encrypt(string text)
         {
-            // kolumny z literami
-            List<List<char>> columns = createColumns(s);
+            string output = "";
+            //jaką długość będzie mieć najkrótsza kolumna
+            int minColLength = (int)Math.Floor((decimal)text.Length / Key.Length);
+            //jaką długość będzie mieć najkrótszy wiersz
+            int lastRowLength = text.Length % Key.Length;
 
-            string decrypted_word = "";
-            int column_count = 0;
-            int column_current = Key[column_count] - 1;
-            for (int i = 0; i < s.Length; i++)
+            for (int i = 0; i <= minColLength; i++)
             {
-                if (columns[column_current].Any())
+                foreach (int colNr in Key)
                 {
-                    char character = columns[column_current].First();
-                    decrypted_word += character;
-                    columns[column_current].Remove(character);
+                    if (i == minColLength)
+                    {
+                        if (colNr <= lastRowLength)
+                            output += text[(colNr + ((i) * Key.Length)) - 1];
+                    }
+                    else
+                        output += text[(colNr + ((i) * Key.Length)) - 1];
                 }
-                else
-                {
-                    decrypted_word += '-';
-                    i--;
-                }
-
-                column_count = (column_count + 1) % Key.Max();
-                column_current = Key[column_count] - 1;
             }
 
-            return decrypted_word;
+            return output;
         }
 
-        public string Decrypt(string s)
+
+        public string Decrypt(string text)
         {
-            // ilość kolumn
-            int lenght = this.Key.Max();
+            char[] output = new char[text.Length];
+            //jaką długość będzie mieć najkrótsza kolumna
+            int minColLength = (int)Math.Floor((decimal)text.Length / Key.Length);
+            //jaką długość będzie mieć najkrótszy wiersz
+            int lastRowLength = text.Length % Key.Length;
+            // 
+            int row = 0;
 
-            // lista kolumn
-            List<List<char>> columns = new List<List<char>>();
-            for (int i = 0; i < lenght; i++)
+            for (int i = 0; i <= minColLength; i++)
             {
-                List<char> new_column = new List<char>();
-                columns.Add(new_column);
-            }
-
-            //słowo do kolumn
-            int column_count = 0;
-            int column_current = Key[column_count] - 1;
-            for (int i = 0; i < s.Length; i++)
-            {
-                columns[column_current].Add(s[i]);
-
-                column_count = (column_count + 1) % Key.Max();
-                column_current = Key[column_count] - 1;
-            }
-
-
-            string encrypted_word = "";
-            column_current = 0;
-            for (int i = 0; i < s.Length; i++)
-            {
-                if (columns[column_current].Any())
+                for (int j = 0; j < Key.Length; j++)
                 {
-
-                    char character = columns[column_current].First();
-                    if (character != '-')
-                        encrypted_word += character;
-                    columns[column_current].Remove(character);
+                    if (i == minColLength)
+                    {
+                        if (Key[j] <= lastRowLength)
+                        {
+                            output[(Key[j]) + ((i) * Key.Length) - 1] = text[row + i * Key.Length];
+                            row++;
+                        }
+                    }
+                    else
+                        output[(Key[j]) + ((i) * Key.Length) - 1] = text[j + i * Key.Length];
                 }
-                else
-                {
-                    i--;
-                }
-                column_current = (column_current + 1) % Key.Max();
             }
 
-            return encrypted_word;
-        }
-
-        private List<List<char>> createColumns(string s)
-        {
-            // ilość kolumn
-            int lenght = this.Key.Max();
-
-            // lista kolumn
-            List<List<char>> columns = new List<List<char>>();
-            for (int i = 0; i < lenght; i++)
-            {
-                List<char> new_column = new List<char>();
-                columns.Add(new_column);
-            }
-
-            for (int i = 0; i < s.Length; i++)
-            {
-                int num = i % lenght;
-                columns[num].Add(s[i]);
-            }
-
-            return columns;
+            return new string(output);
         }
     }
 }
