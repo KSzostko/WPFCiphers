@@ -432,6 +432,15 @@ namespace WPFCiphers
             listOfLines.Clear();
 
         }
+
+        private void mTextBox_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            string textBoxText = ((TextBox)sender).Text;
+            int length = textBoxText.Length;
+            mTextBox.FontSize = 20;
+            if (length > 10) mTextBox.FontSize = 15;
+            if (length > 20) mTextBox.FontSize = 10;
+        }
     }
 
 
