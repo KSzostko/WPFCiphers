@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace WPFCiphers.Ciphers
 {
-    class RailFence : Cipher
+    public class RailFence : Cipher
     {
         public int Key { get; set; }
 
