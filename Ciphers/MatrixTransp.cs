@@ -1,18 +1,19 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
 
 namespace WPFCiphers.Ciphers
 {
     public class MatrixTransp : Cipher
     {
-        private int[] colsOrder;
+        private int[] rowsOrder;
         public string Key { get; set; }
 
         public MatrixTransp(string key)
         {
             Key = key;
-            colsOrder = new int[key.Length];
+            rowsOrder = new int[key.Length];
             
             CalculateRowsOrder();
         }
@@ -20,8 +21,8 @@ namespace WPFCiphers.Ciphers
         public string Encrypt(string s)
         {
             char[,] letters = GenerateLettersArray(s);
-            
-            throw new System.NotImplementedException();
+
+            return BuildWord(letters);
         }
 
         public string Decrypt(string s)
@@ -36,9 +37,9 @@ namespace WPFCiphers.Ciphers
 
             Dictionary<char, int> occurrences = InitOccurrences(chars);
             
-            for (int i = 0; i < colsOrder.Length; i++)
+            for (int i = 0; i < rowsOrder.Length; i++)
             {
-                colsOrder[i] = Array.IndexOf(chars, Key[i]) + occurrences[Key[i]];
+                rowsOrder[i] = Array.IndexOf(chars, Key[i]) + occurrences[Key[i]];
                 occurrences[Key[i]]++;
             }
         }
@@ -79,6 +80,41 @@ namespace WPFCiphers.Ciphers
         private bool IsLetter(char ch)
         {
             return ch >= 'A' && ch <= 'Z' || ch >= 'a' && ch <= 'z';
+        }
+        
+        private string BuildWord(char[,] letters)
+        {
+            char[,] finalWord = AdjustRowsOrder(letters);
+            
+            StringBuilder builder = new StringBuilder();
+            for (int row = 0; row < finalWord.GetLength(0); row++)
+            {
+                if (row != 0) builder.Append(' ');
+                
+                int col = 0;
+                while (col < finalWord.GetLength(1) && IsLetter(finalWord[row, col]))
+                {
+                    builder.Append(finalWord[row, col]);
+                    col++;
+                }
+            }
+
+            return builder.ToString();
+        }
+
+        private char[,] AdjustRowsOrder(char[,] letters)
+        {
+            char[,] finalWord = new char[letters.GetLength(0), letters.GetLength(1)];
+            for (int i = 0; i < rowsOrder.Length; i++)
+            {
+                int currentRow = rowsOrder[i];
+                for (int col = 0; col < letters.GetLength(1); col++)
+                {
+                    finalWord[currentRow, col] = letters[i, col];
+                }
+            }
+
+            return finalWord;
         }
     }
 }
