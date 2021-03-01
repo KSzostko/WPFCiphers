@@ -51,5 +51,29 @@ namespace CiphersTests
             string decrypted = tp.Decrypt(input);
             Assert.AreEqual(expected, decrypted);
         }
+
+        [TestMethod]
+        public void ReturnsEncryptedWordForKeyWithDifferentLetters()
+        {
+            string input = "HERE IS A SECRET MESSAGE ENCIPHERED BY TRANSPOSITION";
+            string expected = "HECRN CEYI ISEP SGDI RNTO AAES RMPN SSRO EEBT ETIA EEHS";
+
+            MatrixTransp tp = new MatrixTransp("CONVENIENCE");
+
+            string encrypted = tp.Encrypt(input);
+            Assert.AreEqual(expected, encrypted);
+        }
+        
+        [TestMethod]
+        public void ReturnsDecryptedWordForKeyWithDifferentLetters()
+        {
+            string input = "HECRN CEYI ISEP SGDI RNTO AAES RMPN SSRO EEBT ETIA EEHS";
+            string expected = "HEREISASECRETMESSAGEENCIPHEREDBYTRANSPOSITION";
+
+            MatrixTransp tp = new MatrixTransp("CONVENIENCE");
+
+            string decrypted = tp.Decrypt(input);
+            Assert.AreEqual(expected, decrypted);
+        }
     }
 }
