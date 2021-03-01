@@ -17,12 +17,14 @@ namespace WPFCiphers.Ciphers
             CalculateRowsOrder();
         }
         
-        public string Encrypt(string Word)
+        public string Encrypt(string s)
         {
+            char[,] letters = GenerateLettersArray(s);
+            
             throw new System.NotImplementedException();
         }
 
-        public string Decrypt(string Word)
+        public string Decrypt(string s)
         {
             throw new System.NotImplementedException();
         }
@@ -50,6 +52,33 @@ namespace WPFCiphers.Ciphers
             }
 
             return occurences;
+        }
+        
+        private char[,] GenerateLettersArray(string s)
+        {
+            int rows = s.Length / Key.Length;
+            if (s.Length % Key.Length != 0) rows++;
+            char[,] letters = new char[Key.Length, rows];
+
+            int current = 0;
+            for (int row = 0; row < letters.GetLength(0); row++)
+            {
+                for (int col = 0; col < letters.GetLength(1); col++)
+                {
+                    while (current != s.Length && !IsLetter(s[current])) current++;
+                    if (current == s.Length) break;
+                    
+                    letters[row, col] = s[current];
+                    current++;
+                }
+            }
+
+            return letters;
+        }
+        
+        private bool IsLetter(char ch)
+        {
+            return ch >= 'A' && ch <= 'Z' || ch >= 'a' && ch <= 'z';
         }
     }
 }
