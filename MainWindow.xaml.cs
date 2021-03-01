@@ -106,9 +106,18 @@ namespace WPFCiphers
                     }
                     break;
                 case "COLUMNAR_TRANSP":
-                    ct = new ColumnarTransposition(parseColumnarTranspKey(userKey));
-                    encrypted = ct.Encrypt(userInput);
-                    decrypted = ct.Decrypt(userInput);
+                    int[] inputTab = parseColumnarTranspKey(userKey);
+                    if (validateColumnarTranspkey(inputTab))
+                    {
+                        ct = new ColumnarTransposition(parseColumnarTranspKey(userKey));
+                        encrypted = ct.Encrypt(userInput);
+                        decrypted = ct.Decrypt(userInput);
+                    }
+                    else
+                    {
+
+                        return;
+                    }
                     break;
                 default:
                     break;
@@ -173,14 +182,15 @@ namespace WPFCiphers
                     }
                     break;
                 case "COLUMNAR_TRANSP":
-                    if (validateColumnarTranspkey(userKey))
+                    int[] inputTab = parseColumnarTranspKey(userKey);
+                    if (validateColumnarTranspkey(inputTab))
                     {
-                        parseColumnarTranspKey(userKey);
-                        //algorithm = new ColumnarTransposition(parseColumnarTranspKey(userKey));
+                        algorithm = new ColumnarTransposition(parseColumnarTranspKey(userKey));
                         algorithmName = "columnar transposition";
                     }
                     else
                     {
+
                         return;
                     }
                     break;
@@ -271,9 +281,24 @@ namespace WPFCiphers
             MessageBox.Show("Rail fence key is invalid. Please provide integer greater than 1.");
             return false;
         }
-        private bool validateColumnarTranspkey(string s)
+        private bool validateColumnarTranspkey(int []table)
         {
             // TODO: get to know-how of columanr transp algorithm and replace this dummy method with proper one
+            // Numbers must be in a succession ( 3-2-1-4 -> ok,    3-2-4 -> bad )
+            // every number from 1 to max number inside key must be present
+            // there shall not be any repetitions
+            int[] temptable = table;
+            Array.Sort(temptable);
+            int i = 1;
+            foreach( int value in temptable)
+            {
+                if (value != i)
+                {
+                    MessageBox.Show("Columnar transp key is invalid. Every number from 1 to max must be present, there shall not be any repetitions.");
+                    return false;
+                }  
+                else i++;
+            }
             return true;
         }
         private int[] parseColumnarTranspKey(string s)
