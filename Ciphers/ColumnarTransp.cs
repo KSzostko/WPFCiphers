@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace WPFCiphers.Ciphers
 {
-    class ColumnarTransposition : Cipher
+    public class ColumnarTransposition : Cipher
     {
         public int[] Key { get; set; }
 
