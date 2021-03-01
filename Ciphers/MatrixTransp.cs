@@ -27,6 +27,8 @@ namespace WPFCiphers.Ciphers
 
         public string Decrypt(string s)
         {
+            char[,] letters = PrepareForRowsAdjusting(s);
+            
             throw new System.NotImplementedException();
         }
 
@@ -115,6 +117,30 @@ namespace WPFCiphers.Ciphers
             }
 
             return finalWord;
+        }
+        
+        private char[,] PrepareForRowsAdjusting(string s)
+        {
+            int rows = s.Length / Key.Length;
+            if (s.Length % Key.Length != 0) rows++;
+            char[,] letters = new char[Key.Length, rows];
+
+            int currRow = 0, currCol = 0;
+            foreach (char letter in s)
+            {
+                if (letter == ' ')
+                {
+                    currRow++;
+                    currCol = 0;
+                }
+                else
+                {
+                    letters[currRow, currCol] = letter;
+                    currCol++;
+                }
+            }
+
+            return letters;
         }
     }
 }
