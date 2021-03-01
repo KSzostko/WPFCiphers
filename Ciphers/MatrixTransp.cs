@@ -28,8 +28,19 @@ namespace WPFCiphers.Ciphers
         public string Decrypt(string s)
         {
             char[,] letters = PrepareForRowsAdjusting(s);
+            char[,] finalWord = DecryptRowsOrder(letters);
+
+            StringBuilder builder = new StringBuilder();
             
-            throw new System.NotImplementedException();
+            for (int col = 0; col < letters.GetLength(1); col++)
+            {
+                for (int row = 0; row < letters.GetLength(0); row++)
+                {
+                    builder.Append(finalWord[row, col]);
+                }
+            }
+
+            return builder.ToString();
         }
 
         private void CalculateRowsOrder()
@@ -141,6 +152,20 @@ namespace WPFCiphers.Ciphers
             }
 
             return letters;
+        }
+        
+        private char[,] DecryptRowsOrder(char[,] letters)
+        {
+            char[,] finalWord = new char[letters.GetLength(0), letters.GetLength(1)];
+            for (int i = 0; i < rowsOrder.Length; i++)
+            {
+                for (int col = 0; col < letters.GetLength(1); col++)
+                {
+                    finalWord[i, col] = letters[rowsOrder[i], col];
+                }
+            }
+
+            return finalWord;
         }
     }
 }
