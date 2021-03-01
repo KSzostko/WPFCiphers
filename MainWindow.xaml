@@ -39,7 +39,7 @@
 
             <Button Click="cipherButtonPressed" Name="RAIL_FENCE" Grid.Row="1" Style="{StaticResource DefaultButtonStyle}" Margin="20" FontSize="35" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" FontWeight="Light" Foreground="White" Content="RAIL FENCE"></Button>
             <Button Click="cipherButtonPressed" Name="COLUMNAR_TRANSP" Grid.Row="2" Style="{StaticResource DefaultButtonStyle}" Margin="20" FontSize="35" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" FontWeight="Light" Foreground="White" Content="COLUMNAR TRANSP"></Button>
-            <Button Click="cipherButtonPressed" Name="alg3" Grid.Row="3" Style="{StaticResource DefaultButtonStyle}" Margin="20" FontSize="35" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" FontWeight="Light" Foreground="White" Content=" "></Button>
+            <Button Click="cipherButtonPressed" Name="MATRIX_TRANSP" Grid.Row="3" Style="{StaticResource DefaultButtonStyle}" Margin="20" FontSize="35" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" FontWeight="Light" Foreground="White" Content="MATRIX TRANSP"></Button>
 
             <Label Grid.Row="4" Content="Jakub i Filip i Jakub 2021 ®" 
                    HorizontalAlignment="Center" VerticalAlignment="Bottom" 

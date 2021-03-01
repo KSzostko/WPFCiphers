@@ -44,7 +44,7 @@ namespace WPFCiphers
         string currentAlgorithm = "none";
         RailFence rf;
         ColumnarTransposition ct;
-
+        MatrixTransp mt;
 
 
         private void cipherButtonPressed(object sender, System.Windows.RoutedEventArgs e)
@@ -74,6 +74,10 @@ namespace WPFCiphers
                         keyLabel.Content = "n";
                         break;
                     case "COLUMNAR_TRANSP":
+                        mLabel.Content = "M";
+                        keyLabel.Content = "key";
+                        break;
+                    case "MATRIX_TRANSP":
                         mLabel.Content = "M";
                         keyLabel.Content = "key";
                         break;
@@ -112,6 +116,19 @@ namespace WPFCiphers
                         ct = new ColumnarTransposition(parseColumnarTranspKey(userKey));
                         encrypted = ct.Encrypt(userInput);
                         decrypted = ct.Decrypt(userInput);
+                    }
+                    else
+                    {
+
+                        return;
+                    }
+                    break;
+                case "MATRIX_TRANSP":
+                    if (validateMatrixTransp(userKey))
+                    {
+                        mt = new MatrixTransp(parseMatrixTranspKey(userKey));
+                        encrypted = mt.Encrypt(userInput);
+                        decrypted = mt.Decrypt(userInput);
                     }
                     else
                     {
@@ -194,6 +211,17 @@ namespace WPFCiphers
                         return;
                     }
                     break;
+                case "MATRIX_TRANSP":
+                    if (validateMatrixTransp(userKey))
+                    {
+                        algorithm = new MatrixTransp(parseMatrixTranspKey(userKey));
+                    }
+                    else
+                    {
+
+                        return;
+                    }
+                    break;
                 default:
                     return;
             }
@@ -263,7 +291,21 @@ namespace WPFCiphers
 
 
         }
-
+        private bool validateMatrixTransp(string s)
+        {
+            for (int i = 0; i < s.Length; i++)
+            {
+                if (Char.IsLetter(s[i]))
+                {
+                    return true;
+                }
+            }
+            return false;
+        }
+        private string parseMatrixTranspKey(string s)
+        {
+            return s.ToLower();
+        }
         private bool validateRailfenceFields(string s)
         {
             int i;
