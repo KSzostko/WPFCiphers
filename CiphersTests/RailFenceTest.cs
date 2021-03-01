@@ -7,7 +7,7 @@ namespace CiphersTests
     public class RailFenceTest
     {
         [TestMethod]
-        public void ReturnsUnchangedWordFor1Key()
+        public void ReturnsUnchangedWordFor1KeyEncryption()
         {
             int key = 1;
             string input = "Dsadajkaajddjh";
