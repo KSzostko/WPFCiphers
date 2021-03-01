@@ -5,6 +5,8 @@ VisualStudioVersion = 15.0.28307.421
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WPFCiphers", "WPFCiphers.csproj", "{A4BA8C5F-E4B0-4A42-95B3-30EA9D05C2DE}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CiphersTests", "CiphersTests\CiphersTests.csproj", "{AA52A0BA-BCA5-44A6-B5A8-1B88A36A982D}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -15,6 +17,10 @@ Global
 		{A4BA8C5F-E4B0-4A42-95B3-30EA9D05C2DE}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{A4BA8C5F-E4B0-4A42-95B3-30EA9D05C2DE}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{A4BA8C5F-E4B0-4A42-95B3-30EA9D05C2DE}.Release|Any CPU.Build.0 = Release|Any CPU
+		{AA52A0BA-BCA5-44A6-B5A8-1B88A36A982D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{AA52A0BA-BCA5-44A6-B5A8-1B88A36A982D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{AA52A0BA-BCA5-44A6-B5A8-1B88A36A982D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{AA52A0BA-BCA5-44A6-B5A8-1B88A36A982D}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
