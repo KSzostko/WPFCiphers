@@ -17,6 +17,8 @@ namespace WPFCiphers.Ciphers
 
         public string Decrypt(string s)
         {
+            if (Key == 1) return s;
+            
             char[,] rails = GenerateRails(new string('*', s.Length));
 
             int current = 0;
@@ -39,6 +41,8 @@ namespace WPFCiphers.Ciphers
 
         public string Encrypt(string s)
         {
+            if (Key == 1) return s;
+            
             char[,] rails = GenerateRails(s);
 
             return BuildWord(rails);
