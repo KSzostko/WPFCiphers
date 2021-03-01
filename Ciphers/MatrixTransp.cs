@@ -61,9 +61,9 @@ namespace WPFCiphers.Ciphers
             char[,] letters = new char[Key.Length, rows];
 
             int current = 0;
-            for (int row = 0; row < letters.GetLength(0); row++)
+            for (int col = 0; col < letters.GetLength(1); col++)
             {
-                for (int col = 0; col < letters.GetLength(1); col++)
+                for (int row = 0; row < letters.GetLength(0); row++)
                 {
                     while (current != s.Length && !IsLetter(s[current])) current++;
                     if (current == s.Length) break;
