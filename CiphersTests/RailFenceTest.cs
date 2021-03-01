@@ -9,7 +9,6 @@ namespace CiphersTests
         [TestMethod]
         public void ReturnsUnchangedWordFor1KeyEncryption()
         {
-            int key = 1;
             string input = "Dsadajkaajddjh";
 
             RailFence railFence = new RailFence(1);
@@ -21,10 +20,31 @@ namespace CiphersTests
         [TestMethod]
         public void ReturnsUnchangedWordFor1KeyDecryption()
         {
-            int key = 1;
             string input = "Dsadajkaajddjh";
 
             RailFence railFence = new RailFence(1);
+
+            string decrypted = railFence.Decrypt(input);
+            Assert.AreEqual(input, decrypted);
+        }
+        
+        [TestMethod]
+        public void ReturnsUnchangedWordForVeryLongKeyEncryption()
+        {
+            string input = "Dsadajkaajddjh";
+
+            RailFence railFence = new RailFence(100);
+
+            string encrypted = railFence.Encrypt(input);
+            Assert.AreEqual(input, encrypted);
+        }
+        
+        [TestMethod]
+        public void ReturnsUnchangedWordForVeryLongKeyDecryption()
+        {
+            string input = "Dsadajkaajddjh";
+
+            RailFence railFence = new RailFence(100);
 
             string decrypted = railFence.Decrypt(input);
             Assert.AreEqual(input, decrypted);
