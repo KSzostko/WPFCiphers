@@ -139,13 +139,15 @@ namespace WPFCiphers.Ciphers
             int currRow = 0, currCol = 0;
             foreach (char letter in s)
             {
-                if (letter == ' ')
+                if (letter == ' ' || currCol == rows)
                 {
                     currRow++;
                     currCol = 0;
                 }
                 else
                 {
+                    if (currRow == Key.Length) break;
+                    
                     letters[currRow, currCol] = letter;
                     currCol++;
                 }
