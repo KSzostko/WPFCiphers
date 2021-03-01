@@ -40,7 +40,7 @@ namespace WPFCiphers.Ciphers
                 }
             }
 
-            return builder.ToString();
+            return builder.ToString().Trim('\0');
         }
 
         private void CalculateRowsOrder()
@@ -112,7 +112,7 @@ namespace WPFCiphers.Ciphers
                 }
             }
 
-            return builder.ToString();
+            return builder.ToString().Trim();
         }
 
         private char[,] AdjustRowsOrder(char[,] letters)
