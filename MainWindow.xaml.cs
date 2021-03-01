@@ -140,6 +140,13 @@ namespace WPFCiphers
                     break;
             }
 
+
+            int length = encrypted.Length;
+
+            outcomeLabel.FontSize = 30;
+            if (length > 10) outcomeLabel.FontSize = 20;
+            if (length > 20) outcomeLabel.FontSize = 15;
+
             if (buttonName == "encrypt")
             {
                 if (encrypted != "") outcomeTypeLabel.Content = "Encrypted:";
@@ -437,7 +444,9 @@ namespace WPFCiphers
         {
             string textBoxText = ((TextBox)sender).Text;
             int length = textBoxText.Length;
+
             mTextBox.FontSize = 20;
+
             if (length > 10) mTextBox.FontSize = 15;
             if (length > 20) mTextBox.FontSize = 10;
         }
