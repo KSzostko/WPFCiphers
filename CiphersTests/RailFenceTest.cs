@@ -49,5 +49,29 @@ namespace CiphersTests
             string decrypted = railFence.Decrypt(input);
             Assert.AreEqual(input, decrypted);
         }
+
+        [TestMethod]
+        public void ReturnsEncryptedWordForKeyShorterThanWord()
+        {
+            string input = "CRYPTOGRAPHY";
+            string expected = "CTARPORPYYGH";
+
+            RailFence railFence = new RailFence(3);
+
+            string encrypted = railFence.Encrypt(input);
+            Assert.AreEqual(encrypted, expected);
+        }
+        
+        [TestMethod]
+        public void ReturnsDecryptedWordForKeyShorterThanWord()
+        {
+            string input = "CTARPORPYYGH";
+            string expected = "CRYPTOGRAPHY";
+
+            RailFence railFence = new RailFence(3);
+
+            string decrypted = railFence.Decrypt(input);
+            Assert.AreEqual(decrypted, expected);
+        }
     }
 }
