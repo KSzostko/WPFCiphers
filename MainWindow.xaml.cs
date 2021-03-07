@@ -361,7 +361,7 @@ namespace WPFCiphers
                   
                 return true;
             }
-            MessageBox.Show("Rail fence key is invalid. Please provide integer greater than 1.");
+            MessageBox.Show("Rail fence key is invalid. Please provide integer greater than 1 or equal.");
             return false;
         }
         private bool validateColumnarTranspkey(int []table)
@@ -462,6 +462,7 @@ namespace WPFCiphers
         {
             mTextBox.Text = "";
             keyTextBox.Text = "";
+            fileskeyTextBox.Text = "";
             outcomeTypeLabel.Content = "";
             userInputScrollList.Clear();
             outcomeScrollViewerList.Clear();
