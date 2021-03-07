@@ -13,7 +13,17 @@
         public string Encrypt(string s)
         {
             string adjustedKey = AdjustKeyToWord(s);
-            throw new System.NotImplementedException();
+            string encrypted = "";
+
+            for (int i = 0; i < s.Length; i++)
+            {
+                int letterVal = (s[i] + adjustedKey[i]) % ALPHABET_LETTERS_COUNT;
+                letterVal += 'A';
+
+                encrypted += (char) letterVal;
+            }
+            
+            return encrypted;
         }
 
         public string Decrypt(string s)
