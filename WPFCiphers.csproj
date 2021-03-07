@@ -67,6 +67,7 @@
     <Compile Include="Ciphers\ColumnarTransp.cs" />
     <Compile Include="Ciphers\MatrixTransp.cs" />
     <Compile Include="Ciphers\RailFence.cs" />
+    <Compile Include="Ciphers\Vigenere.cs" />
     <Compile Include="MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
