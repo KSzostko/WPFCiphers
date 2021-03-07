@@ -28,7 +28,18 @@
 
         public string Decrypt(string s)
         {
-            throw new System.NotImplementedException();
+            string adjustedKey = AdjustKeyToWord(s);
+            string decrypted = "";
+
+            for (int i = 0; i < s.Length; i++)
+            {
+                int letterVal = (s[i] - adjustedKey[i] + ALPHABET_LETTERS_COUNT) % ALPHABET_LETTERS_COUNT;
+                letterVal += 'A';
+
+                decrypted += (char) letterVal;
+            }
+
+            return decrypted;
         }
         
         private string AdjustKeyToWord(string s)
