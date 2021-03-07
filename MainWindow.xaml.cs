@@ -100,6 +100,11 @@ namespace WPFCiphers
             switch (currentAlgorithm)
             {
                 case "RAIL_FENCE":
+                    if (mTextBox.Text == "")
+                    {
+                        MessageBox.Show("Rail fence text input is empty. Please type in something.");
+                        return;
+                    }
                     if (validateRailfenceFields(keyTextBox.Text.ToString()))
                     {
                         int i = int.Parse(userKey);
@@ -110,6 +115,11 @@ namespace WPFCiphers
                     }
                     break;
                 case "COLUMNAR_TRANSP":
+                    if (mTextBox.Text == "")
+                    {
+                        MessageBox.Show("Columanr transp text input is empty. Please type in something.");
+                        return;
+                    }
                     int[] inputTab = parseColumnarTranspKey(userKey);
                     if (validateColumnarTranspkey(inputTab))
                     {
@@ -124,6 +134,11 @@ namespace WPFCiphers
                     }
                     break;
                 case "MATRIX_TRANSP":
+                    if (mTextBox.Text == "")
+                    {
+                        MessageBox.Show("Matrix transp text input is empty. Please type in something.");
+                        return;
+                    }
                     if (validateMatrixTransp(userKey))
                     {
                         mt = new MatrixTransp(parseMatrixTranspKey(userKey));
@@ -194,6 +209,11 @@ namespace WPFCiphers
             switch (currentAlgorithm)
             {
                 case "RAIL_FENCE":
+                    if (fileskeyTextBox.Text == "")
+                    {
+                        MessageBox.Show("Rail fence key is emtpy. Please type in something.");
+                        return;
+                    }
                     if (validateRailfenceFields(fileskeyTextBox.Text.ToString()))
                     {
                         int i = int.Parse(userKey);
@@ -206,6 +226,11 @@ namespace WPFCiphers
                     }
                     break;
                 case "COLUMNAR_TRANSP":
+                    if (fileskeyTextBox.Text == "")
+                    {
+                        MessageBox.Show("Columnar transp key is emtpy. Please type in something.");
+                        return;
+                    }
                     int[] inputTab = parseColumnarTranspKey(userKey);
                     if (validateColumnarTranspkey(inputTab))
                     {
@@ -219,6 +244,11 @@ namespace WPFCiphers
                     }
                     break;
                 case "MATRIX_TRANSP":
+                    if (fileskeyTextBox.Text == "")
+                    {
+                        MessageBox.Show("Matrix transp key is emtpy. Please type in something.");
+                        return;
+                    }
                     if (validateMatrixTransp(userKey))
                     {
                         algorithm = new MatrixTransp(parseMatrixTranspKey(userKey));
@@ -300,6 +330,7 @@ namespace WPFCiphers
         }
         private bool validateMatrixTransp(string s)
         {
+          
             for (int i = 0; i < s.Length; i++)
             {
                 if (Char.IsLetter(s[i]))
@@ -307,6 +338,7 @@ namespace WPFCiphers
                     return true;
                 }
             }
+            MessageBox.Show("Matrix transp key needs to contain at least one letter. Please type in something.");
             return false;
         }
         private string parseMatrixTranspKey(string s)
@@ -317,11 +349,13 @@ namespace WPFCiphers
         {
             int i;
            
+           
+
             if (int.TryParse(s, out i))
             {
-                if (i < 2)
+                if (i < 1)
                 {
-                    MessageBox.Show("Rail fence key is invalid. Please provide integer greater than 1.");
+                    MessageBox.Show("Rail fence key is invalid. Please provide integer greater than 1 or equal.");
                     return false;
                 }
                   
@@ -332,14 +366,16 @@ namespace WPFCiphers
         }
         private bool validateColumnarTranspkey(int []table)
         {
-            // TODO: get to know-how of columanr transp algorithm and replace this dummy method with proper one
-            // Numbers must be in a succession ( 3-2-1-4 -> ok,    3-2-4 -> bad )
-            // every number from 1 to max number inside key must be present
-            // there shall not be any repetitions
             int[] temptable = table;
             Array.Sort(temptable);
             int i = 1;
-            foreach( int value in temptable)
+       
+            if(temptable.Length < 1)
+            {
+                MessageBox.Show("Columnar transp key input is emtpy. Please type in something.");
+                return false;
+            }
+            foreach ( int value in temptable)
             {
                 if (value != i)
                 {
