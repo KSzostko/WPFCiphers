@@ -65,6 +65,7 @@
     </Compile>
     <Compile Include="Ciphers\Cipher.cs" />
     <Compile Include="Ciphers\ColumnarTransp.cs" />
+    <Compile Include="Ciphers\ColumnarTranspC.cs" />
     <Compile Include="Ciphers\MatrixTransp.cs" />
     <Compile Include="Ciphers\RailFence.cs" />
     <Compile Include="Ciphers\Vigenere.cs" />
