@@ -22,12 +22,63 @@ namespace WPFCiphers.Ciphers
         public string Decrypt(string text)
         {
             // usuwa spacje z textu
+            string simplified_text = removeSpaces(text);
+
+            //tworzy tablice o min wymiarach
+            char[,] array = getArray(simplified_text.Length);
+            // wstawia gwiazdki tam gdzie mają być litery
+            array = fillArray(array, simplified_text, true);
+
+            // wstawianie odpowiednich liter tam gdzie są gwazdki 
+            int key_value = 0;
+            int current_letter = 0;
+            for (int i = 0; i < array.GetLength(1); i++)
+            {
+                for (int j = 0; j < array.GetLength(0); j++)
+                {
+                    if (array[j, key_value] == '*')
+                    {
+                        array[j, key_value] = simplified_text[current_letter];
+                        current_letter++;
+                    }
+                }
+                key_value = getNextKeyValue(i);
+            }
+
+            // z tablicy na string
+            string output = "";
+            for (int i = 0; i < array.GetLength(0); i++)
+            {
+                for (int j = 0; j < array.GetLength(1); j++)
+                {
+                    if (array[i, j] != ' ')
+                        output += array[i, j];
+                }
+            }
+
+            /* do testowania, można usunąć
+            for(int i = 0; i < array.GetLength(0); i++)
+            {
+                for (int j = 0; j < array.GetLength(1); j++)
+                {
+                    Console.Write(array[i, j]);
+                }
+                Console.WriteLine(" ");
+            }
+            */
+
+            return output;
+        }
+
+        public string Encrypt(string text)
+        {
+            // usuwa spacje z textu
             string corrected_text = removeSpaces(text);
 
             //tworzy tablice o min wymiarach
             char[,] array = getArray(corrected_text.Length);
             // wstawia znaki w opdowiednie miejsca do tablcy a reszte zapełnia spacjami 
-            array = fillArray(array, corrected_text);
+            array = fillArray(array, corrected_text, false);
 
             // z tablicy na string
             int key_value = 0;
@@ -44,11 +95,6 @@ namespace WPFCiphers.Ciphers
             }
 
             return output;
-        }
-
-        public string Encrypt(string text)
-        {
-            return null;
         }
 
         private void CalculateRowsOrder()
@@ -101,7 +147,7 @@ namespace WPFCiphers.Ciphers
         }
 
         // wstawia znaki w opdowiednie miejsca do tablicy a reszte zapełnia spacjami 
-        private char[,] fillArray(char[,] array, string text)
+        private char[,] fillArray(char[,] array, string text, bool decrypt)
         {
             int current_letter = 0;
             int key_value = 0;
@@ -113,7 +159,11 @@ namespace WPFCiphers.Ciphers
                 {
                     if (flag == false && current_letter < text.Length)
                     {
-                        array[i, j] = text[current_letter];
+                        if (decrypt)
+                            array[i, j] = '*';
+                        else
+                            array[i, j] = text[current_letter];
+
                         current_letter++;
 
                         if (rowsOrder[j] == key_value)
@@ -128,6 +178,7 @@ namespace WPFCiphers.Ciphers
 
             return array;
         }
+
 
         //zwraca pozycję kolejnej kolumny z której odczytać
         private int getNextKeyValue(int prev_value)
