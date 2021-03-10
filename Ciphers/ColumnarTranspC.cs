@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace WPFCiphers.Ciphers
 {
-    class ColumnarTranspositionC : Cipher
+    public class ColumnarTranspositionC : Cipher
     {
         private int[] rowsOrder;
         public string key;
@@ -94,7 +94,7 @@ namespace WPFCiphers.Ciphers
                 key_value = getNextKeyValue(i);
             }
 
-            return output;
+            return output.Remove(output.Length - 1, 1); ;
         }
 
         private void CalculateRowsOrder()
