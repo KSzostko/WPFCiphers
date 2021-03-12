@@ -12,6 +12,7 @@
         }
         public string Encrypt(string s)
         {
+            s = s.ToUpper();
             string adjustedKey = AdjustKeyToWord(s);
             string encrypted = "";
 
@@ -28,6 +29,7 @@
 
         public string Decrypt(string s)
         {
+            s = s.ToUpper();
             string adjustedKey = AdjustKeyToWord(s);
             string decrypted = "";
 
