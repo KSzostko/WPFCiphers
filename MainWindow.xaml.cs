@@ -214,11 +214,12 @@ namespace WPFCiphers
                         MessageBox.Show("Cezar text input is empty. Please type in something.");
                         return;
                     }
-                    if (validateCezar(userKey))
+                    if (validateCezarKey(userKey) && validateCezarWord(userInput))
                     {
-                        //mt = new MatrixTransp(parseMatrixTranspKey(userKey));
-                        //encrypted = mt.Encrypt(userInput);
-                        //decrypted = mt.Decrypt(userInput);
+                        int i = int.Parse(userKey);
+                        cz = new Cezar(i);
+                        encrypted = cz.Encrypt(userInput);
+                        decrypted = cz.Decrypt(userInput);
                     }
                     else
                     {
@@ -340,7 +341,7 @@ namespace WPFCiphers
                         MessageBox.Show("Matrix transp version C text input is empty. Please type in something.");
                         return;
                     }
-                    if (validateMatrixTranspVerCKey(userKey) && validateMatrixTranspVerCWord(userInput))
+                    if (validateMatrixTranspVerCKey(userKey))
                     {
                         algorithm = new ColumnarTranspositionC(userKey);
                   
@@ -357,7 +358,7 @@ namespace WPFCiphers
                         MessageBox.Show("Winegret text input is empty. Please type in something.");
                         return;
                     }
-                    if (validateVinegretKey(userKey) && validateVinegretWord(userInput))
+                    if (validateVinegretKey(userKey))
                     {
                         algorithm = new Vigenere(userKey);
                     }
@@ -373,11 +374,10 @@ namespace WPFCiphers
                         MessageBox.Show("Cezar text input is empty. Please type in something.");
                         return;
                     }
-                    if (validateCezar(userKey))
+                    if (validateCezarKey(userKey))
                     {
-                        //mt = new MatrixTransp(parseMatrixTranspKey(userKey));
-                        //encrypted = mt.Encrypt(userInput);
-                        //decrypted = mt.Decrypt(userInput);
+                        int i = int.Parse(userKey);
+                        algorithm = new Cezar(i);
                     }
                     else
                     {
@@ -454,8 +454,48 @@ namespace WPFCiphers
 
 
         }
-        private bool validateCezar(string s)
+        private bool validateCezarWord(string s)
         {
+            bool containsAtLeastOneLetter = false;
+            for (int i = 0; i < s.Length; i++)
+            {
+                if (Char.IsLetter(s[i]))
+                {
+                    containsAtLeastOneLetter = true;
+                }
+                else
+                {
+                    MessageBox.Show("CEZAR word needs to contain only letters.");
+                    return false;
+                }
+            }
+            if (containsAtLeastOneLetter)
+            {
+                return true;
+            }
+            else
+            {
+                MessageBox.Show("CEZAR word needs to contain at least one letter. Please type in something.");
+                return false;
+            }
+        }
+        private bool validateCezarKey(string s)
+        {
+            int i;
+
+
+
+            if (int.TryParse(s, out i))
+            {
+                if (i < 1)
+                {
+                    MessageBox.Show("CEZAR key is invalid. Please provide integer greater than 1 or equal.");
+                    return false;
+                }
+
+                return true;
+            }
+            MessageBox.Show("CEZAR key is invalid. Please provide integer greater than 1 or equal.");
             return false;
         }
         private bool validateMatrixTranspVerCKey(string s)
