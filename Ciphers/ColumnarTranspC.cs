@@ -13,7 +13,7 @@ namespace WPFCiphers.Ciphers
 
         public ColumnarTranspositionC(string key)
         {
-            this.key = key;
+            this.key = key.ToUpper();
             rowsOrder = new int[key.Length];
 
             CalculateRowsOrder();
