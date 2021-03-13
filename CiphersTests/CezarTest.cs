@@ -4,102 +4,31 @@ using WPFCiphers.Ciphers;
 namespace CiphersTests
 {
     [TestClass]
-    public class VinegereTest
+    public class CezarTest
     {
         [TestMethod]
-        public void ReturnsEncryptedWordForKeyMatchingWordLength()
+        public void ReturnsEncryptedWord()
         {
             string input = "CRYPTOGRAPHY";
-            string expected = "DICPDPXVAZIP";
+            string expected = "FUBSWRJUDSKB";
 
-            Vigenere vigenere = new Vigenere("BREAKBREAKBR");
+            Cezar cezar = new Cezar(3);
 
-            string encrypted = vigenere.Encrypt(input);
+            string encrypted = cezar.Encrypt(input);
             Assert.AreEqual(expected, encrypted);
         }
 
         [TestMethod]
-        public void ReturnsDecryptedWordForKeyMatchingWordLength()
+        public void ReturnsDecryptedWord()
         {
-            string input = "DICPDPXVAZIP";
+            string input = "FUBSWRJUDSKB";
             string expected = "CRYPTOGRAPHY";
 
-            Vigenere vigenere = new Vigenere("BREAKBREAKBR");
+            Cezar cezar = new Cezar(3);
 
-            string decrypted = vigenere.Decrypt(input);
-            Assert.AreEqual(expected, decrypted);
-        }
-
-        [TestMethod]
-        public void ReturnsEncryptedWordForKeyShorterThanWord()
-        {
-            string input = "CRYPTOGRAPHY";
-            string expected = "DICPDPXVAZIP";
-
-            Vigenere vigenere = new Vigenere("BREAK");
-
-            string encrypted = vigenere.Encrypt(input);
+            string encrypted = cezar.Decrypt(input);
             Assert.AreEqual(expected, encrypted);
         }
 
-        [TestMethod]
-        public void ReturnsDecryptedWordForKeyShorterThanWord()
-        {
-            string input = "DICPDPXVAZIP";
-            string expected = "CRYPTOGRAPHY";
-
-            Vigenere vigenere = new Vigenere("BREAK");
-
-            string decrypted = vigenere.Decrypt(input);
-            Assert.AreEqual(expected, decrypted);
-        }
-
-        [TestMethod]
-        public void ReturnsEncryptedWordForKeyMatchingWordLengthWithSmallLetters()
-        {
-            string input = "cryptography";
-            string expected = "DICPDPXVAZIP";
-
-            Vigenere vigenere = new Vigenere("breakbreakbr");
-
-            string encrypted = vigenere.Encrypt(input);
-            Assert.AreEqual(expected, encrypted);
-        }
-
-        [TestMethod]
-        public void ReturnsDecryptedWordForKeyMatchingWordLengthWithSmallLetters()
-        {
-            string input = "dicpdpxvazip";
-            string expected = "CRYPTOGRAPHY";
-
-            Vigenere vigenere = new Vigenere("breakbreakbr");
-
-            string decrypted = vigenere.Decrypt(input);
-            Assert.AreEqual(expected, decrypted);
-        }
-
-        [TestMethod]
-        public void ReturnsEncryptedWordForKeyShorterThanWordWithSmallLetters()
-        {
-            string input = "cryptography";
-            string expected = "DICPDPXVAZIP";
-
-            Vigenere vigenere = new Vigenere("break");
-
-            string encrypted = vigenere.Encrypt(input);
-            Assert.AreEqual(expected, encrypted);
-        }
-
-        [TestMethod]
-        public void ReturnsDecryptedWordForKeyShorterThanWordWithSmallLetters()
-        {
-            string input = "dicpdpxvazip";
-            string expected = "CRYPTOGRAPHY";
-
-            Vigenere vigenere = new Vigenere("break");
-
-            string decrypted = vigenere.Decrypt(input);
-            Assert.AreEqual(expected, decrypted);
-        }
     }
 }
