@@ -171,7 +171,7 @@ namespace WPFCiphers
                         MessageBox.Show("Matrix transp version C text input is empty. Please type in something.");
                         return;
                     }
-                    if (validateMatrixTranspVerC(userKey))
+                    if (validateMatrixTranspVerCKey(userKey) && validateMatrixTranspVerCWord(userInput))
                     {
                         ctc = new ColumnarTranspositionC(userKey);
                         encrypted = ctc.Encrypt(userInput);
@@ -189,7 +189,7 @@ namespace WPFCiphers
                         MessageBox.Show("Winegret text input is empty. Please type in something.");
                         return;
                     }
-                    if (validateVinegret(userKey))
+                    if (validateVinegretKey(userKey) && validateVinegretWord(userInput))
                     {
                         vig = new Vigenere(userKey);
                         encrypted = vig.Encrypt(userInput);
@@ -333,7 +333,7 @@ namespace WPFCiphers
                         MessageBox.Show("Matrix transp version C text input is empty. Please type in something.");
                         return;
                     }
-                    if (validateMatrixTranspVerC(userKey))
+                    if (validateMatrixTranspVerCKey(userKey) && validateMatrixTranspVerCWord(userInput))
                     {
                         algorithm = new ColumnarTranspositionC(userKey);
                   
@@ -350,7 +350,7 @@ namespace WPFCiphers
                         MessageBox.Show("Winegret text input is empty. Please type in something.");
                         return;
                     }
-                    if (validateVinegret(userKey))
+                    if (validateVinegretKey(userKey) && validateVinegretWord(userInput))
                     {
                         algorithm = new Vigenere(userKey);
                     }
@@ -451,7 +451,33 @@ namespace WPFCiphers
         {
             return false;
         }
-        private bool validateMatrixTranspVerC(string s)
+        private bool validateMatrixTranspVerCKey(string s)
+        {
+            bool containsAtLeastOneLetter = false;
+            for (int i = 0; i < s.Length; i++)
+            {
+                if (Char.IsLetter(s[i]))
+                {
+                    containsAtLeastOneLetter = true;
+                }
+                else
+                {
+                    MessageBox.Show("Matrix transp ver_C key needs to contain only letters and blank spaces.");
+                    return false;
+                }
+            }
+            if (containsAtLeastOneLetter)
+            {
+                return true;
+            }
+            else
+            {
+                MessageBox.Show("Matrix transp ver_C key needs to contain at least one letter. Please type in something.");
+                return false;
+            }
+
+        }
+        private bool validateMatrixTranspVerCWord(string s)
         {
             bool containsAtLeastOneLetter = false;
             for (int i = 0; i < s.Length; i++)
@@ -477,7 +503,33 @@ namespace WPFCiphers
             }
 
         }
-        private bool validateVinegret(string s)
+        private bool validateVinegretWord(string s)
+        {
+            bool containsAtLeastOneLetter = false;
+            for (int i = 0; i < s.Length; i++)
+            {
+                if (Char.IsLetter(s[i]))
+                {
+                    containsAtLeastOneLetter = true;
+                }
+                else
+                {
+                    MessageBox.Show("winegret key should contain only letters");
+                    return false;
+                }
+            }
+            if (containsAtLeastOneLetter)
+            {
+                return true;
+            }
+            else
+            {
+                MessageBox.Show("winegret key needs to contain at least one letter. Please type in word that contains only letters.");
+                return false;
+            }
+
+        }
+        private bool validateVinegretKey(string s)
         {
             bool containsAtLeastOneLetter = false;
             for (int i = 0; i < s.Length; i++)
