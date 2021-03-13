@@ -38,7 +38,7 @@
                 <RowDefinition></RowDefinition>
             </Grid.RowDefinitions>
 
-            <Label Grid.Row="0" Content="BSK 2021" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="50" FontWeight="Black"></Label>
+            <Label Grid.Row="0" Name="logoLabel" Content="BSK 2021" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="50" FontWeight="Black"></Label>
 
             <Button Click="cipherButtonPressed" Name="RAIL_FENCE" Grid.Row="1" Style="{StaticResource DefaultButtonStyle}" Margin="20" FontSize="35" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" FontWeight="Light" Foreground="Red" Content="RAIL FENCE"></Button>
             <Button Click="cipherButtonPressed" Name="COLUMNAR_TRANSP" Grid.Row="2" Style="{StaticResource DefaultButtonStyle}" Margin="20" FontSize="35" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" FontWeight="Light" Foreground="Orange" Content="COLUMNAR TRANSP"></Button>
