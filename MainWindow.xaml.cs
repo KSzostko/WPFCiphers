@@ -60,6 +60,7 @@ namespace WPFCiphers
                 filessideBarGrid.Visibility = Visibility.Hidden;
                 sideBarGrid.Visibility = Visibility.Hidden;
                 currentAlgorithm = "none";
+                logoLabel.Foreground = Brushes.Black;
             }
             else
             {
@@ -74,26 +75,32 @@ namespace WPFCiphers
                     case "RAIL_FENCE":
                         mLabel.Content = "M";
                         keyLabel.Content = "n";
+                        logoLabel.Foreground = Brushes.Red;
                         break;
                     case "COLUMNAR_TRANSP":
                         mLabel.Content = "M";
                         keyLabel.Content = "key";
+                        logoLabel.Foreground = Brushes.Orange;
                         break;
                     case "MATRIX_TRANSP":
                         mLabel.Content = "M";
                         keyLabel.Content = "key";
+                        logoLabel.Foreground = Brushes.Yellow;
                         break;
                     case "COLUMNAR_C":
                         mLabel.Content = "M";
                         keyLabel.Content = "key";
+                        logoLabel.Foreground = Brushes.Green;
                         break;
                     case "ViGENERE":
                         mLabel.Content = "M";
                         keyLabel.Content = "K";
+                        logoLabel.Foreground = Brushes.LightBlue;
                         break;
                     case "CEZAR":
                         mLabel.Content = "M";
                         keyLabel.Content = "K";
+                        logoLabel.Foreground = Brushes.Purple;
                         break;
                     default:
                         break;
