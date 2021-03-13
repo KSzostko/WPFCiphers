@@ -63,6 +63,7 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Ciphers\Cezar.cs" />
     <Compile Include="Ciphers\Cipher.cs" />
     <Compile Include="Ciphers\ColumnarTransp.cs" />
     <Compile Include="Ciphers\ColumnarTranspC.cs" />

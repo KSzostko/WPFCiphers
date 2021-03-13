@@ -45,7 +45,9 @@ namespace WPFCiphers
         RailFence rf;
         ColumnarTransposition ct;
         MatrixTransp mt;
-
+        Vigenere vig;
+        ColumnarTranspositionC ctc;
+        Cezar cz;
 
         private void cipherButtonPressed(object sender, System.Windows.RoutedEventArgs e)
         {
@@ -80,6 +82,18 @@ namespace WPFCiphers
                     case "MATRIX_TRANSP":
                         mLabel.Content = "M";
                         keyLabel.Content = "key";
+                        break;
+                    case "COLUMNAR_C":
+                        mLabel.Content = "M";
+                        keyLabel.Content = "key";
+                        break;
+                    case "ViGENERE":
+                        mLabel.Content = "M";
+                        keyLabel.Content = "K";
+                        break;
+                    case "CEZAR":
+                        mLabel.Content = "M";
+                        keyLabel.Content = "K";
                         break;
                     default:
                         break;
@@ -144,6 +158,60 @@ namespace WPFCiphers
                         mt = new MatrixTransp(parseMatrixTranspKey(userKey));
                         encrypted = mt.Encrypt(userInput);
                         decrypted = mt.Decrypt(userInput);
+                    }
+                    else
+                    {
+
+                        return;
+                    }
+                    break;
+                case "COLUMNAR_C":
+                    if (mTextBox.Text == "")
+                    {
+                        MessageBox.Show("Matrix transp version C text input is empty. Please type in something.");
+                        return;
+                    }
+                    if (validateMatrixTranspVerC(userKey))
+                    {
+                        ctc = new ColumnarTranspositionC(userKey);
+                        encrypted = ctc.Encrypt(userInput);
+                        decrypted = ctc.Decrypt(userInput);
+                    }
+                    else
+                    {
+
+                        return;
+                    }
+                    break;
+                case "ViGENERE":
+                    if (mTextBox.Text == "")
+                    {
+                        MessageBox.Show("Winegret text input is empty. Please type in something.");
+                        return;
+                    }
+                    if (validateVinegret(userKey))
+                    {
+                        vig = new Vigenere(userKey);
+                        encrypted = vig.Encrypt(userInput);
+                        decrypted = vig.Decrypt(userInput);
+                    }
+                    else
+                    {
+
+                        return;
+                    }
+                    break;
+                case "CEZAR":
+                    if (mTextBox.Text == "")
+                    {
+                        MessageBox.Show("Cezar text input is empty. Please type in something.");
+                        return;
+                    }
+                    if (validateCezar(userKey))
+                    {
+                        //mt = new MatrixTransp(parseMatrixTranspKey(userKey));
+                        //encrypted = mt.Encrypt(userInput);
+                        //decrypted = mt.Decrypt(userInput);
                     }
                     else
                     {
@@ -259,6 +327,57 @@ namespace WPFCiphers
                         return;
                     }
                     break;
+                case "COLUMNAR_C":
+                    if (fileskeyTextBox.Text == "")
+                    {
+                        MessageBox.Show("Matrix transp version C text input is empty. Please type in something.");
+                        return;
+                    }
+                    if (validateMatrixTranspVerC(userKey))
+                    {
+                        algorithm = new ColumnarTranspositionC(userKey);
+                  
+                    }
+                    else
+                    {
+
+                        return;
+                    }
+                    break;
+                case "ViGENERE":
+                    if (fileskeyTextBox.Text == "")
+                    {
+                        MessageBox.Show("Winegret text input is empty. Please type in something.");
+                        return;
+                    }
+                    if (validateVinegret(userKey))
+                    {
+                        algorithm = new Vigenere(userKey);
+                    }
+                    else
+                    {
+
+                        return;
+                    }
+                    break;
+                case "CEZAR":
+                    if (fileskeyTextBox.Text == "")
+                    {
+                        MessageBox.Show("Cezar text input is empty. Please type in something.");
+                        return;
+                    }
+                    if (validateCezar(userKey))
+                    {
+                        //mt = new MatrixTransp(parseMatrixTranspKey(userKey));
+                        //encrypted = mt.Encrypt(userInput);
+                        //decrypted = mt.Decrypt(userInput);
+                    }
+                    else
+                    {
+
+                        return;
+                    }
+                    break;
                 default:
                     return;
             }
@@ -328,7 +447,61 @@ namespace WPFCiphers
 
 
         }
-        private bool validateMatrixTransp(string s)
+        private bool validateCezar(string s)
+        {
+            return false;
+        }
+        private bool validateMatrixTranspVerC(string s)
+        {
+            bool containsAtLeastOneLetter = false;
+            for (int i = 0; i < s.Length; i++)
+            {
+                if (Char.IsLetter(s[i]) || Char.IsWhiteSpace(s[i]))
+                {
+                    containsAtLeastOneLetter = true;
+                }
+                else
+                {
+                    MessageBox.Show("Matrix transp ver_C key needs to contain only letters and blank spaces.");
+                    return false;
+                }
+            }
+            if (containsAtLeastOneLetter)
+            {
+                return true;
+            }
+            else
+            {
+                MessageBox.Show("Matrix transp ver_C key needs to contain at least one letter. Please type in something.");
+                return false;
+            }
+
+        }
+        private bool validateVinegret(string s)
+        {
+            bool containsAtLeastOneLetter = false;
+            for (int i = 0; i < s.Length; i++)
+            {
+                if (Char.IsLetter(s[i]))
+                {
+                    containsAtLeastOneLetter = true;
+                } else
+                {
+                    MessageBox.Show("winegret key should contain only letters");
+                    return false;
+                }
+            }
+            if (containsAtLeastOneLetter)
+            {
+                return true;
+            } else
+            {
+                MessageBox.Show("winegret key needs to contain at least one letter. Please type in word that contains only letters.");
+                return false;
+            }
+           
+        }
+            private bool validateMatrixTransp(string s)
         {
           
             for (int i = 0; i < s.Length; i++)
