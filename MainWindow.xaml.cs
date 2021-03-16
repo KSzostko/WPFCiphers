@@ -389,7 +389,7 @@ namespace WPFCiphers
                     return;
             }
 
-            // depending on the status move through input list and update outcome list
+            // depending on the status move through input list and update outcome listsdfafsdafsadfsad
 
             string currentDate = DateTime.Now.ToString().Replace(':', ' ').Replace('/', ' ');
             
