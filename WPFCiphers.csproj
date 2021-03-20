@@ -71,6 +71,7 @@
     <Compile Include="Ciphers\MatrixTransp.cs" />
     <Compile Include="Ciphers\RailFence.cs" />
     <Compile Include="Ciphers\Vigenere.cs" />
+    <Compile Include="Generators\LFSR.cs" />
     <Compile Include="Generators\RandomGenerator.cs" />
     <Compile Include="MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>
