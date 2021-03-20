@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Threading;
 
 namespace WPFCiphers.Generators
 {
@@ -9,9 +10,13 @@ namespace WPFCiphers.Generators
         private bool[] _currentBits;
         private bool[] _performXor;
 
+        private Thread _thread;
+        private volatile bool _isRunning = true;
+
         public void StartGenerator(int[] powers)
         {
-            throw new System.NotImplementedException();
+            _thread = new Thread(() => GenerateSequence(powers));
+            _thread.Start();
         }
 
         public void GenerateSequence(int[] powers)
@@ -21,7 +26,7 @@ namespace WPFCiphers.Generators
             CheckPowers(powers);
             GenerateStartingBits();
 
-            while (true)
+            while (_isRunning)
             {
                 bool prevBit = _currentBits[0];
                 XorBits();
@@ -39,12 +44,13 @@ namespace WPFCiphers.Generators
 
         public void StopGenerator()
         {
-            throw new System.NotImplementedException();
+            _isRunning = false;
+            _thread.Join();
         }
 
         public List<bool> GetSequence()
         {
-            throw new System.NotImplementedException();
+            return _result;
         }
 
         private void CheckPowers(int[] powers)
