@@ -20,6 +20,9 @@ namespace WPFCiphers.Generators
 
             CheckPowers(powers);
             GenerateStartingBits();
+
+            bool prevBit = _currentBits[0];
+            XorBits();
         }
 
         public void StopGenerator()
@@ -53,6 +56,30 @@ namespace WPFCiphers.Generators
             {
                 _currentBits[i] = random.NextDouble() > 0.5;
             }
+        }
+
+        private void XorBits()
+        {
+            bool firstValue = true;
+            bool res = false;
+            
+            for(int i = 0; i < _currentBits.Length; i++)
+            {
+                if (_performXor[i])
+                {
+                    if (firstValue)
+                    {
+                        res = _currentBits[i];
+                        firstValue = false;
+                    }
+                    else
+                    {
+                        res = res != _currentBits[i];
+                    }
+                }
+            }
+
+            _currentBits[0] = res;
         }
     }
 }
