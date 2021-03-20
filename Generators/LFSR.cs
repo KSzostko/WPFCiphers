@@ -19,6 +19,7 @@ namespace WPFCiphers.Generators
             _result = new List<bool>();
 
             CheckPowers(powers);
+            GenerateStartingBits();
         }
 
         public void StopGenerator()
@@ -41,6 +42,16 @@ namespace WPFCiphers.Generators
             foreach (int number in powers)
             {
                 _performXor[number - 1] = true;
+            }
+        }
+
+        private void GenerateStartingBits()
+        {
+            Random random = new Random();
+            
+            for (int i = 0; i < _currentBits.Length; i++)
+            {
+                _currentBits[i] = random.NextDouble() > 0.5;
             }
         }
     }
