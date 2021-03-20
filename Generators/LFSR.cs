@@ -21,8 +21,20 @@ namespace WPFCiphers.Generators
             CheckPowers(powers);
             GenerateStartingBits();
 
-            bool prevBit = _currentBits[0];
-            XorBits();
+            while (true)
+            {
+                bool prevBit = _currentBits[0];
+                XorBits();
+                
+                for (int i = 1; i < _currentBits.Length; i++)
+                {
+                    bool temp = _currentBits[i];
+                    _currentBits[i] = prevBit;
+                    prevBit = temp;
+                }
+
+                _result.Add(prevBit);
+            }
         }
 
         public void StopGenerator()
