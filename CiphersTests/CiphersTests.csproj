@@ -50,6 +50,7 @@
     <Reference Include="System.Core" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="CezarTest.cs" />
     <Compile Include="ColumnarTranspTest1.cs" />
     <Compile Include="MatrixTranspTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

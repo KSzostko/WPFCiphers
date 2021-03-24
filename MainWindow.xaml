@@ -33,17 +33,25 @@
                 <RowDefinition></RowDefinition>
                 <RowDefinition></RowDefinition>
                 <RowDefinition></RowDefinition>
+                <RowDefinition></RowDefinition>
+                <RowDefinition></RowDefinition>
+                <RowDefinition></RowDefinition>
             </Grid.RowDefinitions>
 
-            <Label Grid.Row="0" Content="BSK 2021" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="50" FontWeight="Black"></Label>
+            <Label Grid.Row="0" Name="logoLabel" Content="BSK 2021" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="50" FontWeight="Black"></Label>
 
-            <Button Click="cipherButtonPressed" Name="RAIL_FENCE" Grid.Row="1" Style="{StaticResource DefaultButtonStyle}" Margin="20" FontSize="35" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" FontWeight="Light" Foreground="White" Content="RAIL FENCE"></Button>
-            <Button Click="cipherButtonPressed" Name="COLUMNAR_TRANSP" Grid.Row="2" Style="{StaticResource DefaultButtonStyle}" Margin="20" FontSize="35" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" FontWeight="Light" Foreground="White" Content="COLUMNAR TRANSP"></Button>
-            <Button Click="cipherButtonPressed" Name="MATRIX_TRANSP" Grid.Row="3" Style="{StaticResource DefaultButtonStyle}" Margin="20" FontSize="35" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" FontWeight="Light" Foreground="White" Content="MATRIX TRANSP"></Button>
+            <Button Click="cipherButtonPressed" Name="RAIL_FENCE" Grid.Row="1" Style="{StaticResource DefaultButtonStyle}" Margin="20" FontSize="35" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" FontWeight="Light" Foreground="Red" Content="RAIL FENCE"></Button>
+            <Button Click="cipherButtonPressed" Name="COLUMNAR_TRANSP" Grid.Row="2" Style="{StaticResource DefaultButtonStyle}" Margin="20" FontSize="35" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" FontWeight="Light" Foreground="Orange" Content="COLUMNAR TRANSP"></Button>
+            <Button Click="cipherButtonPressed" Name="MATRIX_TRANSP" Grid.Row="3" Style="{StaticResource DefaultButtonStyle}" Margin="20" FontSize="35" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" FontWeight="Light" Foreground="Yellow" Content="MATRIX TRANSP"></Button>
 
-            <Label Grid.Row="4" Content="Jakub i Filip i Jakub 2021 ®" 
+            <Button Click="cipherButtonPressed" Name="COLUMNAR_C" Grid.Row="4" Style="{StaticResource DefaultButtonStyle}" Margin="20" FontSize="35" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" FontWeight="Light" Foreground="Green" Content="COLUMNAR C"></Button>
+            <Button Click="cipherButtonPressed" Name="ViGENERE" Grid.Row="5" Style="{StaticResource DefaultButtonStyle}" Margin="20" FontSize="35" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" FontWeight="Light" Foreground="LightBlue" Content="ViGENERE"></Button>
+            <Button Click="cipherButtonPressed" Name="CEZAR" Grid.Row="6" Style="{StaticResource DefaultButtonStyle}" Margin="20" FontSize="35" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" FontWeight="Light" Foreground="Purple" Content="CEZAR"></Button>
+
+
+            <Label Grid.Row="7" Content="Jakub i Filip i Jakub 2021 ®" 
                    HorizontalAlignment="Center" VerticalAlignment="Bottom" 
-                   FontSize="10" Foreground="Gray"></Label>
+                   FontSize="15" Foreground="Gray"></Label>
         </Grid>
         <!--.-->
 

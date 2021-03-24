@@ -12,7 +12,7 @@ namespace WPFCiphers.Ciphers
 
         public MatrixTransp(string key)
         {
-            Key = key;
+            Key = key.ToUpper();
             rowsOrder = new int[key.Length];
             
             CalculateRowsOrder();
