@@ -56,17 +56,6 @@ namespace WPFCiphers.Ciphers
                 }
             }
 
-            /* do testowania, można usunąć
-            for(int i = 0; i < array.GetLength(0); i++)
-            {
-                for (int j = 0; j < array.GetLength(1); j++)
-                {
-                    Console.Write(array[i, j]);
-                }
-                Console.WriteLine(" ");
-            }
-            */
-
             return output;
         }
 
@@ -77,7 +66,7 @@ namespace WPFCiphers.Ciphers
 
             //tworzy tablice o min wymiarach
             char[,] array = getArray(corrected_text.Length);
-            // wstawia znaki w opdowiednie miejsca do tablcy a reszte zapełnia spacjami 
+            // wstawia znaki w opdowiednie miejsca do tablicy a reszte zapełnia spacjami 
             array = fillArray(array, corrected_text, false);
 
             // z tablicy na string
