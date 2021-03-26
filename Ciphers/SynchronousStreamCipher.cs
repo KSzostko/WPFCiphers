@@ -1,5 +1,7 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -7,295 +9,156 @@ using WPFCiphers.Generators;
 
 namespace WPFCiphers.Ciphers
 {
-    public class SynchronousStreamCipher : Cipher
+    public class SynchronousStreamCipher
     {
         //lista boolowska jako klucz
         public List<bool> key { get; set; }
+        public BitArray bit_key { get; set; }
 
         // LFSR jest jedno bo z nieznianych mi powodów przy dekodowaniu
         // czyli kiedy tworzę drugi LFSR to nie chce mi generować klucza 
         public SynchronousStreamCipher(List<bool> key)
         {
             this.key = key;
+            this.bit_key = boolToBinary(key);
         }
 
-        public string Decrypt(string text)
+        public BitArray Decrypt(string file_input)
         {
-            //XOR-owanie klucza i textu 
-            string output = "";
+            BitArray bit_file = GetFileBits(file_input);
+            BitArray output = new BitArray(bit_file.Count);
 
-            int text_iter = 0;
+            //XOR-owanie klucza i pliku
+            int file_iter = 0;
             int key_iter = 0;
-            while (text_iter < text.Length)
+            while (file_iter < bit_file.Count)
             {
                 if (key_iter == key.Count)
                     key_iter = 0;
 
-                if ((text[text_iter] == '0' && key[key_iter] == false) ||
-                    (text[text_iter] == '1' && key[key_iter] == true))
-                {
-                    output += '0';
-                }
-                else
-                    output += '1';
+                output[file_iter] = bit_file[file_iter] ^ key[key_iter];
 
-                text_iter++;
+                file_iter++;
                 key_iter++;
             }
-
             /*
-            for (int i = 0; i < text.Length; i++)
-            {
-                if ((text[i] == '0' && key[i] == false) ||
-                    (text[i] == '1' && key[i] == true))
-                {
-                    output += '0';
-                }
-                else
-                    output += '1';
-            }
-            */
-
-            // zamiana z binarnej do zwykłej
-            output = binaryToString(output);
-
             // do sprawdzenia czy działa, można usunąć
-            Console.Write("byte_text: ");
-            Console.WriteLine(text);
-            Console.Write("byte_key:  ");
-            for (int i = 0; i < key.Count; i++)
+            Console.Write("key: ");
+            for (int i = 0; i < bit_key.Count; i++)
             {
-                if (key[i] == true)
+                if (bit_key[i] == true)
                     Console.Write('1');
                 else
                     Console.Write('0');
             }
-            Console.Write("\n");
+            Console.Write("\nfil: ");
+            for (int i = 0; i < bit_file.Count; i++)
+            {
+                if (bit_file[i] == true)
+                    Console.Write('1');
+                else
+                    Console.Write('0');
+            }
+            Console.Write("\nout: ");
+            for (int i = 0; i < output.Count; i++)
+            {
+                if (output[i] == true)
+                    Console.Write('1');
+                else
+                    Console.Write('0');
+            }
+            Console.Write('\n');
+            */
+
+            saveDecrypted(output);
 
             return output;
         }
 
-        public string Encrypt(string text)
+        public BitArray Encrypt(string file_input)
         {
-            // string jako bajty
-            string byte_text = stringToBinary(text);
+            BitArray bit_file = GetFileBits(file_input);
+            BitArray output = new BitArray(bit_file.Count);
 
-            //XOR-owanie klucza i textu 
-            string output = "";
-
-            int text_iter = 0;
+            //XOR-owanie klucza i pliku
+            int file_iter = 0;
             int key_iter = 0;
-            while (text_iter < byte_text.Length)
+            while (file_iter < bit_file.Count)
             {
                 if (key_iter == key.Count)
                     key_iter = 0;
 
-                if ((byte_text[text_iter] == '0' && key[key_iter] == false) ||
-                    (byte_text[text_iter] == '1' && key[key_iter] == true))
-                {
-                    output += '0';
-                }
-                else
-                    output += '1';
+                output[file_iter] = bit_file[file_iter] ^ key[key_iter];
 
-                text_iter++;
+                file_iter++;
                 key_iter++;
             }
-
+            /*
             // do sprawdzenia czy działa, można usunąć
-
-            Console.Write("byte_text: ");
-            Console.WriteLine(byte_text);
-            Console.Write("byte_key:  ");
-            for (int i = 0; i < key.Count; i++)
+            Console.Write("key: ");
+            for (int i = 0; i < bit_key.Count; i++)
             {
-                if (key[i] == true)
+                if (bit_key[i] == true)
                     Console.Write('1');
                 else
                     Console.Write('0');
             }
-            Console.Write("\n");
+            Console.Write("\nfil: ");
+            for (int i = 0; i < bit_file.Count; i++)
+            {
+                if (bit_file[i] == true)
+                    Console.Write('1');
+                else
+                    Console.Write('0');
+            }
+            Console.Write("\nout: ");
+            for (int i = 0; i < output.Count; i++)
+            {
+                if (output[i] == true)
+                    Console.Write('1');
+                else
+                    Console.Write('0');
+            }
+            Console.Write('\n');
+            */
+            saveEnrypted(output);
 
             return output;
         }
 
-        // string zwykły na string 0 i 1
-        public String stringToBinary(string text)
+        public BitArray boolToBinary(List<bool> key)
         {
-            /*
-            UTF8Encoding encoding = new UTF8Encoding();
-            byte[] buf = encoding.GetBytes(text);
+            BitArray output = new BitArray(key.Count);
 
-            StringBuilder binaryStringBuilder = new StringBuilder();
-            foreach (byte b in buf)
+            for (int i = 0; i < key.Count; i++)
             {
-                binaryStringBuilder.Append(Convert.ToString(b, 2));
+                if (key[i] == true)
+                    output[i] = true;
+                else
+                    output[i] = false;
             }
 
-            return binaryStringBuilder.ToString();
-            */
-
-            StringBuilder sb = new StringBuilder();
-
-            foreach (char c in text.ToCharArray())
-            {
-                sb.Append(Convert.ToString(c, 2).PadLeft(8, '0'));
-            }
-            return sb.ToString();
+            return output;
         }
 
-        public String binaryToString(string text)
+        private BitArray GetFileBits(String filename)
         {
-            /*
-            List<Byte> byteList = new List<Byte>();
-            
-            for (int i = 0; i < text.Length; i += 8)
-            {
-                byteList.Add(Convert.ToByte(text.Substring(i, 8), 2));
-            }
-            return Encoding.ASCII.GetString(byteList.ToArray());
-            */
+            byte[] bytes = File.ReadAllBytes(filename);
+            return new BitArray(bytes);
+        }
 
-            List<Byte> byteList = new List<Byte>();
+        private void saveDecrypted(BitArray input)
+        {
+            byte[] bytes = new byte[input.Length / 8 + (input.Length % 8 == 0 ? 0 : 1)];
+            input.CopyTo(bytes, 0);
+            File.WriteAllBytes("decrypted.bin", bytes);
+        }
 
-            for (int i = 0; i < text.Length; i += 8)
-            {
-                byteList.Add(Convert.ToByte(text.Substring(i, 8), 2));
-            }
-            return Encoding.ASCII.GetString(byteList.ToArray());
+        private void saveEnrypted(BitArray input)
+        {
+            byte[] bytes = new byte[input.Length / 8 + (input.Length % 8 == 0 ? 0 : 1)];
+            input.CopyTo(bytes, 0);
+            File.WriteAllBytes("encrypted.bin", bytes);
         }
     }
 }
-
-/* orginał, na wszelki wypadek
- public class SynchronousStreamCipher : Cipher
-    {
-        // wielomian jako tablica intów(potęgi x)
-        public int[] seed { get; set; }
-        private LFSR number_generator;
-
-        // LFSR jest jedno bo z nieznianych mi powodów przy dekodowaniu
-        // czyli kiedy tworzę drugi LFSR to nie chce mi generować klucza 
-        public SynchronousStreamCipher(int[] seed)
-        {
-            this.seed = seed;
-            number_generator = new LFSR();
-        }
-
-        public string Decrypt(string text)
-        {
-            // klucz jako bajty
-            List<byte> byte_key = getKey(text);
-
-            //XOR-owanie klucza i textu 
-            string output = "";
-            for (int i = 0; i < text.Length; i++)
-            {
-                if ((text[i] == '0' && byte_key[i] == 0) ||
-                    (text[i] == '1' && byte_key[i] == 1))
-                {
-                    output += '0';
-                }
-                else
-                    output += '1';
-            }
-
-            // zamiana z binarnej do zwykłej
-            output = binaryToString(output);
-
-            // do sprawdzenia czy działa, można usunąć
-            Console.Write("byte_text: ");
-            Console.WriteLine(text);
-            Console.Write("byte_key:  ");
-            for (int i = 0; i < text.Length; i++)
-                Console.Write(byte_key[i]);
-            Console.Write("\n");
-
-            return output;
-        }
-
-        public string Encrypt(string text)
-        {
-            // string jako bajty
-            string byte_text = stringToBinary(text);
-            // klucz jako bajty
-            List<byte> byte_key = getKey(byte_text);
-
-            //XOR-owanie klucza i textu 
-            // trochę pokrętnie ale byte_text to string a byte_key to byte
-            string output = "";
-            for (int i = 0; i < byte_text.Length; i++)
-            {
-                if ((byte_text[i] == '0' && byte_key[i] == 0) ||
-                    (byte_text[i] == '1' && byte_key[i] == 1))
-                {
-                    output += '0';
-                }
-                else
-                    output += '1';
-            }
-
-            // do sprawdzenia czy działa, można usunąć
-            Console.Write("byte_text: ");
-            Console.WriteLine(byte_text);
-            Console.Write("byte_key:  ");
-            for (int i = 0; i < byte_text.Length; i++)
-                Console.Write(byte_key[i]);
-            Console.Write("\n");
-
-            return output;
-        }
-
-        // do pobrania klucza
-        private List<byte> getKey(string byte_text)
-        {
-            number_generator.StartGenerator(seed);
-
-            List<bool> key = new List<bool>();
-            List<byte> byte_key = new List<byte>();
-
-            while (byte_key.Count() < byte_text.Length)
-            {
-                key = number_generator.GetSequence();
-                //Console.WriteLine(key.Count); 
-                // jeżeli LFSR będzie tworzone w tej funkcji to za 2 razem czyli przy dekodwaniu
-                // nie zwraca klucza (długość = 0), albo Ja ślepy na problem albo coś jest nie tak
-                for (int i = 0; i < key.Count; i++)
-                {
-                    if (key[i] == true)
-                        byte_key.Add(1);
-                    else
-                        byte_key.Add(0);
-                }
-            }
-            number_generator.StopGenerator();
-
-            return byte_key;
-        }
-
-        // string zwykły na string 0 i 1
-        public String stringToBinary(string text)
-        {
-            
-
-            StringBuilder sb = new StringBuilder();
-
-            foreach (char c in text.ToCharArray())
-            {
-                sb.Append(Convert.ToString(c, 2).PadLeft(8, '0'));
-            }
-            return sb.ToString();
-        }
-
-        public String binaryToString(string text)
-        {
-            List<Byte> byteList = new List<Byte>();
-
-            for (int i = 0; i < text.Length; i += 8)
-            {
-                byteList.Add(Convert.ToByte(text.Substring(i, 8), 2));
-            }
-            return Encoding.ASCII.GetString(byteList.ToArray());
-        }
-    }
- */
