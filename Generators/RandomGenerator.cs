@@ -2,12 +2,12 @@
 
 namespace WPFCiphers.Generators
 {
-    public interface RandomGenerator
+    interface RandomGenerator
     {
-        public void StartGenerator(int[] powers);
+        void StartGenerator(int[] powers);
         // you don't have to call GenerateSequence in the app
-        public void GenerateSequence(int[] powers);
-        public void StopGenerator();
-        public List<bool> GetSequence();
+        void GenerateSequence(int[] powers);
+        void StopGenerator();
+        List<bool> GetSequence();
     }
 }
