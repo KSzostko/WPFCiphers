@@ -3,10 +3,172 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using WPFCiphers.Generators;
 
 namespace WPFCiphers.Ciphers
 {
     public class SynchronousStreamCipher : Cipher
+    {
+        //lista boolowska jako klucz
+        public List<bool> key { get; set; }
+
+        // LFSR jest jedno bo z nieznianych mi powodów przy dekodowaniu
+        // czyli kiedy tworzę drugi LFSR to nie chce mi generować klucza 
+        public SynchronousStreamCipher(List<bool> key)
+        {
+            this.key = key;
+        }
+
+        public string Decrypt(string text)
+        {
+            //XOR-owanie klucza i textu 
+            string output = "";
+
+            int text_iter = 0;
+            int key_iter = 0;
+            while (text_iter < text.Length)
+            {
+                if (key_iter == key.Count)
+                    key_iter = 0;
+
+                if ((text[text_iter] == '0' && key[key_iter] == false) ||
+                    (text[text_iter] == '1' && key[key_iter] == true))
+                {
+                    output += '0';
+                }
+                else
+                    output += '1';
+
+                text_iter++;
+                key_iter++;
+            }
+
+            /*
+            for (int i = 0; i < text.Length; i++)
+            {
+                if ((text[i] == '0' && key[i] == false) ||
+                    (text[i] == '1' && key[i] == true))
+                {
+                    output += '0';
+                }
+                else
+                    output += '1';
+            }
+            */
+
+            // zamiana z binarnej do zwykłej
+            output = binaryToString(output);
+
+            // do sprawdzenia czy działa, można usunąć
+            Console.Write("byte_text: ");
+            Console.WriteLine(text);
+            Console.Write("byte_key:  ");
+            for (int i = 0; i < key.Count; i++)
+            {
+                if (key[i] == true)
+                    Console.Write('1');
+                else
+                    Console.Write('0');
+            }
+            Console.Write("\n");
+
+            return output;
+        }
+
+        public string Encrypt(string text)
+        {
+            // string jako bajty
+            string byte_text = stringToBinary(text);
+
+            //XOR-owanie klucza i textu 
+            string output = "";
+
+            int text_iter = 0;
+            int key_iter = 0;
+            while (text_iter < byte_text.Length)
+            {
+                if (key_iter == key.Count)
+                    key_iter = 0;
+
+                if ((byte_text[text_iter] == '0' && key[key_iter] == false) ||
+                    (byte_text[text_iter] == '1' && key[key_iter] == true))
+                {
+                    output += '0';
+                }
+                else
+                    output += '1';
+
+                text_iter++;
+                key_iter++;
+            }
+
+            // do sprawdzenia czy działa, można usunąć
+
+            Console.Write("byte_text: ");
+            Console.WriteLine(byte_text);
+            Console.Write("byte_key:  ");
+            for (int i = 0; i < key.Count; i++)
+            {
+                if (key[i] == true)
+                    Console.Write('1');
+                else
+                    Console.Write('0');
+            }
+            Console.Write("\n");
+
+            return output;
+        }
+
+        // string zwykły na string 0 i 1
+        public String stringToBinary(string text)
+        {
+            /*
+            UTF8Encoding encoding = new UTF8Encoding();
+            byte[] buf = encoding.GetBytes(text);
+
+            StringBuilder binaryStringBuilder = new StringBuilder();
+            foreach (byte b in buf)
+            {
+                binaryStringBuilder.Append(Convert.ToString(b, 2));
+            }
+
+            return binaryStringBuilder.ToString();
+            */
+
+            StringBuilder sb = new StringBuilder();
+
+            foreach (char c in text.ToCharArray())
+            {
+                sb.Append(Convert.ToString(c, 2).PadLeft(8, '0'));
+            }
+            return sb.ToString();
+        }
+
+        public String binaryToString(string text)
+        {
+            /*
+            List<Byte> byteList = new List<Byte>();
+            
+            for (int i = 0; i < text.Length; i += 8)
+            {
+                byteList.Add(Convert.ToByte(text.Substring(i, 8), 2));
+            }
+            return Encoding.ASCII.GetString(byteList.ToArray());
+            */
+
+            List<Byte> byteList = new List<Byte>();
+
+            for (int i = 0; i < text.Length; i += 8)
+            {
+                byteList.Add(Convert.ToByte(text.Substring(i, 8), 2));
+            }
+            return Encoding.ASCII.GetString(byteList.ToArray());
+        }
+    }
+}
+
+/* orginał, na wszelki wypadek
+ public class SynchronousStreamCipher : Cipher
     {
         // wielomian jako tablica intów(potęgi x)
         public int[] seed { get; set; }
@@ -114,18 +276,7 @@ namespace WPFCiphers.Ciphers
         // string zwykły na string 0 i 1
         public String stringToBinary(string text)
         {
-            /*
-            UTF8Encoding encoding = new UTF8Encoding();
-            byte[] buf = encoding.GetBytes(text);
-
-            StringBuilder binaryStringBuilder = new StringBuilder();
-            foreach (byte b in buf)
-            {
-                binaryStringBuilder.Append(Convert.ToString(b, 2));
-            }
-
-            return binaryStringBuilder.ToString();
-            */
+            
 
             StringBuilder sb = new StringBuilder();
 
@@ -138,16 +289,6 @@ namespace WPFCiphers.Ciphers
 
         public String binaryToString(string text)
         {
-            /*
-            List<Byte> byteList = new List<Byte>();
-            
-            for (int i = 0; i < text.Length; i += 8)
-            {
-                byteList.Add(Convert.ToByte(text.Substring(i, 8), 2));
-            }
-            return Encoding.ASCII.GetString(byteList.ToArray());
-            */
-
             List<Byte> byteList = new List<Byte>();
 
             for (int i = 0; i < text.Length; i += 8)
@@ -157,4 +298,4 @@ namespace WPFCiphers.Ciphers
             return Encoding.ASCII.GetString(byteList.ToArray());
         }
     }
-}
+ */
