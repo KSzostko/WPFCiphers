@@ -249,9 +249,9 @@ namespace WPFCiphers
                     }
                     break;
                 case "SYNC":
-                    if (syncFileName.Content.ToString() == "")
+                    if (syncFileName.Content.ToString() == " ")
                     {
-                        MessageBox.Show("SYNC text input is empty. Please type in something.");
+                        MessageBox.Show("SYNC file input is empty. Please type in something.");
                         return;
                     }
                     if (keyTextBox.Text == "")
@@ -301,20 +301,8 @@ namespace WPFCiphers
                 }
             } else
             {
-                if (buttonName == "encrypt")
-                {
-                    if (encrypted != "") outcomeTypeLabel.Content = "Encrypted:";
-                    outcomeLabel.Content = encrypted;
-                }
-                else
-                {
-                    if (decrypted != "") outcomeTypeLabel.Content = "Decrypted:";
-                    outcomeLabel.Content = decrypted;
-                }
+     
             }
-         
-
-
 
         }
 
@@ -924,13 +912,14 @@ namespace WPFCiphers
         }
         private void startGen_Click(object sender, RoutedEventArgs e)
         {
-            stopGen.IsEnabled = true;
-            startGen.IsEnabled = false;
-            syncKeyGenerated = false;
-            stillWorking = true;
+           
+        
             int[] table = parseSyncKey(keyTextBox.Text);
             if (validateSyncKey(table))
             {
+                stopGen.IsEnabled = true;
+                startGen.IsEnabled = false;
+                syncKeyGenerated = false;
                 genStatusLabel.Content = "Your key is being generated.";
                 lsfrGen.StartGenerator(table);
             } else
