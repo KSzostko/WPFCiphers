@@ -266,6 +266,8 @@ namespace WPFCiphers
                     }
                     normalDialog = false;
                     synchronousStreamCipher = new SynchronousStreamCipher(lsfrGen.GetSequence());
+
+                   
                     if (buttonName == "encrypt")
                     {
                          synchronousStreamCipher.Encrypt(syncFileName.Content.ToString());
@@ -920,6 +922,8 @@ namespace WPFCiphers
                 stopGen.IsEnabled = true;
                 startGen.IsEnabled = false;
                 syncKeyGenerated = false;
+                encrypt.IsEnabled = false;
+                decrypt.IsEnabled = false;
                 genStatusLabel.Content = "Your key is being generated.";
                 lsfrGen.StartGenerator(table);
             } else
@@ -939,6 +943,8 @@ namespace WPFCiphers
             stillWorking = false;
             stopGen.IsEnabled = false;
             startGen.IsEnabled = true;
+            encrypt.IsEnabled = true;
+            decrypt.IsEnabled = true;
         }
         private void showGenButtons()
         {
