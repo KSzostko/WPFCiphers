@@ -304,6 +304,7 @@ namespace WPFCiphers
                     {
                          synchronousStreamCipher.Decrypt(syncFileName.Content.ToString());
                     }
+                    MessageBox.Show("Encrypted/decrypted file is located in folder where your .exe file is ( most probably bin/debug ). You will also find text file that contains LFSR key in it there.");
                     break;
                 default:
                     break;
