@@ -16,6 +16,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 using WPFCiphers.Ciphers;
+using WPFCiphers.Generators;
 
 namespace WPFCiphers
 {
@@ -49,6 +50,8 @@ namespace WPFCiphers
         ColumnarTranspositionC ctc;
         Cezar cz;
 
+        SynchronousStreamCipher synchronousStreamCipher;
+
         private void cipherButtonPressed(object sender, System.Windows.RoutedEventArgs e)
         {
             string buttonName = ((Button)sender).Name;
@@ -69,44 +72,60 @@ namespace WPFCiphers
                 currentAlgorithm = buttonName;
                 algoNameLabel.Content = buttonName;
                 filesalgoNameLabel.Content = buttonName;
-
+                hideGenButtons();
                 switch (currentAlgorithm)
                 {
                     case "RAIL_FENCE":
                         mLabel.Content = "M";
                         keyLabel.Content = "n";
+                        fileskeyLabel.Content = "n";
                         logoLabel.Foreground = Brushes.Red;
                         break;
                     case "COLUMNAR_TRANSP":
                         mLabel.Content = "M";
                         keyLabel.Content = "key";
+                        fileskeyLabel.Content = "key";
                         logoLabel.Foreground = Brushes.Orange;
                         break;
                     case "MATRIX_TRANSP":
                         mLabel.Content = "M";
                         keyLabel.Content = "key";
+                        fileskeyLabel.Content = "key";
                         logoLabel.Foreground = Brushes.Yellow;
                         break;
                     case "COLUMNAR_C":
                         mLabel.Content = "M";
                         keyLabel.Content = "key";
+                        fileskeyLabel.Content = "KEY";
                         logoLabel.Foreground = Brushes.Green;
                         break;
                     case "ViGENERE":
                         mLabel.Content = "M";
                         keyLabel.Content = "K";
+                        fileskeyLabel.Content = "K";
                         logoLabel.Foreground = Brushes.LightBlue;
                         break;
                     case "CEZAR":
                         mLabel.Content = "M";
                         keyLabel.Content = "K";
+                        fileskeyLabel.Content = "K";
                         logoLabel.Foreground = Brushes.Purple;
+                        break;
+                    case "SYNC":
+                        mLabel.Content = "M";
+                        keyLabel.Content = "POLYNOMIAL";
+                        fileskeyLabel.Content = "POLYNOMIAL";
+                        showGenButtons();
+                        logoLabel.Foreground = Brushes.White;
+                        filessideBarGrid.Visibility = Visibility.Hidden;
                         break;
                     default:
                         break;
                 }
             }
         }
+
+
 
         private void encryptDecryptPressed(object sender, RoutedEventArgs e)
         {
@@ -117,6 +136,8 @@ namespace WPFCiphers
 
             string encrypted = "";
             string decrypted = "";
+
+            bool normalDialog = true;
 
             switch (currentAlgorithm)
             {
@@ -227,6 +248,34 @@ namespace WPFCiphers
                         return;
                     }
                     break;
+                case "SYNC":
+                    if (syncFileName.Content.ToString() == "")
+                    {
+                        MessageBox.Show("SYNC text input is empty. Please type in something.");
+                        return;
+                    }
+                    if (keyTextBox.Text == "")
+                    {
+                        MessageBox.Show("SYNC key text input is empty. Please type in something.");
+                        return;
+                    }
+                    if (!syncKeyGenerated)
+                    {
+                        MessageBox.Show("SYNC key needs to be generated first, please press run and then stop button before proceeding.");
+                        return;
+                    }
+                    normalDialog = false;
+                    synchronousStreamCipher = new SynchronousStreamCipher(lsfrGen.GetSequence());
+                    if (buttonName == "encrypt")
+                    {
+                         synchronousStreamCipher.Encrypt(syncFileName.Content.ToString());
+
+                    }
+                    else
+                    {
+                         synchronousStreamCipher.Decrypt(syncFileName.Content.ToString());
+                    }
+                    break;
                 default:
                     break;
             }
@@ -238,20 +287,37 @@ namespace WPFCiphers
             if (length > 10) outcomeLabel.FontSize = 20;
             if (length > 20) outcomeLabel.FontSize = 15;
 
-            if (buttonName == "encrypt")
+            if (normalDialog)
             {
-                if (encrypted != "") outcomeTypeLabel.Content = "Encrypted:";
-                outcomeLabel.Content = encrypted;
-            }
-            else
+                if (buttonName == "encrypt")
+                {
+                    if (encrypted != "") outcomeTypeLabel.Content = "Encrypted:";
+                    outcomeLabel.Content = encrypted;
+                }
+                else
+                {
+                    if (decrypted != "") outcomeTypeLabel.Content = "Decrypted:";
+                    outcomeLabel.Content = decrypted;
+                }
+            } else
             {
-                if (decrypted != "") outcomeTypeLabel.Content = "Decrypted:";
-                outcomeLabel.Content = decrypted;
+                if (buttonName == "encrypt")
+                {
+                    if (encrypted != "") outcomeTypeLabel.Content = "Encrypted:";
+                    outcomeLabel.Content = encrypted;
+                }
+                else
+                {
+                    if (decrypted != "") outcomeTypeLabel.Content = "Decrypted:";
+                    outcomeLabel.Content = decrypted;
+                }
             }
+         
 
 
 
         }
+
 
         private void filesencryptDecryptPressed(object sender, RoutedEventArgs e)
         {
@@ -344,7 +410,7 @@ namespace WPFCiphers
                     if (validateMatrixTranspVerCKey(userKey))
                     {
                         algorithm = new ColumnarTranspositionC(userKey);
-                  
+
                     }
                     else
                     {
@@ -392,7 +458,7 @@ namespace WPFCiphers
             // depending on the status move through input list and update outcome listsdfafsdafsadfsad
 
             string currentDate = DateTime.Now.ToString().Replace(':', ' ').Replace('/', ' ');
-            
+
 
             if (status == "encrypting")
             {
@@ -445,8 +511,8 @@ namespace WPFCiphers
                 MessageBox.Show("Check app's folder for outcome of this operation. ");
                 outcomeScrollViewerList.Add("Check your app's folder for");
                 if (status == "encrypting") outcomeScrollViewerList.Add("EncryptedListOfWords - ");
-                else outcomeScrollViewerList.Add("DecryptedListOfWords - " );
-                outcomeScrollViewerList.Add(currentAlgorithm); 
+                else outcomeScrollViewerList.Add("DecryptedListOfWords - ");
+                outcomeScrollViewerList.Add(currentAlgorithm);
                 outcomeScrollViewerList.Add(" - ");
                 outcomeScrollViewerList.Add(currentDate);
                 outcomeScrollViewerList.Add(".txt");
@@ -584,7 +650,8 @@ namespace WPFCiphers
                 if (Char.IsLetter(s[i]))
                 {
                     containsAtLeastOneLetter = true;
-                } else
+                }
+                else
                 {
                     MessageBox.Show("winegret key should contain only letters");
                     return false;
@@ -593,16 +660,17 @@ namespace WPFCiphers
             if (containsAtLeastOneLetter)
             {
                 return true;
-            } else
+            }
+            else
             {
                 MessageBox.Show("winegret key needs to contain at least one letter. Please type in word that contains only letters.");
                 return false;
             }
-           
+
         }
-            private bool validateMatrixTransp(string s)
+        private bool validateMatrixTransp(string s)
         {
-          
+
             for (int i = 0; i < s.Length; i++)
             {
                 if (Char.IsLetter(s[i]))
@@ -620,8 +688,8 @@ namespace WPFCiphers
         private bool validateRailfenceFields(string s)
         {
             int i;
-           
-           
+
+
 
             if (int.TryParse(s, out i))
             {
@@ -630,30 +698,30 @@ namespace WPFCiphers
                     MessageBox.Show("Rail fence key is invalid. Please provide integer greater than 1 or equal.");
                     return false;
                 }
-                  
+
                 return true;
             }
             MessageBox.Show("Rail fence key is invalid. Please provide integer greater than 1 or equal.");
             return false;
         }
-        private bool validateColumnarTranspkey(int []table)
+        private bool validateColumnarTranspkey(int[] table)
         {
             int[] temptable = table;
             Array.Sort(temptable);
             int i = 1;
-       
-            if(temptable.Length < 1)
+
+            if (temptable.Length < 1)
             {
                 MessageBox.Show("Columnar transp key input is emtpy. Please type in something.");
                 return false;
             }
-            foreach ( int value in temptable)
+            foreach (int value in temptable)
             {
                 if (value != i)
                 {
                     MessageBox.Show("Columnar transp key is invalid. Every number from 1 to max must be present, there shall not be any repetitions.");
                     return false;
-                }  
+                }
                 else i++;
             }
             return true;
@@ -758,6 +826,162 @@ namespace WPFCiphers
 
             if (length > 10) mTextBox.FontSize = 15;
             if (length > 20) mTextBox.FontSize = 10;
+        }
+
+
+        private bool validateSyncKey(int[] table)
+        {
+            int[] temptable = table;
+            Array.Sort(temptable);
+            bool firstLoop = true;
+            int prevValue = 0;
+
+            if (temptable.Length < 1)
+            {
+                MessageBox.Show("SYNC key input is emtpy. Please type in something.");
+                return false;
+            }
+            foreach (int value in temptable)
+            {
+                if (value == prevValue && firstLoop == false)
+                {
+                    MessageBox.Show("SYNC key is invalid.There shall not be any repetitions.");
+                    return false;
+                }
+                else
+                {
+                    prevValue = value;
+                    firstLoop = false;
+                }
+                   
+            }
+            return true;
+        }
+        private int[] parseSyncKey(string s)
+        {
+            List<int> l = new List<int>();
+
+            //
+            char startingSequence = '^';
+            bool beginSequence = false;
+            char endingSequence = '+';
+
+            string cachedNumber = "";
+            //
+            // needed for parsing algorithm to work.
+            s += " ";
+            for (int i = 0; i < s.Length; i++)
+            {
+                if (beginSequence)
+                {
+                    if (Char.IsDigit(s[i]))
+                    {
+                        cachedNumber += s[i];
+                    }
+                    else
+                    {
+                        if (cachedNumber != "" && Int32.Parse(cachedNumber) != 0) l.Add(Int32.Parse(cachedNumber));
+                        cachedNumber = "";
+
+                    }
+                }
+                if (!Char.IsDigit(s[i]))
+                {
+                    if (s[i] == startingSequence)
+                    {
+                        beginSequence = true;
+                    }
+                    if (s[i] == endingSequence)
+                    {
+                        beginSequence = false;
+                    }
+                }
+
+
+            }
+            int[] tab = new int[l.Count];
+            for (int i = 0; i < l.Count; i++)
+            {
+                tab[i] = l.ElementAt(i);
+            }
+            return tab;
+        }
+
+
+        internal bool stillWorking = true;
+        public bool syncKeyGenerated = false;
+        LFSR lsfrGen = new LFSR();
+        internal async Task lfsrGenerating(int[] table)
+        {
+
+                while (stillWorking)
+                {
+
+                lsfrGen.GenerateSequence(table);
+                await Task.Delay(1000);
+                }
+     
+        }
+        private void startGen_Click(object sender, RoutedEventArgs e)
+        {
+            stopGen.IsEnabled = true;
+            startGen.IsEnabled = false;
+            syncKeyGenerated = false;
+            stillWorking = true;
+            int[] table = parseSyncKey(keyTextBox.Text);
+            if (validateSyncKey(table))
+            {
+                genStatusLabel.Content = "Your key is being generated.";
+                lsfrGen.StartGenerator(table);
+            } else
+            {
+                //MessageBox.Show("SYNC key is invalid.");
+            }
+           
+         
+       
+        }
+
+        private void stopGen_Click(object sender, RoutedEventArgs e)
+        {
+            lsfrGen.StopGenerator();
+            genStatusLabel.Content = "Your key is ready.";
+            syncKeyGenerated = true;
+            stillWorking = false;
+            stopGen.IsEnabled = false;
+            startGen.IsEnabled = true;
+        }
+        private void showGenButtons()
+        {
+            stopGen.IsEnabled = false;
+            startGen.IsEnabled = true;
+            startGen.Visibility = Visibility.Visible;
+            stopGen.Visibility = Visibility.Visible;
+            syncchooseFileButton.Visibility = Visibility.Visible;
+            syncFileName.Visibility = Visibility.Visible;
+            mLabel.Visibility = Visibility.Hidden;
+            mTextBox.Visibility = Visibility.Hidden;
+        }
+        private void hideGenButtons()
+        {
+            stopGen.IsEnabled = false;
+            startGen.IsEnabled = false;
+            startGen.Visibility = Visibility.Hidden;
+            stopGen.Visibility = Visibility.Hidden;
+            syncchooseFileButton.Visibility = Visibility.Hidden;
+            syncFileName.Visibility = Visibility.Hidden;
+            mLabel.Visibility = Visibility.Visible;
+            mTextBox.Visibility = Visibility.Visible;
+        }
+
+        private void syncchooseFileButton_Click(object sender, RoutedEventArgs e)
+        {
+
+            var ofd = new Microsoft.Win32.OpenFileDialog() { Filter = "SYNC_CIPHER FILES (*.png;*.jpeg;*.txt;*.bin)|*.png;*.jpeg;*.txt;*.bin|All files (*.*)|*.*" };
+            var result = ofd.ShowDialog();
+            if (result == false) return;
+            var filepath = ofd.FileName;
+            syncFileName.Content = ofd.FileName;
         }
     }
 
