@@ -266,8 +266,35 @@ namespace WPFCiphers
                     }
                     normalDialog = false;
                     synchronousStreamCipher = new SynchronousStreamCipher(lsfrGen.GetSequence());
+                   TextWriter tw = new StreamWriter("LFSR KEY USED.txt");
+                    List<bool> listOfBools = lsfrGen.GetSequence();
+                    char boolOutcome = ' ';
+                    string boolOutcomeCollection = "";
+                    int ij = 0;
+                    foreach (bool b in listOfBools)
+                    {
+                        if (b == true)
+                        {
+                            boolOutcome = '1';
+                        }
+                        else
+                        {
+                            boolOutcome = '0';
+                        }
+                        boolOutcomeCollection += boolOutcome;
+                        ij++;
+                        
+                        if( ij > 100)
+                        {
+                            ij = 0;
+                            tw.WriteLine(boolOutcomeCollection);
+                            boolOutcomeCollection = "";
+                        }
 
-                   
+                    }
+                    tw.WriteLine(boolOutcomeCollection);
+                    tw.Close();
+
                     if (buttonName == "encrypt")
                     {
                          synchronousStreamCipher.Encrypt(syncFileName.Content.ToString());

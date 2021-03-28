@@ -28,7 +28,7 @@ namespace WPFCiphers.Generators
 
             while (_isRunning)
             {
-                Thread.Sleep(200);
+                Thread.Sleep(1);
                 bool prevBit = _currentBits[0];
                 XorBits();
                 
