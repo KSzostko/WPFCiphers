@@ -927,7 +927,7 @@ namespace WPFCiphers
 
         internal bool stillWorking = true;
         public bool syncKeyGenerated = false;
-        LFSR lsfrGen = new LFSR();
+        LFSR lsfrGen;
         internal async Task lfsrGenerating(int[] table)
         {
 
@@ -946,6 +946,7 @@ namespace WPFCiphers
             int[] table = parseSyncKey(keyTextBox.Text);
             if (validateSyncKey(table))
             {
+                lsfrGen = new LFSR();
                 stopGen.IsEnabled = true;
                 startGen.IsEnabled = false;
                 syncKeyGenerated = false;
