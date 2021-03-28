@@ -70,10 +70,21 @@ namespace WPFCiphers.Generators
         private void GenerateStartingBits()
         {
             Random random = new Random();
+            int count0 = 0;
+            int count1 = 0;
             
             for (int i = 0; i < _currentBits.Length; i++)
             {
-                _currentBits[i] = random.NextDouble() > 0.5;
+                bool randomBit = random.NextDouble() > 0.5;
+                _currentBits[i] = randomBit;
+
+                if (randomBit) count1++;
+                else count0++;
+            }
+
+            if (count0 == 0 || count1 == 0)
+            {
+                _currentBits[_currentBits.Length - 1] = !_currentBits[_currentBits.Length - 1];
             }
         }
 
