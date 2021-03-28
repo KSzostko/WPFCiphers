@@ -84,7 +84,14 @@ namespace WPFCiphers.Generators
 
             if (count0 == 0 || count1 == 0)
             {
-                _currentBits[_currentBits.Length - 1] = !_currentBits[_currentBits.Length - 1];
+                for (int i = 0; i < _currentBits.Length; i++)
+                {
+                    if (_performXor[i])
+                    {
+                        _currentBits[i] = !_currentBits[i];
+                        break;
+                    }
+                }
             }
         }
 
