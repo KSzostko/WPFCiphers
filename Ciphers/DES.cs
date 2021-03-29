@@ -41,6 +41,8 @@ namespace WPFCiphers.Ciphers
             // step 3 not implemented for now
 
             string reducedKey = PerformKeyPermutation();
+            string leftKeyBits = reducedKey.Substring(0, 28);
+            string rightKeyBits = reducedKey.Substring(28, 28);
 
             throw new System.NotImplementedException();
         }
