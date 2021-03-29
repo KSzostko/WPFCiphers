@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Linq;
+using System.Text;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using WPFCiphers.Ciphers;
 
@@ -43,6 +45,21 @@ namespace CiphersTests
             DES des = new DES("0000010111101010000101010101001010101010101010101011011010101100");
             PrivateObject obj = new PrivateObject(des);
             string res = Convert.ToString(obj.Invoke("AppendBits", input));
+            
+            Assert.AreEqual(res, input);
+        }
+        
+        [TestMethod]
+        public void BitsDoNotChangeBlocksAfterPermutation()
+        {
+            StringBuilder builder = new StringBuilder();
+            builder.Append(new string('0', 64));
+            builder.Append(new string('1', 64));
+            string input = builder.ToString();
+
+            DES des = new DES("0000010111101010000101010101001010101010101010101011011010101100");
+            PrivateObject obj = new PrivateObject(des);
+            string res = Convert.ToString(obj.Invoke("PerformInitialPermutation", input));
             
             Assert.AreEqual(res, input);
         }
