@@ -37,12 +37,12 @@ namespace WPFCiphers.Ciphers
         
         private string AppendBits(string s)
         {
-            if (s.Length % 64 == 0) return s;
+            if (s.Length % BlockSize == 0) return s;
 
             StringBuilder builder = new StringBuilder(s);
             
             builder.Append('1');
-            while (builder.Length % 64 != 0)
+            while (builder.Length % BlockSize != 0)
             {
                 builder.Append('0');
             }
@@ -53,7 +53,7 @@ namespace WPFCiphers.Ciphers
         private string PerformInitialPermutation(string s)
         {
             StringBuilder builder = new StringBuilder();
-            int blocksCount = s.Length / 64;
+            int blocksCount = s.Length / BlockSize;
 
             for (int currentBlock = 0; currentBlock < blocksCount; currentBlock++)
             {
