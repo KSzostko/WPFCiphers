@@ -11,12 +11,9 @@ namespace WPFCiphers.Ciphers
 {
     public class SynchronousStreamCipher
     {
-        //lista boolowska jako klucz
         public List<bool> key { get; set; }
         public BitArray bit_key { get; set; }
-
-        // LFSR jest jedno bo z nieznianych mi powodów przy dekodowaniu
-        // czyli kiedy tworzę drugi LFSR to nie chce mi generować klucza 
+ 
         public SynchronousStreamCipher(List<bool> key)
         {
             this.key = key;
@@ -28,7 +25,6 @@ namespace WPFCiphers.Ciphers
             BitArray bit_file = GetFileBits(file_input);
             BitArray output = new BitArray(bit_file.Count);
 
-            //XOR-owanie klucza i pliku
             int file_iter = 0;
             int key_iter = 0;
             while (file_iter < bit_file.Count)
@@ -41,34 +37,7 @@ namespace WPFCiphers.Ciphers
                 file_iter++;
                 key_iter++;
             }
-            /*
-            // do sprawdzenia czy działa, można usunąć
-            Console.Write("key: ");
-            for (int i = 0; i < bit_key.Count; i++)
-            {
-                if (bit_key[i] == true)
-                    Console.Write('1');
-                else
-                    Console.Write('0');
-            }
-            Console.Write("\nfil: ");
-            for (int i = 0; i < bit_file.Count; i++)
-            {
-                if (bit_file[i] == true)
-                    Console.Write('1');
-                else
-                    Console.Write('0');
-            }
-            Console.Write("\nout: ");
-            for (int i = 0; i < output.Count; i++)
-            {
-                if (output[i] == true)
-                    Console.Write('1');
-                else
-                    Console.Write('0');
-            }
-            Console.Write('\n');
-            */
+            
 
             saveDecrypted(output);
 
@@ -80,7 +49,6 @@ namespace WPFCiphers.Ciphers
             BitArray bit_file = GetFileBits(file_input);
             BitArray output = new BitArray(bit_file.Count);
 
-            //XOR-owanie klucza i pliku
             int file_iter = 0;
             int key_iter = 0;
             while (file_iter < bit_file.Count)
@@ -93,34 +61,7 @@ namespace WPFCiphers.Ciphers
                 file_iter++;
                 key_iter++;
             }
-            /*
-            // do sprawdzenia czy działa, można usunąć
-            Console.Write("key: ");
-            for (int i = 0; i < bit_key.Count; i++)
-            {
-                if (bit_key[i] == true)
-                    Console.Write('1');
-                else
-                    Console.Write('0');
-            }
-            Console.Write("\nfil: ");
-            for (int i = 0; i < bit_file.Count; i++)
-            {
-                if (bit_file[i] == true)
-                    Console.Write('1');
-                else
-                    Console.Write('0');
-            }
-            Console.Write("\nout: ");
-            for (int i = 0; i < output.Count; i++)
-            {
-                if (output[i] == true)
-                    Console.Write('1');
-                else
-                    Console.Write('0');
-            }
-            Console.Write('\n');
-            */
+           
             saveEnrypted(output);
 
             return output;
