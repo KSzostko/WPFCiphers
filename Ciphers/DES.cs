@@ -1,4 +1,6 @@
-﻿using System.Text;
+﻿using System;
+using System.Collections.Generic;
+using System.Text;
 
 namespace WPFCiphers.Ciphers
 {
@@ -25,6 +27,9 @@ namespace WPFCiphers.Ciphers
             {14, 6, 61, 53, 45, 37, 29},
             {21, 13, 5, 28, 20, 12, 4}
         };
+
+        private List<string> _rightInputBits;
+        private List<string> _leftInputBits;
         
         public string Key { get; set; }
 
@@ -37,8 +42,7 @@ namespace WPFCiphers.Ciphers
         {
             string input = AppendBits(s);
             input = PerformInitialPermutation(input);
-            
-            // step 3 not implemented for now
+            DivideInputBits(input);
 
             string reducedKey = PerformKeyPermutation();
             string leftKeyBits = reducedKey.Substring(0, 28);
@@ -82,6 +86,23 @@ namespace WPFCiphers.Ciphers
             }
 
             return builder.ToString();
+        }
+
+        private void DivideInputBits(string input)
+        {
+            _leftInputBits = new List<string>();
+            _rightInputBits = new List<string>();
+            int prevIndex = 0;
+            
+            while(prevIndex != input.Length)
+            {
+                string left = input.Substring(prevIndex, 32);
+                string right = input.Substring(prevIndex + 32, 32);
+                _leftInputBits.Add(left);
+                _rightInputBits.Add(right);
+
+                prevIndex += BlockSize;
+            }
         }
         
         private string PerformKeyPermutation()
