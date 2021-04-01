@@ -138,6 +138,9 @@ namespace WPFCiphers.Ciphers
 
         private void ShiftKeyBits(string leftKeyBits, string rightKeyBits)
         {
+            _leftKeyShiftedBits = new List<string>();
+            _rightKeyShiftedBits = new List<string>();
+
             string currentLeftShiftedBits = leftKeyBits;
             string currentRightShiftedBits = rightKeyBits;
             foreach (int shiftCount in LeftShift)
