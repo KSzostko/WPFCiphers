@@ -28,12 +28,24 @@ namespace WPFCiphers.Ciphers
             {21, 13, 5, 28, 20, 12, 4}
         };
         private static readonly int[] LeftShift = {1, 1, 2, 2, 2, 2, 2, 2, 1, 2, 2, 2, 2, 2, 2, 1};
+        private static readonly int[,] PermutedChoice2 = {
+            {14, 17, 11, 24, 1, 5},
+            {3, 28, 15, 6, 21, 10},
+            {23, 19, 12, 4, 26, 8},
+            {16, 7, 27, 20, 13, 2},
+            {41, 52, 31, 37, 47, 55},
+            {30, 40, 51, 45, 33, 48},
+            {44, 49, 39, 56, 34, 53},
+            {46, 42, 50, 36, 29, 32}
+        };
 
         private List<string> _rightInputBits;
         private List<string> _leftInputBits;
 
         private List<string> _leftKeyShiftedBits;
         private List<string> _rightKeyShiftedBits;
+
+        private List<string> _permutedKeys;
         
         public string Key { get; set; }
 
@@ -52,6 +64,8 @@ namespace WPFCiphers.Ciphers
             string leftKeyBits = reducedKey.Substring(0, 28);
             string rightKeyBits = reducedKey.Substring(28, 28);
             ShiftKeyBits(leftKeyBits, rightKeyBits);
+
+            CreatePermutedKeys();
 
             throw new System.NotImplementedException();
         }
@@ -139,6 +153,31 @@ namespace WPFCiphers.Ciphers
         private string Shift(string s, int count)
         {
             return s.Remove(0, count) + s.Substring(0, count);
+        }
+
+        private void CreatePermutedKeys()
+        {
+            _permutedKeys = new List<string>();
+
+            for (int i = 0; i < _leftKeyShiftedBits.Count; i++)
+            {
+                string joinedBits = _leftKeyShiftedBits[i] + _rightKeyShiftedBits[i];
+                string permutedBits = PerformPc2(joinedBits);
+                
+                _permutedKeys.Add(permutedBits);
+            }
+        }
+
+        private string PerformPc2(string key)
+        {
+            StringBuilder builder = new StringBuilder();
+
+            foreach (int pos in PermutedChoice2)
+            {
+                builder.Append(key[pos - 1]);
+            }
+
+            return builder.ToString();
         }
     }
 }
