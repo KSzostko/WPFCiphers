@@ -27,9 +27,13 @@ namespace WPFCiphers.Ciphers
             {14, 6, 61, 53, 45, 37, 29},
             {21, 13, 5, 28, 20, 12, 4}
         };
+        private static readonly int[] LeftShift = {1, 1, 2, 2, 2, 2, 2, 2, 1, 2, 2, 2, 2, 2, 2, 1};
 
         private List<string> _rightInputBits;
         private List<string> _leftInputBits;
+
+        private List<string> _leftKeyShiftedBits;
+        private List<string> _rightKeyShiftedBits;
         
         public string Key { get; set; }
 
@@ -47,6 +51,7 @@ namespace WPFCiphers.Ciphers
             string reducedKey = PerformKeyPermutation();
             string leftKeyBits = reducedKey.Substring(0, 28);
             string rightKeyBits = reducedKey.Substring(28, 28);
+            ShiftKeyBits(leftKeyBits, rightKeyBits);
 
             throw new System.NotImplementedException();
         }
@@ -115,6 +120,25 @@ namespace WPFCiphers.Ciphers
             }
 
             return builder.ToString();
+        }
+
+        private void ShiftKeyBits(string leftKeyBits, string rightKeyBits)
+        {
+            string currentLeftShiftedBits = leftKeyBits;
+            string currentRightShiftedBits = rightKeyBits;
+            foreach (int shiftCount in LeftShift)
+            {
+                currentLeftShiftedBits = Shift(currentLeftShiftedBits, shiftCount);
+                currentRightShiftedBits = Shift(currentRightShiftedBits, shiftCount);
+                
+                _leftKeyShiftedBits.Add(currentLeftShiftedBits);
+                _rightKeyShiftedBits.Add(currentRightShiftedBits);
+            }
+        }
+
+        private string Shift(string s, int count)
+        {
+            return s.Remove(0, count) + s.Substring(0, count);
         }
     }
 }
