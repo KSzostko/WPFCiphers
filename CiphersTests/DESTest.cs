@@ -63,5 +63,42 @@ namespace CiphersTests
             
             Assert.AreEqual(res, input);
         }
+        
+        [TestMethod]
+        public void ReturnsUnchangedBitsAfterShiftByZero()
+        {
+            StringBuilder builder = new StringBuilder();
+            builder.Append(new string('0', 14));
+            builder.Append(new string('1', 14));
+            string input = builder.ToString();
+
+            DES des = new DES("0000010111101010000101010101001010101010101010101011011010101100");
+            PrivateObject obj = new PrivateObject(des);
+            string res = Convert.ToString(obj.Invoke("Shift", input, 0));
+            
+            Assert.AreEqual(res, input);
+        }
+        
+        [TestMethod]
+        public void ReturnsShiftedBits()
+        {
+            StringBuilder builder = new StringBuilder();
+            builder.Append(new string('0', 14));
+            builder.Append(new string('1', 14));
+            string input = builder.ToString();
+            builder.Clear();
+
+            int shiftCount = 2;
+            builder.Append(new string('0', 12));
+            builder.Append(new string('1', 14));
+            builder.Append(new string('0', 2));
+            string expected = builder.ToString();
+
+            DES des = new DES("0000010111101010000101010101001010101010101010101011011010101100");
+            PrivateObject obj = new PrivateObject(des);
+            string res = Convert.ToString(obj.Invoke("Shift", input, shiftCount));
+            
+            Assert.AreEqual(expected, res);
+        }
     }
 }
