@@ -201,6 +201,8 @@ namespace WPFCiphers.Ciphers
             {
                 string extended = PerformBitsExtension(_rightInputBits[i]);
                 string xoredBits = PerformXorWithKey(extended, i);
+
+                string[] dataPositions = DivideRightInputBits(xoredBits);
             }
         }
 
@@ -228,6 +230,24 @@ namespace WPFCiphers.Ciphers
             }
 
             return builder.ToString();
+        }
+
+        private string[] DivideRightInputBits(string bits)
+        {
+            string[] res = new string[8];
+            int resCurrent = 0;
+            
+            int prevIndex = 0;
+            while(prevIndex != bits.Length)
+            {
+                string fragment = bits.Substring(prevIndex, 6);
+                res[resCurrent] = fragment;
+                resCurrent++;
+
+                prevIndex += 6;
+            }
+
+            return res;
         }
     }
 }
