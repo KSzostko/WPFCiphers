@@ -197,9 +197,10 @@ namespace WPFCiphers.Ciphers
 
         private void ComputeInputRightBits()
         {
-            foreach (string bits in _rightInputBits)
+            for (int i = 0; i < _rightInputBits.Count - 1; i++)
             {
-                string extended = PerformBitsExtension(bits);
+                string extended = PerformBitsExtension(_rightInputBits[i]);
+                string xoredBits = PerformXorWithKey(extended, i);
             }
         }
 
@@ -210,6 +211,20 @@ namespace WPFCiphers.Ciphers
             foreach (int pos in ExtenstionArray)
             {
                 builder.Append(bits[pos - 1]);
+            }
+
+            return builder.ToString();
+        }
+
+        private string PerformXorWithKey(string bits, int index)
+        {
+            StringBuilder builder = new StringBuilder();
+            string key = _permutedKeys[index];
+
+            for (int i = 0; i < bits.Length; i++)
+            {
+                char bit = Convert.ToChar(key[i] != bits[i]);
+                builder.Append(bit);
             }
 
             return builder.ToString();
