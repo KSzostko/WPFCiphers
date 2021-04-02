@@ -313,12 +313,18 @@ namespace WPFCiphers.Ciphers
 
         private string CalculatePositions(string[] dataPositions)
         {
-            foreach (string dataPosition in dataPositions)
+            StringBuilder builder = new StringBuilder();
+            
+            for (int i = 0; i < dataPositions.Length; i++)
             {
-                int row = CalculateRow(dataPosition);
-                int column = CalculateColumn(dataPosition);
+                int row = CalculateRow(dataPositions[i]);
+                int column = CalculateColumn(dataPositions[i]);
+
+                string binaryNumber = GetValueAtPosition(i, row, column);
+                builder.Append(binaryNumber);
             }
-            return "";
+            
+            return builder.ToString();
         }
 
         private int CalculateRow(string data)
@@ -349,6 +355,27 @@ namespace WPFCiphers.Ciphers
 
                 multiplier *= 2;
             }
+            return res;
+        }
+
+        private string GetValueAtPosition(int iteration, int row, int col)
+        {
+            int number = RightBitsPermutations[iteration][row, col];
+
+            return ConvertDecimalToBits(number);
+        }
+
+        private string ConvertDecimalToBits(int number)
+        {
+            string res =  Convert.ToString(number, 2);
+            if (res.Length < 4)
+            {
+                while (res.Length < 4)
+                {
+                    res = "0" + res;
+                }
+            }
+
             return res;
         }
     }
