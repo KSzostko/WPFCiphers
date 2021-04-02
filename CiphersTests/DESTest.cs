@@ -100,5 +100,44 @@ namespace CiphersTests
             
             Assert.AreEqual(expected, res);
         }
+
+        [TestMethod]
+        public void CalculatesValueWithOnlyZeroes()
+        {
+            string input = "0000";
+            int expected = 0;
+
+            DES des = new DES("0000010111101010000101010101001010101010101010101011011010101100");
+            PrivateObject obj = new PrivateObject(des);
+            int res = Convert.ToInt16(obj.Invoke("ConvertBitsToDecimal", input));
+            
+            Assert.AreEqual(expected, res);
+        }
+        
+        [TestMethod]
+        public void CalculatesValueWithOnlyOnes()
+        {
+            string input = "1111";
+            int expected = 15;
+
+            DES des = new DES("0000010111101010000101010101001010101010101010101011011010101100");
+            PrivateObject obj = new PrivateObject(des);
+            int res = Convert.ToInt16(obj.Invoke("ConvertBitsToDecimal", input));
+            
+            Assert.AreEqual(expected, res);
+        }
+        
+        [TestMethod]
+        public void CalculatesValueWithBothOnesAndZeroes()
+        {
+            string input = "0101";
+            int expected = 5;
+
+            DES des = new DES("0000010111101010000101010101001010101010101010101011011010101100");
+            PrivateObject obj = new PrivateObject(des);
+            int res = Convert.ToInt16(obj.Invoke("ConvertBitsToDecimal", input));
+            
+            Assert.AreEqual(expected, res);
+        }
     }
 }
