@@ -203,6 +203,7 @@ namespace WPFCiphers.Ciphers
                 string xoredBits = PerformXorWithKey(extended, i);
 
                 string[] dataPositions = DivideRightInputBits(xoredBits);
+                string mergedBits = CalculatePositions(dataPositions);
             }
         }
 
@@ -247,6 +248,47 @@ namespace WPFCiphers.Ciphers
                 prevIndex += 6;
             }
 
+            return res;
+        }
+
+        private string CalculatePositions(string[] dataPositions)
+        {
+            foreach (string dataPosition in dataPositions)
+            {
+                int row = CalculateRow(dataPosition);
+                int column = CalculateColumn(dataPosition);
+            }
+            return "";
+        }
+
+        private int CalculateRow(string data)
+        {
+            StringBuilder rowInBinary = new StringBuilder();
+            rowInBinary.Append(data[0]);
+            rowInBinary.Append(data[data.Length - 1]);
+            
+            return ConvertBitsToDecimal(rowInBinary.ToString());
+        }
+        
+        private int CalculateColumn(string data)
+        {
+            string colInBinary = data.Substring(1, 4);
+
+            return ConvertBitsToDecimal(colInBinary);
+        }
+
+        private int ConvertBitsToDecimal(string bits)
+        {
+            int multiplier = 1;
+            int res = 0;
+            
+            foreach (int asciiValue in bits)
+            {
+                int bit = asciiValue - '0';
+                res += bit * multiplier;
+
+                multiplier *= 2;
+            }
             return res;
         }
     }
