@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 
 namespace WPFCiphers.Ciphers
@@ -282,7 +283,7 @@ namespace WPFCiphers.Ciphers
             int multiplier = 1;
             int res = 0;
             
-            foreach (int asciiValue in bits)
+            foreach (int asciiValue in bits.Reverse())
             {
                 int bit = asciiValue - '0';
                 res += bit * multiplier;
