@@ -139,5 +139,44 @@ namespace CiphersTests
             
             Assert.AreEqual(expected, res);
         }
+        
+        [TestMethod]
+        public void ReturnsUnchangedBinaryValueWhenItHas4Bits()
+        {
+            int input = 13;
+            string expected = "1101";
+
+            DES des = new DES("0000010111101010000101010101001010101010101010101011011010101100");
+            PrivateObject obj = new PrivateObject(des);
+            string res = Convert.ToString(obj.Invoke("ConvertDecimalToBits", input));
+            
+            Assert.AreEqual(expected, res);
+        }
+        
+        [TestMethod]
+        public void ReturnsAppendedBinaryValueWhenItDoesNotHave4Bits()
+        {
+            int input = 2;
+            string expected = "0010";
+
+            DES des = new DES("0000010111101010000101010101001010101010101010101011011010101100");
+            PrivateObject obj = new PrivateObject(des);
+            string res = Convert.ToString(obj.Invoke("ConvertDecimalToBits", input));
+            
+            Assert.AreEqual(expected, res);
+        }
+        
+        [TestMethod]
+        public void Returns4ZeroesForZeroValue()
+        {
+            int input = 0;
+            string expected = "0000";
+
+            DES des = new DES("0000010111101010000101010101001010101010101010101011011010101100");
+            PrivateObject obj = new PrivateObject(des);
+            string res = Convert.ToString(obj.Invoke("ConvertDecimalToBits", input));
+            
+            Assert.AreEqual(expected, res);
+        }
     }
 }
