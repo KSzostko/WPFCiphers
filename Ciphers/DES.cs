@@ -313,7 +313,8 @@ namespace WPFCiphers.Ciphers
 
             for (int i = 0; i < bits.Length; i++)
             {
-                char bit = Convert.ToChar(key[i] != bits[i]);
+                bool res = key[i] != bits[i];
+                char bit = res ? '1' : '0';
                 builder.Append(bit);
             }
 
@@ -425,7 +426,8 @@ namespace WPFCiphers.Ciphers
 
             for (int i = 0; i < rightBits.Length; i++)
             {
-                char bit = Convert.ToChar(leftBits[i] != rightBits[i]);
+                bool res = leftBits[i] != rightBits[i];
+                char bit = res ? '1' : '0';
                 builder.Append(bit);
             }
 
