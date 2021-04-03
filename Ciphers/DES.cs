@@ -277,7 +277,10 @@ namespace WPFCiphers.Ciphers
                 string permutedBits = PerformPermutationFunction(mergedBits);
 
                 _rightInputBits[i + 1] = XorLeftAndRightInputBits(i, permutedBits);
+                _leftInputBits[i + 1] = _rightInputBits[i];
             }
+
+            SwapLastInputBits();
         }
 
         private string PerformBitsExtension(string bits)
@@ -416,6 +419,15 @@ namespace WPFCiphers.Ciphers
             }
 
             return builder.ToString();
+        }
+
+        private void SwapLastInputBits()
+        {
+            int lastIndex = _leftInputBits.Count - 1;
+            
+            string temp = _leftInputBits[lastIndex];
+            _leftInputBits[lastIndex] = _rightInputBits[lastIndex];
+            _rightInputBits[lastIndex] = temp;
         }
     }
 }
