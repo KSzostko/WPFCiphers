@@ -147,7 +147,7 @@ namespace WPFCiphers.Ciphers
 
             CreatePermutedKeys();
 
-            ComputeInputRightBits();
+            ComputeInputBits();
 
             throw new System.NotImplementedException();
         }
@@ -265,7 +265,7 @@ namespace WPFCiphers.Ciphers
             return builder.ToString();
         }
 
-        private void ComputeInputRightBits()
+        private void ComputeInputBits()
         {
             for (int i = 0; i < _rightInputBits.Count - 1; i++)
             {
@@ -275,6 +275,8 @@ namespace WPFCiphers.Ciphers
                 string[] dataPositions = DivideRightInputBits(xoredBits);
                 string mergedBits = CalculatePositions(dataPositions);
                 string permutedBits = PerformPermutationFunction(mergedBits);
+
+                _rightInputBits[i + 1] = XorLeftAndRightInputBits(i, permutedBits);
             }
         }
 
@@ -397,6 +399,20 @@ namespace WPFCiphers.Ciphers
             foreach (int pos in PermutationFunction)
             {
                 builder.Append(bits[pos - 1]);
+            }
+
+            return builder.ToString();
+        }
+
+        private string XorLeftAndRightInputBits(int index, string rightBits)
+        {
+            StringBuilder builder = new StringBuilder();
+            string leftBits = _leftInputBits[index];
+
+            for (int i = 0; i < rightBits.Length; i++)
+            {
+                char bit = Convert.ToChar(leftBits[i] != rightBits[i]);
+                builder.Append(bit);
             }
 
             return builder.ToString();
