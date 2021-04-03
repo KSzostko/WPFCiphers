@@ -108,6 +108,16 @@ namespace WPFCiphers.Ciphers
                 {2, 1, 14, 7, 4, 10, 8, 13, 15, 12, 9, 0, 3, 5, 6, 11}
             }
         };
+        private static readonly int[,] PermutationFunction = {
+            {16, 7, 20, 21},
+            {29, 12, 28, 17},
+            {1, 15, 23, 26},
+            {5, 18, 31, 10},
+            {2, 8, 24, 14},
+            {32, 27, 3, 9},
+            {19, 13, 30, 6},
+            {22, 11, 4, 25}
+        };
 
         private List<string> _rightInputBits;
         private List<string> _leftInputBits;
@@ -264,6 +274,7 @@ namespace WPFCiphers.Ciphers
 
                 string[] dataPositions = DivideRightInputBits(xoredBits);
                 string mergedBits = CalculatePositions(dataPositions);
+                string permutedBits = PerformPermutationFunction(mergedBits);
             }
         }
 
@@ -377,6 +388,18 @@ namespace WPFCiphers.Ciphers
             }
 
             return res;
+        }
+
+        private string PerformPermutationFunction(string bits)
+        {
+            StringBuilder builder = new StringBuilder();
+
+            foreach (int pos in PermutationFunction)
+            {
+                builder.Append(bits[pos - 1]);
+            }
+
+            return builder.ToString();
         }
     }
 }
