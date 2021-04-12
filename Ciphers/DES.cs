@@ -170,8 +170,6 @@ namespace WPFCiphers.Ciphers
         
         private string AppendBits(string s)
         {
-            if (s.Length % BlockSize == 0) return s;
-
             StringBuilder builder = new StringBuilder(s);
             
             builder.Append('1');
