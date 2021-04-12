@@ -38,15 +38,20 @@ namespace CiphersTests
         }
         
         [TestMethod]
-        public void ReturnsUnchangedInputWhenItCanBeDividedBy64()
+        public void ReturnsInputAppendedWhenItCanBeDividedBy64()
         {
             string input = "0101010111101010000101010101001010101010101010101011011010101000";
+
+            StringBuilder builder = new StringBuilder(input);
+            builder.Append('1');
+            builder.Append(new string('0', 63));
+            string expected = builder.ToString();
 
             DES des = new DES("0000010111101010000101010101001010101010101010101011011010101100");
             PrivateObject obj = new PrivateObject(des);
             string res = Convert.ToString(obj.Invoke("AppendBits", input));
             
-            Assert.AreEqual(res, input);
+            Assert.AreEqual(expected, res);
         }
         
         [TestMethod]
