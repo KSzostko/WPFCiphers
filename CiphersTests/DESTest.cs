@@ -86,6 +86,18 @@ namespace CiphersTests
         }
 
         [TestMethod]
+        public void KeyBitsChangeAfterPermutation()
+        {
+            string expected = "11110110100010111011001001000111101011000101110101101100";
+            DES des = new DES("0100010111101010100111010101001010101010101000101001111011101100");
+            
+            PrivateObject obj = new PrivateObject(des);
+            string res = Convert.ToString(obj.Invoke("PerformKeyPermutation"));
+            
+            Assert.AreEqual(expected, res);
+        }
+
+        [TestMethod]
         public void ReturnsUnchangedBitsAfterShiftByZero()
         {
             StringBuilder builder = new StringBuilder();
