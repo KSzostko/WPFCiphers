@@ -55,6 +55,22 @@ namespace CiphersTests
         }
         
         [TestMethod]
+        public void BitsChangeAfterPermutation()
+        {
+            string input = "01110101101010001100011101010010001010101010101110110110001010000101001010101010101000000011101010101001";
+            DES des = new DES("0000010111101010000101010101001010101010101010101011011010101100");
+
+            string expected =
+                "00001101010010010100010100100101011001101111001110110010011111000000000100001001000000000001000000110110000111100001101000001011";
+            
+            PrivateObject obj = new PrivateObject(des);
+            string appended = Convert.ToString(obj.Invoke("AppendBits", input));
+            string res = Convert.ToString(obj.Invoke("PerformInitialPermutation", appended));
+            
+            Assert.AreEqual(res, expected);
+        }
+        
+        [TestMethod]
         public void BitsDoNotChangeBlocksAfterPermutation()
         {
             StringBuilder builder = new StringBuilder();
@@ -68,7 +84,7 @@ namespace CiphersTests
             
             Assert.AreEqual(res, input);
         }
-        
+
         [TestMethod]
         public void ReturnsUnchangedBitsAfterShiftByZero()
         {
