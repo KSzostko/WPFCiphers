@@ -278,18 +278,26 @@ namespace WPFCiphers.Ciphers
         {
             for (int i = 0; i < _rightInputBits.Count - 1; i++)
             {
-                string extended = PerformBitsExtension(_rightInputBits[i]);
-                string xoredBits = PerformXorWithKey(extended, i);
+                string currentRightBits = _rightInputBits[i];
+                string currentLeftBits = _leftInputBits[i];
 
-                string[] dataPositions = DivideRightInputBits(xoredBits);
-                string mergedBits = CalculatePositions(dataPositions);
-                string permutedBits = PerformPermutationFunction(mergedBits);
+                for (int key = 0; key < 16; key++)
+                {
+                    string extended = PerformBitsExtension(currentRightBits);
+                    string xoredBits = PerformXorWithKey(extended, key);
 
-                _rightInputBits[i + 1] = XorLeftAndRightInputBits(i, permutedBits);
-                _leftInputBits[i + 1] = _rightInputBits[i];
+                    string[] dataPositions = DivideRightInputBits(xoredBits);
+                    string mergedBits = CalculatePositions(dataPositions);
+                    string permutedBits = PerformPermutationFunction(mergedBits);
+
+                    string oldRightBits = currentRightBits;
+                    currentRightBits = XorLeftAndRightInputBits(currentLeftBits, permutedBits);
+                    currentLeftBits = oldRightBits;
+                }
+
+                _rightInputBits[i] = currentRightBits;
+                _leftInputBits[i] = currentLeftBits;
             }
-
-            SwapLastInputBits();
         }
 
         private string PerformBitsExtension(string bits)
@@ -417,10 +425,9 @@ namespace WPFCiphers.Ciphers
             return builder.ToString();
         }
 
-        private string XorLeftAndRightInputBits(int index, string rightBits)
+        private string XorLeftAndRightInputBits(string leftBits, string rightBits)
         {
             StringBuilder builder = new StringBuilder();
-            string leftBits = _leftInputBits[index];
 
             for (int i = 0; i < rightBits.Length; i++)
             {
@@ -430,15 +437,6 @@ namespace WPFCiphers.Ciphers
             }
 
             return builder.ToString();
-        }
-
-        private void SwapLastInputBits()
-        {
-            int lastIndex = _leftInputBits.Count - 1;
-            
-            string temp = _leftInputBits[lastIndex];
-            _leftInputBits[lastIndex] = _rightInputBits[lastIndex];
-            _rightInputBits[lastIndex] = temp;
         }
 
         private string MergeAllBits()
