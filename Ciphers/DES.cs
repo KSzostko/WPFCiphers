@@ -165,7 +165,21 @@ namespace WPFCiphers.Ciphers
 
         public string Decrypt(string s)
         {
-            throw new System.NotImplementedException();
+            string input = PerformInitialPermutation(s);
+            DivideInputBits(input);
+
+            string reducedKey = PerformKeyPermutation();
+            string leftKeyBits = reducedKey.Substring(0, 28);
+            string rightKeyBits = reducedKey.Substring(28, 28);
+            ShiftKeyBits(leftKeyBits, rightKeyBits);
+            
+            CreatePermutedKeys();
+            _permutedKeys.Reverse();
+
+            ComputeInputBits();
+            string res = MergeAllBits();
+
+            return RemoveAppendedBits(res);
         }
         
         private string AppendBits(string s)
@@ -464,6 +478,17 @@ namespace WPFCiphers.Ciphers
             }
 
             return builder.ToString();
+        }
+        
+        private string RemoveAppendedBits(string s)
+        {
+            int currentIndex = s.Length - 1;
+
+            while (s[currentIndex] == '0') currentIndex--;
+
+            string res = s.Remove(currentIndex);
+
+            return res;
         }
     }
 }
