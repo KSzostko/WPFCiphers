@@ -211,5 +211,17 @@ namespace CiphersTests
             
             Assert.AreEqual(expected, res);
         }
+
+        [TestMethod]
+        public void ReturnsStartingDataAfterEncryptionAndDecryption()
+        {
+            string start = "01110101101010001100011101010010001010101010101110110110001010000101001010101010101000000011101010101001";
+            
+            DES des = new DES("0100010111101010100111010101001010101010101000101001111011101100");
+            string encrypted = des.Encrypt(start);
+            string decrypted = des.Decrypt(encrypted);
+            
+            Assert.AreEqual(start, decrypted);
+        }
     }
 }
