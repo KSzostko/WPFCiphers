@@ -290,7 +290,7 @@ namespace WPFCiphers.Ciphers
 
         private void ComputeInputBits()
         {
-            for (int i = 0; i < _rightInputBits.Count - 1; i++)
+            for (int i = 0; i < _rightInputBits.Count; i++)
             {
                 string currentRightBits = _rightInputBits[i];
                 string currentLeftBits = _leftInputBits[i];
