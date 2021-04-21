@@ -159,18 +159,18 @@ namespace WPFCiphers.Ciphers
         {
             // zczytanie rozszerzenia
             string extension = Path.GetExtension(filename);
-            extension = StringToBinaryString(extension);
+            extension = ConvertTextToBinaryString(extension);
 
             // zczytanie zawartości pliku
             BitArray bit_file = GetFileBits(filename);
-            string input = BitArrayToString(bit_file);
+            string input = ConvertBitArrayToString(bit_file);
 
             // dodanie bitów i rozszerzenia
             input = AppendBitsWithExtension(input, extension);
 
             // zakodowanie
             string encrypted = Encrypt(input);
-            BitArray output = StringToBitArray(encrypted);
+            BitArray output = ConvertStringToBitArray(encrypted);
 
             // zapisanie do pliku
             SaveFile(output, ".bin", 'e');
@@ -181,20 +181,20 @@ namespace WPFCiphers.Ciphers
         {
             // zczytanie zawartości pliku
             BitArray bit_file = GetFileBits(filename);
-            string input = BitArrayToString(bit_file);
+            string input = ConvertBitArrayToString(bit_file);
 
             // odkodowanie
             string decrypted = Decrypt(input);
 
             // zczytanie rozszerzenia 
-            string extension = DecryptedExtension(decrypted);
-            extension = BinaryToString(extension);
+            string extension = DecryptExtension(decrypted);
+            extension = ConvertBinaryToString(extension);
 
             // usuniecie dodatkowych bitow
             decrypted = RemoveAppendedBitsWithExtension(decrypted);
 
             // zapisanie do odpowiedniego pliku
-            BitArray output = StringToBitArray(decrypted);
+            BitArray output = ConvertStringToBitArray(decrypted);
             SaveFile(output, extension, 'd');
         }
 
@@ -206,7 +206,7 @@ namespace WPFCiphers.Ciphers
         }
 
         // zamiana stringa na string zer i jedynek
-        private string StringToBinaryString(string input)
+        private string ConvertTextToBinaryString(string input)
         {
             StringBuilder sb = new StringBuilder();
 
@@ -218,7 +218,7 @@ namespace WPFCiphers.Ciphers
         }
 
         // zamiana stringa zer i jedynek na zwykłego
-        private string BinaryToString(string data)
+        private string ConvertBinaryToString(string data)
         {
             List<Byte> byteList = new List<Byte>();
 
@@ -230,7 +230,7 @@ namespace WPFCiphers.Ciphers
         }
 
         // zamiana BitArray na string
-        private string BitArrayToString(BitArray bits)
+        private string ConvertBitArrayToString(BitArray bits)
         {
             var sb = new StringBuilder();
 
@@ -244,7 +244,7 @@ namespace WPFCiphers.Ciphers
         }
 
         // zamiana stringa na BitArray
-        private BitArray StringToBitArray(string input)
+        private BitArray ConvertStringToBitArray(string input)
         {
             BitArray output = new BitArray(input.Length);
 
@@ -307,10 +307,10 @@ namespace WPFCiphers.Ciphers
         }
 
         // odczytanie rozszerzenia z dekodowanej wiadomości
-        private string DecryptedExtension(string input)
+        private string DecryptExtension(string input)
         {
-            string dotCharInBits = "00101110";
-            int at = input.LastIndexOf(dotCharInBits);
+            string dotCharInBinaryString = "00101110";
+            int at = input.LastIndexOf(dotCharInBinaryString);
             string output = input.Substring(at);
 
             return output;
