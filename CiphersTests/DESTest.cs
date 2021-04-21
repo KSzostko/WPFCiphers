@@ -218,9 +218,14 @@ namespace CiphersTests
             string start = "01110101101010001100011101010010001010101010101110110110001010000101001010101010101000000011101010101001";
             
             DES des = new DES("0100010111101010100111010101001010101010101000101001111011101100");
-            string encrypted = des.Encrypt(start);
-            string decrypted = des.Decrypt(encrypted);
-            
+            PrivateObject obj = new PrivateObject(des);
+
+            string appended = Convert.ToString(obj.Invoke("AppendBitsWithExtension", start, ".txt"));
+            string encrypted = Convert.ToString(obj.Invoke("Encrypt", appended));
+
+            string decryptedAppended = Convert.ToString(obj.Invoke("Decrypt", encrypted));
+            string decrypted = Convert.ToString(obj.Invoke("RemoveAppendedBitsWithExtension", decryptedAppended));
+
             Assert.AreEqual(start, decrypted);
         }
     }

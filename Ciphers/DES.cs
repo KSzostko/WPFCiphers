@@ -7,7 +7,7 @@ using System.Text;
 
 namespace WPFCiphers.Ciphers
 {
-    public class DES : Cipher
+    public class DES : FileCipher
     {
         private static readonly int BlockSize = 64;
         private static readonly int[,] InitialPermutation = {
@@ -155,29 +155,29 @@ namespace WPFCiphers.Ciphers
         // sprawdzałem i działa na .txt i .jpg więc na resztę pewnie też
 
         // funkcja do zakodowania pliku
-        public void encryptFile(string filename)
+        public void EncryptFile(string filename)
         {
             // zczytanie rozszerzenia
             string extension = Path.GetExtension(filename);
-            extension = stringToBinaryString(extension);
+            extension = StringToBinaryString(extension);
 
             // zczytanie zawartości pliku
             BitArray bit_file = GetFileBits(filename);
             string input = BitArrayToString(bit_file);
 
             // dodanie bitów i rozszerzenia
-            input = appendBitsWithExtension(input, extension);
+            input = AppendBitsWithExtension(input, extension);
 
             // zakodowanie
             string encrypted = Encrypt(input);
-            BitArray output = stringToBitArray(encrypted);
+            BitArray output = StringToBitArray(encrypted);
 
             // zapisanie do pliku
-            saveFile(output, ".bin", 'e');
+            SaveFile(output, ".bin", 'e');
         }
 
         // funkcja do odkodowania pliku
-        public void decryptFile(string filename)
+        public void DecryptFile(string filename)
         {
             // zczytanie zawartości pliku
             BitArray bit_file = GetFileBits(filename);
@@ -187,15 +187,15 @@ namespace WPFCiphers.Ciphers
             string decrypted = Decrypt(input);
 
             // zczytanie rozszerzenia 
-            string extension = decryptedExtension(decrypted);
+            string extension = DecryptedExtension(decrypted);
             extension = BinaryToString(extension);
 
             // usuniecie dodatkowych bitow
             decrypted = RemoveAppendedBitsWithExtension(decrypted);
 
             // zapisanie do odpowiedniego pliku
-            BitArray output = stringToBitArray(decrypted);
-            saveFile(output, extension, 'd');
+            BitArray output = StringToBitArray(decrypted);
+            SaveFile(output, extension, 'd');
         }
 
         // zczytanie bitów z pliku
@@ -206,7 +206,7 @@ namespace WPFCiphers.Ciphers
         }
 
         // zamiana stringa na string zer i jedynek
-        private string stringToBinaryString(string input)
+        private string StringToBinaryString(string input)
         {
             StringBuilder sb = new StringBuilder();
 
@@ -244,7 +244,7 @@ namespace WPFCiphers.Ciphers
         }
 
         // zamiana stringa na BitArray
-        private BitArray stringToBitArray(string input)
+        private BitArray StringToBitArray(string input)
         {
             BitArray output = new BitArray(input.Length);
 
@@ -260,7 +260,7 @@ namespace WPFCiphers.Ciphers
         }
 
         // moja wersja dodawania bitów o której wspominałem
-        private string appendBitsWithExtension(string input, string extension)
+        private string AppendBitsWithExtension(string input, string extension)
         {
             StringBuilder builder = new StringBuilder(input);
             // standardowe dodanie bitów żeby string był podzielny przez 64
@@ -288,7 +288,7 @@ namespace WPFCiphers.Ciphers
         }
 
         // zapis do pliku
-        void saveFile(BitArray input, string extension, char type)
+        void SaveFile(BitArray input, string extension, char type)
         {
             if (type == 'e')
             {
@@ -307,7 +307,7 @@ namespace WPFCiphers.Ciphers
         }
 
         // odczytanie rozszerzenia z dekodowanej wiadomości
-        private string decryptedExtension(string input)
+        private string DecryptedExtension(string input)
         {
             int at = input.LastIndexOf("00101110");
             string output = input.Substring(at);
@@ -330,10 +330,9 @@ namespace WPFCiphers.Ciphers
         }
         /*----------------------------------------------KONIEC-------------------------------------------------------------*/
 
-        public string Encrypt(string s)
+        private string Encrypt(string s)
         {
-            string input = AppendBits(s);
-            input = PerformInitialPermutation(input);
+            string input = PerformInitialPermutation(s);
             DivideInputBits(input);
 
             string reducedKey = PerformKeyPermutation();
@@ -349,7 +348,7 @@ namespace WPFCiphers.Ciphers
             return res;
         }
 
-        public string Decrypt(string s)
+        private string Decrypt(string s)
         {
             string input = PerformInitialPermutation(s);
             DivideInputBits(input);
@@ -364,8 +363,8 @@ namespace WPFCiphers.Ciphers
 
             ComputeInputBits();
             string res = MergeAllBits();
-
-            return RemoveAppendedBits(res);
+            
+            return res;
         }
         
         private string AppendBits(string s)
@@ -380,7 +379,7 @@ namespace WPFCiphers.Ciphers
 
             return builder.ToString();
         }
-        
+
         private string PerformInitialPermutation(string s)
         {
             StringBuilder builder = new StringBuilder();
@@ -664,17 +663,6 @@ namespace WPFCiphers.Ciphers
             }
 
             return builder.ToString();
-        }
-        
-        private string RemoveAppendedBits(string s)
-        {
-            int currentIndex = s.Length - 1;
-
-            while (s[currentIndex] == '0') currentIndex--;
-
-            string res = s.Remove(currentIndex);
-
-            return res;
         }
     }
 }
