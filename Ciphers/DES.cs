@@ -1,5 +1,7 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 
@@ -143,6 +145,189 @@ namespace WPFCiphers.Ciphers
         {
             Key = key;
         }
+
+        /*---------------------------------------------START--------------------------------------------------------------*/
+        // WAŻNE!!!
+        // żeby nowe funkcje działy poprawnie trzeba zakomentować dodawanie bitów w kodowaniu a w dekodwaniu ich usuwanie
+        // te czynności teraz odbywają się w encryptFile i decryptFile
+        // wiem że to pewnie testu popsuje ale tak było najoptymalniej 
+        // nowo utworzone pliki powinny być zapisywane w bin/Debug
+
+        // funkcja do zakodowania pliku
+        public void encryptFile(string filename)
+        {
+            // zczytanie rozszerzenia
+            string extension = Path.GetExtension(filename);
+            extension = stringToBinaryString(extension);
+
+            // zczytanie zawartości pliku
+            BitArray bit_file = GetFileBits(filename);
+            string input = BitArrayToString(bit_file);
+
+            // dodanie bitów i rozszerzenia
+            input = appendBitsWithExtension(input, extension);
+
+            // zakodowanie
+            string encrypted = Encrypt(input);
+            BitArray output = stringToBitArray(encrypted);
+
+            // zapisanie do pliku
+            saveFile(output, ".bin", 'e');
+        }
+
+        // funkcja do odkodowania pliku
+        public void decryptFile(string filename)
+        {
+            // zczytanie zawartości pliku
+            BitArray bit_file = GetFileBits(filename);
+            string input = BitArrayToString(bit_file);
+
+            // odkodowanie
+            string decrypted = Decrypt(input);
+
+            // zczytanie rozszerzenia 
+            string extension = decryptedExtension(decrypted);
+            extension = BinaryToString(extension);
+
+            // usuniecie dodatkowych bitow
+            decrypted = RemoveAppendedBitsWithExtension(decrypted);
+
+            // zapisanie do odpowiedniego pliku
+            BitArray output = stringToBitArray(decrypted);
+            saveFile(output, extension, 'd');
+        }
+
+        // zczytanie bitów z pliku
+        private BitArray GetFileBits(String filename)
+        {
+            byte[] bytes = File.ReadAllBytes(filename);
+            return new BitArray(bytes);
+        }
+
+        // zamiana stringa na string zer i jedynek
+        private string stringToBinaryString(string input)
+        {
+            StringBuilder sb = new StringBuilder();
+
+            foreach (char c in input.ToCharArray())
+            {
+                sb.Append(Convert.ToString(c, 2).PadLeft(8, '0'));
+            }
+            return sb.ToString();
+        }
+
+        // zamiana stringa zer i jedynek na zwykłego
+        private string BinaryToString(string data)
+        {
+            List<Byte> byteList = new List<Byte>();
+
+            for (int i = 0; i < data.Length; i += 8)
+            {
+                byteList.Add(Convert.ToByte(data.Substring(i, 8), 2));
+            }
+            return Encoding.ASCII.GetString(byteList.ToArray());
+        }
+
+        // zamiana BitArray na string
+        private string BitArrayToString(BitArray bits)
+        {
+            var sb = new StringBuilder();
+
+            for (int i = 0; i < bits.Count; i++)
+            {
+                char c = bits[i] ? '1' : '0';
+                sb.Append(c);
+            }
+
+            return sb.ToString();
+        }
+
+        // zamiana stringa na BitArray
+        private BitArray stringToBitArray(string input)
+        {
+            BitArray output = new BitArray(input.Length);
+
+            for (int i = 0; i < input.Length; i++)
+            {
+                if (input[i] == '1')
+                    output[i] = true;
+                else
+                    output[i] = false;
+            }
+
+            return output;
+        }
+
+        // moja wersja dodawania bitów o której wspominałem
+        private string appendBitsWithExtension(string input, string extension)
+        {
+            StringBuilder builder = new StringBuilder(input);
+            // standardowe dodanie bitów żeby string był podzielny przez 64
+            builder.Append('1');
+            while (builder.Length % BlockSize != 0)
+            {
+                builder.Append('0');
+            }
+
+            // dodanie kolejnych 64 bitow gdzie na koncu jest rozszerzenie pliku a reszta to zera
+            int bitstart = BlockSize - extension.Length;
+            int extensionbit = 0;
+            for (int i = 0; i < BlockSize; i++)
+            {
+                if (i >= bitstart)
+                {
+                    builder.Append(extension[extensionbit]);
+                    extensionbit++;
+                }
+                else
+                    builder.Append('0');
+            }
+
+            return builder.ToString();
+        }
+
+        // zapis do pliku
+        void saveFile(BitArray input, string extension, char type)
+        {
+            if (type == 'e')
+            {
+                byte[] bytes = new byte[input.Length / 8 + (input.Length % 8 == 0 ? 0 : 1)];
+                input.CopyTo(bytes, 0);
+                string filename = "encrypted" + extension;
+                File.WriteAllBytes(filename, bytes);
+            }
+            else
+            {
+                byte[] bytes = new byte[input.Length / 8 + (input.Length % 8 == 0 ? 0 : 1)];
+                input.CopyTo(bytes, 0);
+                string filename = "decrypted" + extension;
+                File.WriteAllBytes(filename, bytes);
+            }
+        }
+
+        // odczytanie rozszerzenia z dekodowanej wiadomości
+        private string decryptedExtension(string input)
+        {
+            int at = input.LastIndexOf("00101110");
+            string output = input.Substring(at);
+
+            return output;
+        }
+
+        // usnięcie bitów do mojej wersji
+        private string RemoveAppendedBitsWithExtension(string s)
+        {
+            s = s.Substring(0, s.Length - BlockSize);
+
+            int currentIndex = s.Length - 1;
+
+            while (s[currentIndex] == '0') currentIndex--;
+
+            string res = s.Remove(currentIndex);
+
+            return res;
+        }
+        /*----------------------------------------------KONIEC-------------------------------------------------------------*/
 
         public string Encrypt(string s)
         {
