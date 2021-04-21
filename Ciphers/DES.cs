@@ -309,7 +309,8 @@ namespace WPFCiphers.Ciphers
         // odczytanie rozszerzenia z dekodowanej wiadomości
         private string DecryptedExtension(string input)
         {
-            int at = input.LastIndexOf("00101110");
+            string dotCharInBits = "00101110";
+            int at = input.LastIndexOf(dotCharInBits);
             string output = input.Substring(at);
 
             return output;
