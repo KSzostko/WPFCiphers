@@ -199,7 +199,7 @@ namespace WPFCiphers.Ciphers
         }
 
         // zczytanie bitów z pliku
-        private BitArray GetFileBits(String filename)
+        public BitArray GetFileBits(String filename)
         {
             byte[] bytes = File.ReadAllBytes(filename);
             return new BitArray(bytes);
@@ -330,9 +330,9 @@ namespace WPFCiphers.Ciphers
         }
         /*----------------------------------------------KONIEC-------------------------------------------------------------*/
 
-        public string Encrypt(string s)
+        public string Encrypt(string input)
         {
-            string input = AppendBits(s);
+            //string input = AppendBits(s);
             input = PerformInitialPermutation(input);
             DivideInputBits(input);
 
@@ -365,7 +365,7 @@ namespace WPFCiphers.Ciphers
             ComputeInputBits();
             string res = MergeAllBits();
 
-            return RemoveAppendedBits(res);
+            return res; //RemoveAppendedBits(res);
         }
         
         private string AppendBits(string s)

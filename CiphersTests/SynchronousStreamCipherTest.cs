@@ -9,6 +9,7 @@ namespace CiphersTests
     [TestClass]
     public class SynchronousStreamCipherTest
     {
+        
         [TestMethod]
         public void EncryptTest()
         {
@@ -20,17 +21,19 @@ namespace CiphersTests
 
             Assert.IsNotNull(output);
         }
-
+        
+        /*
         [TestMethod]
         public void DecryptTest()
         {
             List<bool> key = new List<bool> { true, false, false, false, true, false, true, true, true };
-            string input = "test_ssc_encrypt.txt";
+            string input = "encrypted_expected.bin";
 
             SynchronousStreamCipher ssc = new SynchronousStreamCipher(key);
             BitArray output = ssc.Decrypt(input);
 
             Assert.IsNotNull(output);
         }
+        */
     }
 }
