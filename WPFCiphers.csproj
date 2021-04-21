@@ -67,6 +67,7 @@
     <Compile Include="Ciphers\Cezar.cs" />
     <Compile Include="Ciphers\Cipher.cs" />
     <Compile Include="Ciphers\DES.cs" />
+    <Compile Include="Ciphers\FileCipher.cs" />
     <Compile Include="Ciphers\SynchronousStreamCipher.cs" />
     <Compile Include="Ciphers\ColumnarTransp.cs" />
     <Compile Include="Ciphers\ColumnarTranspC.cs" />
