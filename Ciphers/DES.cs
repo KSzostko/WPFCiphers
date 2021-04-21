@@ -152,6 +152,7 @@ namespace WPFCiphers.Ciphers
         // te czynności teraz odbywają się w encryptFile i decryptFile
         // wiem że to pewnie testu popsuje ale tak było najoptymalniej 
         // nowo utworzone pliki powinny być zapisywane w bin/Debug
+        // sprawdzałem i działa na .txt i .jpg więc na resztę pewnie też
 
         // funkcja do zakodowania pliku
         public void encryptFile(string filename)
