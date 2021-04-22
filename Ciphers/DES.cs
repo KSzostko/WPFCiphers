@@ -146,66 +146,47 @@ namespace WPFCiphers.Ciphers
             Key = key;
         }
 
-        /*---------------------------------------------START--------------------------------------------------------------*/
-        // WAŻNE!!!
-        // żeby nowe funkcje działy poprawnie trzeba zakomentować dodawanie bitów w kodowaniu a w dekodwaniu ich usuwanie
-        // te czynności teraz odbywają się w encryptFile i decryptFile
-        // wiem że to pewnie testu popsuje ale tak było najoptymalniej 
-        // nowo utworzone pliki powinny być zapisywane w bin/Debug
-        // sprawdzałem i działa na .txt i .jpg więc na resztę pewnie też
-
-        // funkcja do zakodowania pliku
         public void EncryptFile(string filename)
         {
-            // zczytanie rozszerzenia
             string extension = Path.GetExtension(filename);
             extension = ConvertTextToBinaryString(extension);
 
-            // zczytanie zawartości pliku
             BitArray bit_file = GetFileBits(filename);
             string input = ConvertBitArrayToString(bit_file);
 
-            // dodanie bitów i rozszerzenia
             input = AppendBitsWithExtension(input, extension);
 
-            // zakodowanie
             string encrypted = Encrypt(input);
             BitArray output = ConvertStringToBitArray(encrypted);
 
-            // zapisanie do pliku
             SaveFile(output, ".bin", 'e');
         }
 
-        // funkcja do odkodowania pliku
         public void DecryptFile(string filename)
         {
-            // zczytanie zawartości pliku
             BitArray bit_file = GetFileBits(filename);
             string input = ConvertBitArrayToString(bit_file);
 
-            // odkodowanie
             string decrypted = Decrypt(input);
 
-            // zczytanie rozszerzenia 
+
             string extension = DecryptExtension(decrypted);
             extension = ConvertBinaryToString(extension);
 
-            // usuniecie dodatkowych bitow
             decrypted = RemoveAppendedBitsWithExtension(decrypted);
 
-            // zapisanie do odpowiedniego pliku
             BitArray output = ConvertStringToBitArray(decrypted);
             SaveFile(output, extension, 'd');
         }
 
-        // zczytanie bitów z pliku
+     
         public BitArray GetFileBits(String filename)
         {
             byte[] bytes = File.ReadAllBytes(filename);
             return new BitArray(bytes);
         }
 
-        // zamiana stringa na string zer i jedynek
+       
         private string ConvertTextToBinaryString(string input)
         {
             StringBuilder sb = new StringBuilder();
@@ -217,7 +198,7 @@ namespace WPFCiphers.Ciphers
             return sb.ToString();
         }
 
-        // zamiana stringa zer i jedynek na zwykłego
+      
         private string ConvertBinaryToString(string data)
         {
             List<Byte> byteList = new List<Byte>();
@@ -229,7 +210,7 @@ namespace WPFCiphers.Ciphers
             return Encoding.ASCII.GetString(byteList.ToArray());
         }
 
-        // zamiana BitArray na string
+       
         private string ConvertBitArrayToString(BitArray bits)
         {
             var sb = new StringBuilder();
@@ -243,7 +224,7 @@ namespace WPFCiphers.Ciphers
             return sb.ToString();
         }
 
-        // zamiana stringa na BitArray
+       
         private BitArray ConvertStringToBitArray(string input)
         {
             BitArray output = new BitArray(input.Length);
@@ -259,18 +240,18 @@ namespace WPFCiphers.Ciphers
             return output;
         }
 
-        // moja wersja dodawania bitów o której wspominałem
+        
         private string AppendBitsWithExtension(string input, string extension)
         {
             StringBuilder builder = new StringBuilder(input);
-            // standardowe dodanie bitów żeby string był podzielny przez 64
+            
             builder.Append('1');
             while (builder.Length % BlockSize != 0)
             {
                 builder.Append('0');
             }
 
-            // dodanie kolejnych 64 bitow gdzie na koncu jest rozszerzenie pliku a reszta to zera
+            
             int bitstart = BlockSize - extension.Length;
             int extensionbit = 0;
             for (int i = 0; i < BlockSize; i++)
@@ -287,7 +268,7 @@ namespace WPFCiphers.Ciphers
             return builder.ToString();
         }
 
-        // zapis do pliku
+        
         void SaveFile(BitArray input, string extension, char type)
         {
             if (type == 'e')
@@ -306,7 +287,7 @@ namespace WPFCiphers.Ciphers
             }
         }
 
-        // odczytanie rozszerzenia z dekodowanej wiadomości
+        
         private string DecryptExtension(string input)
         {
             string dotCharInBinaryString = "00101110";
@@ -316,7 +297,7 @@ namespace WPFCiphers.Ciphers
             return output;
         }
 
-        // usnięcie bitów do mojej wersji
+        
         private string RemoveAppendedBitsWithExtension(string s)
         {
             s = s.Substring(0, s.Length - BlockSize);
@@ -329,7 +310,6 @@ namespace WPFCiphers.Ciphers
 
             return res;
         }
-        /*----------------------------------------------KONIEC-------------------------------------------------------------*/
 
         private string Encrypt(string s)
         {
