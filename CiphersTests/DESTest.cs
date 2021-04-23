@@ -221,7 +221,9 @@ namespace CiphersTests
             DES des = new DES("0100010111101010100111010101001010101010101000101001111011101100");
             PrivateObject obj = new PrivateObject(des);
 
-            string appended = Convert.ToString(obj.Invoke("AppendBitsWithExtension", start, ".txt"));
+            string extensionInBin = Convert.ToString(obj.Invoke("ConvertTextToBinaryString", ".txt"));
+            
+            string appended = Convert.ToString(obj.Invoke("AppendBitsWithExtension", start, extensionInBin));
             string encrypted = Convert.ToString(obj.Invoke("Encrypt", appended));
 
             string decryptedAppended = Convert.ToString(obj.Invoke("Decrypt", encrypted));
