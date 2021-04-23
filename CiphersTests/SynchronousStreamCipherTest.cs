@@ -14,26 +14,33 @@ namespace CiphersTests
         public void EncryptTest()
         {
             List<bool> key = new List<bool> { true, false, false, false, true, false, true, true, true };
-            string input = "test_ssc_encrypt.txt";
+            string input = "input.txt";
+            string expected = "1010010101100011001011001101111101010110110010000010011001011011";
 
             SynchronousStreamCipher ssc = new SynchronousStreamCipher(key);
-            BitArray output = ssc.Encrypt(input);
+            PrivateObject obj = new PrivateObject(ssc);
 
-            Assert.IsNotNull(output);
+            BitArray output = ssc.Encrypt(input);
+            string output_string = Convert.ToString(obj.Invoke("BitArrayToString", output));
+
+            Assert.AreEqual(output_string, expected);
         }
         
-        /*
         [TestMethod]
         public void DecryptTest()
         {
             List<bool> key = new List<bool> { true, false, false, false, true, false, true, true, true };
-            string input = "encrypted_expected.bin";
+            string input = "encrypted_ssc.bin";
+            string expected = "00101110101001101100111000101110";
 
             SynchronousStreamCipher ssc = new SynchronousStreamCipher(key);
-            BitArray output = ssc.Decrypt(input);
+            PrivateObject obj = new PrivateObject(ssc);
 
-            Assert.IsNotNull(output);
+            BitArray output = ssc.Decrypt(input);
+            string output_string = Convert.ToString(obj.Invoke("BitArrayToString", output));
+
+            Assert.AreEqual(output_string, expected);
         }
-        */
+        
     }
 }
