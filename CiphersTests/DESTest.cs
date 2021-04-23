@@ -269,7 +269,7 @@ namespace CiphersTests
         }
         
         [TestMethod]
-        public void EncryptionAndDecryptionReturnsSameResultWhenKeyContainsAnEdgeCase()
+        public void EncryptionAndDecryptionReturnsSameResultWhenKeyContainsAnEdgeCaseKey()
         {
             string start = "01110101101010001100011101010010001010101010101110110110001010000101001010101010101000000011101010101001";
 
@@ -291,7 +291,7 @@ namespace CiphersTests
         }
         
         [TestMethod]
-        public void EncryptionAndDecryptionReturnsSameResultWhenKeyContainsAnEdgeCasev2()
+        public void EncryptionAndDecryptionReturnsSameResultWhenKeyContainsAnEdgeCaseKeyV2()
         {
             string start = "01110101101010001100011101010010001010101010101110110110001010000101001010101010101000000011101010101001";
 
@@ -310,6 +310,83 @@ namespace CiphersTests
             string decrypted = Convert.ToString(obj.Invoke("Decrypt", appended));
 
             Assert.AreEqual(encrypted, decrypted);
+        }
+        
+        // semi-weak key tests
+        // here after two encryptions with two different keys we get the starting value
+        [TestMethod]
+        public void TwoEncryptionsGivesInitialValueWithAnEdgeCaseKeys()
+        {
+            string start = "01110101101010001100011101010010001010101010101110110110001010000101001010101010101000000011101010101001";
+
+            // in hex this key is 011F011F010E010E
+            string firstKey = "0000000100011111000000010001111100000001000011100000000100001110";
+            // in hex this key is 1F011F010E010E01
+            string secondKey = "0001111100000001000111110000000100001110000000010000111000000001";
+
+            DES des = new DES(firstKey);
+            PrivateObject obj = new PrivateObject(des);
+            
+            string extensionInBin = Convert.ToString(obj.Invoke("ConvertTextToBinaryString", ".txt"));
+            string appended = Convert.ToString(obj.Invoke("AppendBitsWithExtension", start, extensionInBin));
+            
+            string firstEncryption = Convert.ToString(obj.Invoke("Encrypt", appended));
+
+            des.Key = secondKey;
+            string secondEncryption = Convert.ToString(obj.Invoke("Encrypt", firstEncryption));
+            string res = Convert.ToString(obj.Invoke("RemoveAppendedBitsWithExtension", secondEncryption));
+
+            Assert.AreEqual(start, res);
+        }
+        
+        [TestMethod]
+        public void TwoEncryptionsGivesInitialValueWithAnEdgeCaseKeysV2()
+        {
+            string start = "01110101101010001100011101010010001010101010101110110110001010000101001010101010101000000011101010101001";
+
+            // in hex this key is 1E001E001F101F1
+            string firstKey = "0000000111100000000000011110000000000001111100010000000111110001";
+            // in hex this key is E001E001F101F101
+            string secondKey = "1110000000000001111000000000000111110001000000011111000100000001";
+
+            DES des = new DES(firstKey);
+            PrivateObject obj = new PrivateObject(des);
+            
+            string extensionInBin = Convert.ToString(obj.Invoke("ConvertTextToBinaryString", ".txt"));
+            string appended = Convert.ToString(obj.Invoke("AppendBitsWithExtension", start, extensionInBin));
+            
+            string firstEncryption = Convert.ToString(obj.Invoke("Encrypt", appended));
+
+            des.Key = secondKey;
+            string secondEncryption = Convert.ToString(obj.Invoke("Encrypt", firstEncryption));
+            string res = Convert.ToString(obj.Invoke("RemoveAppendedBitsWithExtension", secondEncryption));
+
+            Assert.AreEqual(start, res);
+        }
+        
+        [TestMethod]
+        public void TwoEncryptionsGivesInitialValueWithAnEdgeCaseKeysV3()
+        {
+            string start = "01110101101010001100011101010010001010101010101110110110001010000101001010101010101000000011101010101001";
+
+            // in hex this key is FE01FE01FE01FE
+            string firstKey = "0000000011111110000000011111111000000001111111100000000111111110";
+            // in hex this key is FE01FE01FE01FE01
+            string secondKey = "1111111000000001111111100000000111111110000000011111111000000001";
+
+            DES des = new DES(firstKey);
+            PrivateObject obj = new PrivateObject(des);
+            
+            string extensionInBin = Convert.ToString(obj.Invoke("ConvertTextToBinaryString", ".txt"));
+            string appended = Convert.ToString(obj.Invoke("AppendBitsWithExtension", start, extensionInBin));
+            
+            string firstEncryption = Convert.ToString(obj.Invoke("Encrypt", appended));
+
+            des.Key = secondKey;
+            string secondEncryption = Convert.ToString(obj.Invoke("Encrypt", firstEncryption));
+            string res = Convert.ToString(obj.Invoke("RemoveAppendedBitsWithExtension", secondEncryption));
+
+            Assert.AreEqual(start, res);
         }
     }
 }
