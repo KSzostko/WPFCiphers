@@ -231,5 +231,85 @@ namespace CiphersTests
 
             Assert.AreEqual(start, decrypted);
         }
+
+        // weak key tests
+        // here encryption and decryption gives identical results
+        [TestMethod]
+        public void EncryptionAndDecryptionReturnsSameResultWhenKeyContainsOnly0()
+        {
+            string start = "01110101101010001100011101010010001010101010101110110110001010000101001010101010101000000011101010101001";
+            
+            DES des = new DES(new string('0', 64));
+            PrivateObject obj = new PrivateObject(des);
+            
+            string extensionInBin = Convert.ToString(obj.Invoke("ConvertTextToBinaryString", ".txt"));
+            string appended = Convert.ToString(obj.Invoke("AppendBitsWithExtension", start, extensionInBin));
+            
+            string encrypted = Convert.ToString(obj.Invoke("Encrypt", appended));
+            string decrypted = Convert.ToString(obj.Invoke("Decrypt", appended));
+
+            Assert.AreEqual(encrypted, decrypted);
+        }
+        
+        [TestMethod]
+        public void EncryptionAndDecryptionReturnsSameResultWhenKeyContainsOnly1()
+        {
+            string start = "01110101101010001100011101010010001010101010101110110110001010000101001010101010101000000011101010101001";
+            
+            DES des = new DES(new string('1', 64));
+            PrivateObject obj = new PrivateObject(des);
+            
+            string extensionInBin = Convert.ToString(obj.Invoke("ConvertTextToBinaryString", ".txt"));
+            string appended = Convert.ToString(obj.Invoke("AppendBitsWithExtension", start, extensionInBin));
+            
+            string encrypted = Convert.ToString(obj.Invoke("Encrypt", appended));
+            string decrypted = Convert.ToString(obj.Invoke("Decrypt", appended));
+
+            Assert.AreEqual(encrypted, decrypted);
+        }
+        
+        [TestMethod]
+        public void EncryptionAndDecryptionReturnsSameResultWhenKeyContainsAnEdgeCase()
+        {
+            string start = "01110101101010001100011101010010001010101010101110110110001010000101001010101010101000000011101010101001";
+
+            // in hex this key is E1E1E1E1F0F0F0F0
+            StringBuilder builder = new StringBuilder();
+            for (int i = 0; i < 4; i++) builder.Append("11100001");
+            for (int i = 0; i < 4; i++) builder.Append("11110000");
+
+            DES des = new DES(builder.ToString());
+            PrivateObject obj = new PrivateObject(des);
+            
+            string extensionInBin = Convert.ToString(obj.Invoke("ConvertTextToBinaryString", ".txt"));
+            string appended = Convert.ToString(obj.Invoke("AppendBitsWithExtension", start, extensionInBin));
+            
+            string encrypted = Convert.ToString(obj.Invoke("Encrypt", appended));
+            string decrypted = Convert.ToString(obj.Invoke("Decrypt", appended));
+
+            Assert.AreEqual(encrypted, decrypted);
+        }
+        
+        [TestMethod]
+        public void EncryptionAndDecryptionReturnsSameResultWhenKeyContainsAnEdgeCasev2()
+        {
+            string start = "01110101101010001100011101010010001010101010101110110110001010000101001010101010101000000011101010101001";
+
+            // in hex this key is 1E1E1E1E0F0F0F0F
+            StringBuilder builder = new StringBuilder();
+            for (int i = 0; i < 4; i++) builder.Append("00011110");
+            for (int i = 0; i < 4; i++) builder.Append("00001111");
+
+            DES des = new DES(builder.ToString());
+            PrivateObject obj = new PrivateObject(des);
+            
+            string extensionInBin = Convert.ToString(obj.Invoke("ConvertTextToBinaryString", ".txt"));
+            string appended = Convert.ToString(obj.Invoke("AppendBitsWithExtension", start, extensionInBin));
+            
+            string encrypted = Convert.ToString(obj.Invoke("Encrypt", appended));
+            string decrypted = Convert.ToString(obj.Invoke("Decrypt", appended));
+
+            Assert.AreEqual(encrypted, decrypted);
+        }
     }
 }
