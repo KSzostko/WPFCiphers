@@ -407,7 +407,7 @@ namespace WPFCiphers
         {
             int from = 16;
             int to = 2;
-            string binary = Convert.ToString(Convert.ToInt32(s, from), to);
+            string binary = Convert.ToString(Convert.ToInt64(s, from), to);
             Console.WriteLine(binary);
             int count = 64 - s.Length;
             string bin = "";
