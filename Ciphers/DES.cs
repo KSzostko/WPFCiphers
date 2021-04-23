@@ -275,14 +275,14 @@ namespace WPFCiphers.Ciphers
             {
                 byte[] bytes = new byte[input.Length / 8 + (input.Length % 8 == 0 ? 0 : 1)];
                 input.CopyTo(bytes, 0);
-                string filename = "encrypted" + extension;
+                string filename = "encrypted-DES" + extension;
                 File.WriteAllBytes(filename, bytes);
             }
             else
             {
                 byte[] bytes = new byte[input.Length / 8 + (input.Length % 8 == 0 ? 0 : 1)];
                 input.CopyTo(bytes, 0);
-                string filename = "decrypted" + extension;
+                string filename = "decrypted-DES" + extension;
                 File.WriteAllBytes(filename, bytes);
             }
         }
