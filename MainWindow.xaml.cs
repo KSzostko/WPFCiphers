@@ -52,6 +52,8 @@ namespace WPFCiphers
 
         SynchronousStreamCipher synchronousStreamCipher;
 
+        DES des;
+
         private void cipherButtonPressed(object sender, System.Windows.RoutedEventArgs e)
         {
             string buttonName = ((Button)sender).Name;
@@ -117,6 +119,13 @@ namespace WPFCiphers
                         fileskeyLabel.Content = "POLYNOMIAL";
                         showGenButtons();
                         logoLabel.Foreground = Brushes.White;
+                        filessideBarGrid.Visibility = Visibility.Hidden;
+                        break;
+                    case "DES":
+                        mLabel.Content = "FILE";
+                        keyLabel.Content = "KEY";
+                        logoLabel.Foreground = Brushes.White;
+                        showChooseFileOnly();
                         filessideBarGrid.Visibility = Visibility.Hidden;
                         break;
                     default:
@@ -306,6 +315,35 @@ namespace WPFCiphers
                     }
                     MessageBox.Show("Encrypted/decrypted file is located in folder where your .exe file is ( most probably bin/debug ). You will also find text file that contains LFSR key in it there.");
                     break;
+                case "DES":
+                    if (syncFileName.Content.ToString() == " ")
+                    {
+                        MessageBox.Show("DES file input is empty. Please type in something.");
+                        return;
+                    }
+                    if (keyTextBox.Text == "")
+                    {
+                        MessageBox.Show("DES key text input is empty. Please type in something.");
+                        return;
+                    }
+                    if(!validateDesKey(userKey))
+                    {
+                        return;
+                    }
+                    des = new DES(desKeyParsing(userKey));
+
+                    if (buttonName == "encrypt")
+                    {
+                        des.EncryptFile(syncFileName.Content.ToString());
+
+                    }
+                    else
+                    {
+                        des.DecryptFile(syncFileName.Content.ToString());
+                    }
+
+                    MessageBox.Show("Encrypted/decrypted file is located in folder where your .exe file is ( most probably bin/debug ).");
+                    break;
                 default:
                     break;
             }
@@ -336,6 +374,51 @@ namespace WPFCiphers
 
         }
 
+        private bool validateDesLetter(char c)
+        {
+            if((c > 47 && c < 58) || (c > 64 && c < 71) )
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+        private bool validateDesKey(string s)
+        {
+            string word = s.ToLower();
+            if (s.Length != 16)
+            {
+                MessageBox.Show("Key you provided has to have exactly 4 letters/numbers.");
+                return false;
+            }
+            for (int i = 0; i < s.Length; i++)
+            {
+                if(!validateDesLetter(s[i])) 
+                {
+                    MessageBox.Show("Key you provided doesnt seem like HEX number, please try again.");
+                    return false;
+                }
+            }
+            return true;
+        }
+        private string desKeyParsing(string s)
+        {
+            int from = 16;
+            int to = 2;
+            string binary = Convert.ToString(Convert.ToInt32(s, from), to);
+            Console.WriteLine(binary);
+            int count = 64 - s.Length;
+            string bin = "";
+            for(int i = 0; i < count; i++)
+            {
+                bin += "0";
+            }
+            bin += binary;
+            Console.WriteLine(bin);
+            return bin;
+        }
 
         private void filesencryptDecryptPressed(object sender, RoutedEventArgs e)
         {
@@ -998,6 +1081,13 @@ namespace WPFCiphers
             mTextBox.Visibility = Visibility.Visible;
         }
 
+        private void showChooseFileOnly()
+        {
+            syncchooseFileButton.Visibility = Visibility.Visible;
+            syncFileName.Visibility = Visibility.Visible;
+            mLabel.Visibility = Visibility.Hidden;
+            mTextBox.Visibility = Visibility.Hidden;
+        }
         private void syncchooseFileButton_Click(object sender, RoutedEventArgs e)
         {
 
