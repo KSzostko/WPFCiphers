@@ -212,7 +212,7 @@ namespace CiphersTests
             
             Assert.AreEqual(expected, res);
         }
-        /* przy nowych zmianach już nie zachodzi 
+        
         [TestMethod]
         public void ReturnsStartingDataAfterEncryptionAndDecryption()
         {
@@ -228,32 +228,6 @@ namespace CiphersTests
             string decrypted = Convert.ToString(obj.Invoke("RemoveAppendedBitsWithExtension", decryptedAppended));
 
             Assert.AreEqual(start, decrypted);
-        }
-        */
-        [TestMethod]
-        public void encryptFileTest()
-        {
-            string key = "0100010111101010100111010101001010101010101000101001111011101100";
-            string filepath = "input.txt";
-
-            DES des = new DES(key);
-            des.encryptFile(filepath);
-            BitArray output = des.GetFileBits("encrypted.bin");
-
-            Assert.IsNotNull(output);
-        }
-
-        [TestMethod]
-        public void decryptFileTest()
-        {
-            string key = "0100010111101010100111010101001010101010101000101001111011101100";
-            string filepath = "encrypted_expected.bin";
-
-            DES des = new DES(key);
-            des.decryptFile(filepath);
-            BitArray output = des.GetFileBits("decrypted.txt");
-
-            Assert.IsNotNull(output);
         }
     }
 }

@@ -180,7 +180,7 @@ namespace WPFCiphers.Ciphers
         }
 
      
-        public BitArray GetFileBits(String filename)
+        private BitArray GetFileBits(String filename)
         {
             byte[] bytes = File.ReadAllBytes(filename);
             return new BitArray(bytes);
@@ -269,7 +269,7 @@ namespace WPFCiphers.Ciphers
         }
 
         
-        void SaveFile(BitArray input, string extension, char type)
+        private void SaveFile(BitArray input, string extension, char type)
         {
             if (type == 'e')
             {
