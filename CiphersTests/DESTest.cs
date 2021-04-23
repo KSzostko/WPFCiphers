@@ -388,5 +388,36 @@ namespace CiphersTests
 
             Assert.AreEqual(start, res);
         }
+
+        [TestMethod]
+        public void AppendBitsWithExtensionTest()
+        {
+            string key = "0100010111101010100111010101001010101010101000101001111011101100";
+            string start = "01110101101010001100011101010010001010101010101110110110001010000101001010101010101000000011101010101001";
+            string expected = "011101011010100011000111010100100010101010101011101101100010100001010010101010101010000000111010101010011000000000000000000000000000000000000000000000000000000000101110011101000111100001110100";
+
+            DES des = new DES(key);
+            PrivateObject obj = new PrivateObject(des);
+
+            string extensionInBin = Convert.ToString(obj.Invoke("ConvertTextToBinaryString", ".txt"));
+            string appended = Convert.ToString(obj.Invoke("AppendBitsWithExtension", start, extensionInBin));
+
+            Assert.AreEqual(expected, appended);
+        }
+
+        [TestMethod]
+        public void RemoveAppendedBitsWithExtensionTest()
+        {
+            string key = "0100010111101010100111010101001010101010101000101001111011101100";
+            string start = "011101011010100011000111010100100010101010101011101101100010100001010010101010101010000000111010101010011000000000000000000000000000000000000000000000000000000000101110011101000111100001110100";
+            string expected = "01110101101010001100011101010010001010101010101110110110001010000101001010101010101000000011101010101001";
+
+            DES des = new DES(key);
+            PrivateObject obj = new PrivateObject(des);
+
+            string shorted = Convert.ToString(obj.Invoke("RemoveAppendedBitsWithExtension", start));
+
+            Assert.AreEqual(expected, shorted);
+        }
     }
 }
