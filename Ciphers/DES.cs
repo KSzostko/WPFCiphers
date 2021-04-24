@@ -347,19 +347,6 @@ namespace WPFCiphers.Ciphers
             
             return res;
         }
-        
-        private string AppendBits(string s)
-        {
-            StringBuilder builder = new StringBuilder(s);
-            
-            builder.Append('1');
-            while (builder.Length % BlockSize != 0)
-            {
-                builder.Append('0');
-            }
-
-            return builder.ToString();
-        }
 
         private string PerformInitialPermutation(string s)
         {

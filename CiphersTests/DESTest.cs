@@ -11,67 +11,6 @@ namespace CiphersTests
     public class DESTest
     {
         [TestMethod]
-        public void ReturnsInputAppendedWith1WhenRemainderOfDivisionBy64Is63()
-        {
-            string input = "010101011110101000010101010100101010101010101010101101101010100";
-            // appended only by 1
-            string expected = "0101010111101010000101010101001010101010101010101011011010101001";
-
-            DES des = new DES("0000010111101010000101010101001010101010101010101011011010101100");
-            PrivateObject obj = new PrivateObject(des);
-            string res = Convert.ToString(obj.Invoke("AppendBits", input));
-            
-            Assert.AreEqual(res, expected);
-        }
-        
-        [TestMethod]
-        public void ReturnsInputAppendedWith1AndZeroesWhenRemainderOfDivisionBy64IsLessThan63()
-        {
-            string input = "0101010111101010000101010101001010101010101010101011011010101";
-            // appended by 1 and two zeros
-            string expected = "0101010111101010000101010101001010101010101010101011011010101100";
-
-            DES des = new DES("0000010111101010000101010101001010101010101010101011011010101100");
-            PrivateObject obj = new PrivateObject(des);
-            string res = Convert.ToString(obj.Invoke("AppendBits", input));
-            
-            Assert.AreEqual(res, expected);
-        }
-        
-        [TestMethod]
-        public void ReturnsInputAppendedWhenItCanBeDividedBy64()
-        {
-            string input = "0101010111101010000101010101001010101010101010101011011010101000";
-
-            StringBuilder builder = new StringBuilder(input);
-            builder.Append('1');
-            builder.Append(new string('0', 63));
-            string expected = builder.ToString();
-
-            DES des = new DES("0000010111101010000101010101001010101010101010101011011010101100");
-            PrivateObject obj = new PrivateObject(des);
-            string res = Convert.ToString(obj.Invoke("AppendBits", input));
-            
-            Assert.AreEqual(expected, res);
-        }
-        
-        [TestMethod]
-        public void BitsChangeAfterPermutation()
-        {
-            string input = "01110101101010001100011101010010001010101010101110110110001010000101001010101010101000000011101010101001";
-            DES des = new DES("0000010111101010000101010101001010101010101010101011011010101100");
-
-            string expected =
-                "00001101010010010100010100100101011001101111001110110010011111000000000100001001000000000001000000110110000111100001101000001011";
-            
-            PrivateObject obj = new PrivateObject(des);
-            string appended = Convert.ToString(obj.Invoke("AppendBits", input));
-            string res = Convert.ToString(obj.Invoke("PerformInitialPermutation", appended));
-            
-            Assert.AreEqual(res, expected);
-        }
-        
-        [TestMethod]
         public void BitsDoNotChangeBlocksAfterPermutation()
         {
             StringBuilder builder = new StringBuilder();
